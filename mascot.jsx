@@ -1,17 +1,24 @@
 /* ============================================================
    MASCOT GUIDE · "Neko"
 
-   Classic hand-drawn anime mascot, image-based. A layered
-   "puppet" system crossfades between illustrated poses, with
-   CSS-driven idle animations (breathing sway, speak bob).
+   Neko is the PRIMARY narrator of the lesson. Instead of sitting
+   tucked into a corner, she appears inline at the top of each
+   major section as a large "host panel": avatar on the left, a
+   wide speech bubble on the right that introduces the topic.
+
+   Each major section (intro, chain, phases, casestudy, quiz)
+   contains a <div class="mascot-host" data-section="..."> slot.
+   This component uses a React portal to render Neko into the
+   slot that matches the section currently in view.
+
+   The hero section intentionally has no host — Neko stays off
+   the page entirely there so the hero copy can breathe. Once the
+   user scrolls into a real section, Neko appears and takes over
+   the introduction.
 
    Illustration assets live in /assets/mascot-*-transparent.png
-   (white background removed, PNGs share identical canvas size
-   so the character stays pixel-registered across poses).
-
-   Neko is the PRIMARY narrator. The page intentionally omits
-   setup / context paragraphs — Neko delivers them instead,
-   keyed to section-in-view and carousel phase events from app.js.
+   (white background removed, PNGs share identical canvas size so
+   the character stays pixel-registered across poses).
    ============================================================ */
 
 const { useState, useEffect, useRef, useMemo, useCallback } = React;
@@ -41,39 +48,29 @@ const EXPRESSION_TO_POSE = {
 
 /* ------------------------------------------------------------
    LESSON SCRIPT
-   Neko owns the storytelling now. Section messages cover the
-   context the page no longer prints inline; phase messages set
-   the scene; complete messages react to user progress.
-
-   Phase numbering matches the 5-phase carousel (1..5), not the
-   original Lockheed Martin 7-phase taxonomy.
+   Neko owns the storytelling. Section messages cover the context
+   the page no longer prints inline; phase messages set the scene
+   when the user changes the carousel; complete messages react to
+   user progress.
    ------------------------------------------------------------ */
 const LESSON = {
-  /* greet plays the first time the user leaves the hero and arrives
-     at the intro. It's merged in front of the intro dialogue so the
-     hero can breathe — Neko stays silent (just waving) on the hero. */
-  greet: [
-    { text: "Nyaa~! I'm Neko, your guide through the Cyber Kill Chain.", expr: 'wave' },
-    { text: "I'll handle the setup at every section so the page can stay clean. Tap me any time to hide or show!", expr: 'excited' },
-  ],
   section: {
-    /* hero intentionally has no dialogue — Neko just waves silently
-       so the hero copy stays fully readable */
     intro: [
+      { text: "Hi, I'm Neko! I'll be your guide through the Cyber Kill Chain — nyaa~!", expr: 'wave' },
       { text: "The Cyber Kill Chain was developed by Lockheed Martin as a map of how every cyberattack moves forward.", expr: 'teaching' },
       { text: "Every breach, big or small, has to complete each of these 5 phases to succeed.", expr: 'thinking' },
       { text: "That's the magic: if defenders break any ONE phase, the whole attack collapses.", expr: 'excited' },
     ],
     chain: [
       { text: "Here are the five links of the chain, in order. Each circle is a phase the attacker must complete.", expr: 'teaching' },
-      { text: "Click any circle to preview what happens — and how defenders push back — at that phase.", expr: 'happy' },
+      { text: "Click any circle below to preview what happens — and how defenders push back — at that phase.", expr: 'happy' },
     ],
     phases: [
       { text: "Now for the fun part: each phase has a live mini-simulation you can drive yourself.", expr: 'excited' },
-      { text: "Use the tabs above, or the Next button below, to move through all five phases in order.", expr: 'teaching' },
+      { text: "Use the tabs or the Next button below to move through all five phases in order. I'll narrate each one!", expr: 'teaching' },
     ],
     casestudy: [
-      { text: "Real world time! This is MGM Resorts, September 2023. Scattered Spider used every phase you just learned, in exact order.", expr: 'alert' },
+      { text: "Real-world time! This is MGM Resorts, September 2023. Scattered Spider used every phase you just learned.", expr: 'alert' },
       { text: "A single 10-minute phone call to the IT help desk caused over $100M in losses. Social engineering is scary powerful!", expr: 'worried' },
     ],
     quiz: [
@@ -81,6 +78,9 @@ const LESSON = {
       { text: "A breach just happened — can you reconstruct the attack? I believe in you, nyaa~!", expr: 'happy' },
     ],
   },
+  /* Phase messages fire inside the "phases" section when the user
+     changes the carousel. They replace the current script while
+     the user is on that section. */
   phase: {
     recon: [
       { text: "Phase 1 · Reconnaissance. The attacker has picked ACME Corp as their target.", expr: 'thinking' },
@@ -113,6 +113,14 @@ const LESSON = {
   },
 };
 
+const SECTION_TITLES = {
+  intro:     'The Framework',
+  chain:     'The Five Links',
+  phases:    'Interactive Walkthrough',
+  casestudy: 'Case Study · MGM 2023',
+  quiz:      'Your Challenge',
+};
+
 /* ------------------------------------------------------------
    PRELOAD · ensure every pose is cached before the first
    crossfade, so there's no flash on transition.
@@ -130,12 +138,9 @@ const LESSON = {
 
    All pose images are rendered stacked and absolutely positioned.
    The currently-active pose fades in while others fade out.
-
-   With transparent PNGs there's no card/frame — Neko floats
-   directly on the page, anchored by a soft drop shadow and a
-   tiny elliptical ground shadow for weight.
+   Uses the intrinsic aspect ratio of the source PNGs (1376/768).
    ------------------------------------------------------------ */
-function CatGirlMascot({ expression = 'happy', size = 140, speaking = false }) {
+function CatGirlMascot({ expression = 'happy', speaking = false }) {
   const activePose = EXPRESSION_TO_POSE[expression] || 'happy';
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -145,7 +150,6 @@ function CatGirlMascot({ expression = 'happy', size = 140, speaking = false }) {
   return (
     <div
       className={`mascot-portrait${speaking ? ' is-speaking' : ''}${mounted ? ' is-mounted' : ''}`}
-      style={{ width: size }}
       role="img"
       aria-label={`Neko, ${activePose}`}
     >
@@ -167,7 +171,7 @@ function CatGirlMascot({ expression = 'happy', size = 140, speaking = false }) {
 /* ------------------------------------------------------------
    CHARACTER-BY-CHARACTER TYPEWRITER
    ------------------------------------------------------------ */
-function useTypewriter(text, speed = 18) {
+function useTypewriter(text, speed = 16) {
   const [out, setOut] = useState('');
   const [done, setDone] = useState(false);
   useEffect(() => {
@@ -190,78 +194,114 @@ function useTypewriter(text, speed = 18) {
 }
 
 /* ------------------------------------------------------------
-   MASCOT GUIDE · the interactive companion
-   Tracks section-in-view, listens for phase/complete events from
-   app.js, and queues the matching LESSON messages.
+   ACTIVE SECTION HOOK
+   Tracks which section is currently dominating the viewport and
+   returns its id. The hero and pre-hero regions return null so
+   Neko stays hidden until the user enters real content.
    ------------------------------------------------------------ */
-function MascotGuide() {
-  /* Start closed — Neko waves silently on the hero so the intro copy
-     ("Understand the five phases…") stays fully readable. The bubble
-     auto-opens the first time the user leaves the hero. */
-  const [queue, setQueue] = useState([{ text: '', expr: 'wave' }]);
-  const [qIndex, setQIndex] = useState(0);
-  const [open, setOpen] = useState(false);
-  const [currentSection, setCurrentSection] = useState('hero');
-  const [greeted, setGreeted] = useState(false);
-  const seenKeys = useRef(new Set());
+const SECTION_IDS = ['intro', 'chain', 'phases', 'casestudy', 'quiz'];
 
-  const current = queue[qIndex] || { text: '', expr: 'happy' };
-  const [typed, typedDone, skip] = useTypewriter(current.text, 16);
-
-  const queueMessages = useCallback((messages, key, { prependGreet = false } = {}) => {
-    if (!messages || !messages.length) return;
-    if (key && seenKeys.current.has(key)) return;
-    if (key) seenKeys.current.add(key);
-    const next = prependGreet ? [...LESSON.greet, ...messages] : messages;
-    setQueue(next);
-    setQIndex(0);
-    setOpen(true);
-  }, []);
+function useActiveSection() {
+  const [activeId, setActiveId] = useState(null);
 
   useEffect(() => {
-    const sections = ['hero', 'intro', 'chain', 'phases', 'casestudy', 'quiz']
+    const sections = SECTION_IDS
       .map((id) => document.getElementById(id))
       .filter(Boolean);
     if (!sections.length) return;
 
+    const visibility = new Map();
+
     const io = new IntersectionObserver(
       (entries) => {
-        let best = null;
         for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          if (!best || e.intersectionRatio > best.intersectionRatio) best = e;
+          visibility.set(e.target.id, e.isIntersecting ? e.intersectionRatio : 0);
         }
-        if (best) {
-          const id = best.target.id;
-          if (id !== currentSection) {
-            setCurrentSection(id);
-            if (id === 'hero') return; // stay silent on the hero
-            const msgs = LESSON.section[id];
-            if (msgs) {
-              // on the first real section, fold the greeting in front
-              const prepend = !greeted;
-              if (prepend) setGreeted(true);
-              queueMessages(msgs, `sec:${id}`, { prependGreet: prepend });
-            }
-          }
+        let bestId = null;
+        let bestRatio = 0;
+        for (const [id, ratio] of visibility.entries()) {
+          if (ratio > bestRatio) { bestRatio = ratio; bestId = id; }
         }
+        if (bestRatio > 0.08) setActiveId(bestId);
+        else setActiveId(null);
       },
-      { threshold: [0.25, 0.5, 0.75] }
+      { threshold: [0, 0.08, 0.2, 0.4, 0.6, 0.8, 1] }
     );
+
     sections.forEach((s) => io.observe(s));
     return () => io.disconnect();
-  }, [currentSection, greeted, queueMessages]);
+  }, []);
 
+  return activeId;
+}
+
+/* ------------------------------------------------------------
+   MASCOT GUIDE · the interactive narrator
+
+   Renders a large "host panel" (avatar + speech card) into the
+   mascot-host slot belonging to the currently active section,
+   using React portals. Listens for carousel phase and scene
+   completion events so that within the phases section, Neko
+   narrates each individual phase as the user advances.
+   ------------------------------------------------------------ */
+function MascotGuide() {
+  const activeSection = useActiveSection();
+  const [queue, setQueue] = useState([]);
+  const [qIndex, setQIndex] = useState(0);
+  const [dismissed, setDismissed] = useState(false);
+
+  /* The "source" of the current script: either a section id or a
+     phase scene name. We use it to avoid replaying the same script
+     over and over as visibility thresholds flicker. */
+  const scriptSourceRef = useRef(null);
+
+  const current = queue[qIndex] || { text: '', expr: 'happy' };
+  const [typed, typedDone, skip] = useTypewriter(current.text, 16);
+
+  const loadScript = useCallback((messages, sourceKey) => {
+    if (!messages || !messages.length) return;
+    if (scriptSourceRef.current === sourceKey) return;
+    scriptSourceRef.current = sourceKey;
+    setQueue(messages);
+    setQIndex(0);
+    setDismissed(false);
+  }, []);
+
+  /* When the active section changes, load that section's script.
+     Exception: while the user is inside the "phases" section, the
+     carousel phase events drive the script instead. */
+  useEffect(() => {
+    if (!activeSection) return;
+    if (activeSection === 'phases' && scriptSourceRef.current?.startsWith('phase:')) {
+      // Keep phase-level narration even as the section gains/loses
+      // visibility — only override if we haven't loaded any phase yet.
+      return;
+    }
+    const msgs = LESSON.section[activeSection];
+    if (msgs) loadScript(msgs, `section:${activeSection}`);
+  }, [activeSection, loadScript]);
+
+  /* Listen for the carousel's phase events and override the script
+     so Neko narrates the currently-displayed phase. */
   useEffect(() => {
     const onPhase = (e) => {
       const { sceneName } = e.detail || {};
       const msgs = LESSON.phase[sceneName];
-      if (msgs) queueMessages(msgs, `phase:${sceneName}`);
+      if (msgs) loadScript(msgs, `phase:${sceneName}`);
     };
     const onComplete = (e) => {
       const { sceneName } = e.detail || {};
       const msg = LESSON.complete[sceneName];
-      if (msg) queueMessages([msg], `done:${sceneName}`);
+      if (!msg) return;
+      // A completion is a single flash — append it to the current
+      // queue without resetting the source key, so we don't loop.
+      setQueue((q) => {
+        // Avoid duplicate completion lines
+        if (q.some((m) => m.text === msg.text)) return q;
+        return [...q, msg];
+      });
+      setQIndex((i) => i); // no-op, but keeps state consistent
+      setDismissed(false);
     };
     document.addEventListener('mascot:phase', onPhase);
     document.addEventListener('mascot:complete', onComplete);
@@ -269,74 +309,89 @@ function MascotGuide() {
       document.removeEventListener('mascot:phase', onPhase);
       document.removeEventListener('mascot:complete', onComplete);
     };
-  }, [queueMessages]);
+  }, [loadScript]);
 
   const next = () => {
     if (!typedDone) { skip(); return; }
     if (qIndex < queue.length - 1) setQIndex(qIndex + 1);
-    else setOpen(false);
-  };
-  const toggle = () => {
-    if (!open) {
-      // If the user taps Neko before scrolling, kick off the greeting
-      // so she always has something to say on first interaction.
-      if (!greeted) {
-        setGreeted(true);
-        setQueue([...LESSON.greet]);
-        setQIndex(0);
-        seenKeys.current.add('__greet');
-      }
-      setOpen(true);
-      return;
-    }
-    setOpen(false);
+    else setDismissed(true);
   };
 
-  const showHint = !open && !greeted;
+  const replay = () => {
+    setQIndex(0);
+    setDismissed(false);
+  };
 
-  return (
-    <div className={`mascot-guide${open ? ' is-open' : ' is-closed'}`}>
-      <button
-        className="mascot-sprite"
-        onClick={toggle}
-        aria-label={open ? 'Hide mascot' : 'Show mascot'}
-      >
-        <CatGirlMascot expression={current.expr} size={150} speaking={open && !typedDone} />
-        {showHint && (
-          <span className="mascot-hint" aria-hidden="true">
-            <span className="mascot-hint-text">tap me~</span>
-          </span>
-        )}
+  /* Find the host slot for the active section. If none (hero or
+     between sections), render nothing. */
+  const host = useMemo(() => {
+    if (!activeSection) return null;
+    return document.querySelector(`.mascot-host[data-section="${activeSection}"]`);
+  }, [activeSection]);
+
+  if (!host) return null;
+
+  const sectionTitle = SECTION_TITLES[activeSection] || '';
+  const stepLabel = `${qIndex + 1} / ${queue.length}`;
+  const atEnd = qIndex >= queue.length - 1 && typedDone;
+
+  /* Two render paths:
+     - Expanded panel (default): avatar + full speech card.
+     - Collapsed strip (after user dismisses): slim row with
+       avatar peek and a "Neko has more to say" reopen button.
+     Both render into the same host slot so the page layout is
+     stable whichever state we're in. */
+  const panel = dismissed ? (
+    <div className="mascot-stage mascot-stage--collapsed" data-active-section={activeSection}>
+      <button className="mascot-stage-reopen" onClick={replay} aria-label="Reopen Neko's narration">
+        <span className="mascot-stage-reopen-avatar">
+          <CatGirlMascot expression="happy" speaking={false} />
+        </span>
+        <span className="mascot-stage-reopen-text">
+          <span className="mascot-stage-reopen-name">Neko</span>
+          <span className="mascot-stage-reopen-cta">Replay narration →</span>
+        </span>
       </button>
-      {open && (
-        <div className="mascot-bubble" role="status" aria-live="polite">
-          <div className="mascot-bubble-head">
-            <span className="mascot-bubble-name">Neko</span>
-            <span className="mascot-bubble-sub">kill-chain guide</span>
-            <button
-              className="mascot-bubble-close"
-              onClick={() => setOpen(false)}
-              aria-label="Hide mascot"
-            >×</button>
-          </div>
-          <p className="mascot-bubble-text">
-            {typed}
-            {!typedDone && <span className="mascot-caret" />}
-          </p>
-          <div className="mascot-bubble-actions">
-            <span className="mascot-bubble-progress">
-              {qIndex + 1} / {queue.length}
-            </span>
-            <button className="mascot-bubble-next" onClick={next}>
-              {typedDone
-                ? (qIndex < queue.length - 1 ? 'Next →' : 'Got it')
-                : 'Skip'}
-            </button>
-          </div>
+    </div>
+  ) : (
+    <div className="mascot-stage" data-active-section={activeSection}>
+      <div className="mascot-stage-avatar">
+        <CatGirlMascot expression={current.expr} speaking={!typedDone} />
+      </div>
+      <div className="mascot-stage-card">
+        <div className="mascot-stage-head">
+          <span className="mascot-stage-name">Neko</span>
+          <span className="mascot-stage-topic">{sectionTitle}</span>
+          <button
+            className="mascot-stage-close"
+            onClick={() => setDismissed(true)}
+            aria-label="Dismiss narration"
+            title="Dismiss"
+          >×</button>
         </div>
-      )}
+        <p className="mascot-stage-text">
+          {typed}
+          {!typedDone && <span className="mascot-caret" />}
+        </p>
+        <div className="mascot-stage-actions">
+          <div className="mascot-stage-steps" aria-hidden="true">
+            {queue.map((_, i) => (
+              <span
+                key={i}
+                className={`mascot-stage-step${i === qIndex ? ' is-current' : ''}${i < qIndex ? ' is-past' : ''}`}
+              />
+            ))}
+          </div>
+          <span className="mascot-stage-progress" aria-live="polite">{stepLabel}</span>
+          <button className="mascot-stage-next" onClick={next}>
+            {!typedDone ? 'Skip' : atEnd ? 'Got it' : 'Next →'}
+          </button>
+        </div>
+      </div>
     </div>
   );
+
+  return ReactDOM.createPortal(panel, host);
 }
 
 /* ------------------------------------------------------------
@@ -374,7 +429,9 @@ function NekoDebug() {
             }}>
               {e}
             </div>
-            <CatGirlMascot expression={e} size={200} />
+            <div style={{ width: 200 }}>
+              <CatGirlMascot expression={e} />
+            </div>
           </div>
         ))}
       </div>
