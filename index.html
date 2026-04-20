@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cyber Kill Chain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=neko-silent1">
+</head>
+<body>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <span class="nav-logo-icon">&#9632;</span>
+        Cyber Kill Chain
+      </a>
+      <div class="nav-links">
+        <a href="#intro" class="nav-link">Overview</a>
+        <a href="#chain" class="nav-link">The Chain</a>
+        <a href="#phases" class="nav-link">Phases</a>
+        <a href="#quiz" class="nav-link nav-link--cta">Take the Quiz</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow hero-glow--1"></div>
+    <div class="hero-glow hero-glow--2"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge anim-fade-up">
+        <span class="hero-badge-dot"></span>
+        Cybersecurity Fundamentals
+      </div>
+      <h1 class="hero-title anim-fade-up anim-delay-1">
+        The Cyber<br>Kill Chain
+      </h1>
+      <p class="hero-subtitle anim-fade-up anim-delay-2">
+        Understand the five phases every cyberattack follows,<br>
+        and learn how defenders fight back at each step.
+      </p>
+      <a href="#intro" class="hero-cta anim-fade-up anim-delay-3">
+        Begin Learning
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+    <div class="hero-scroll-indicator anim-fade-up anim-delay-4">
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section class="section section--intro" id="intro">
+    <div class="container">
+      <div class="intro-grid">
+        <div class="intro-text">
+          <span class="section-label anim-fade-up">The Framework</span>
+          <h2 class="section-title anim-fade-up">
+            Every cyberattack tells the same story.
+          </h2>
+        </div>
+        <div class="intro-visual anim-fade-up">
+          <div class="intro-card">
+            <div class="intro-card-row intro-card-row--centered">
+              <span class="intro-card-number intro-card-number--large">5</span>
+              <span class="intro-card-label">Phases<br>of Every Attack</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kill Chain Overview -->
+  <section class="section section--chain" id="chain">
+    <div class="container">
+      <span class="section-label anim-fade-up">Interactive Overview</span>
+      <h2 class="section-title anim-fade-up">The five links.</h2>
+      <div class="chain-diagram anim-fade-up" id="chainDiagram">
+        <div class="chain-track">
+          <div class="chain-line">
+            <div class="chain-line-fill" id="chainLineFill"></div>
+          </div>
+          <div class="chain-nodes">
+            <button class="chain-node" data-phase="1">
+              <div class="chain-node-ring"><span>1</span></div>
+              <div class="chain-node-label">Recon</div>
+            </button>
+            <button class="chain-node" data-phase="2">
+              <div class="chain-node-ring"><span>2</span></div>
+              <div class="chain-node-label">Arm & Deliver</div>
+            </button>
+            <button class="chain-node" data-phase="3">
+              <div class="chain-node-ring"><span>3</span></div>
+              <div class="chain-node-label">Exploit</div>
+            </button>
+            <button class="chain-node" data-phase="4">
+              <div class="chain-node-ring"><span>4</span></div>
+              <div class="chain-node-label">Control</div>
+            </button>
+            <button class="chain-node" data-phase="5">
+              <div class="chain-node-ring"><span>5</span></div>
+              <div class="chain-node-label">Exfiltrate</div>
+            </button>
+          </div>
+        </div>
+        <div class="chain-detail" id="chainDetail">
+          <div class="chain-detail-inner">
+            <p class="chain-detail-hint">Select a phase above to see details</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phase Deep-Dives: Interactive Carousel -->
+  <section class="section section--phases" id="phases">
+    <div class="container">
+      <span class="section-label anim-fade-up">Interactive Walkthrough</span>
+      <h2 class="section-title anim-fade-up">Step through the attack yourself.</h2>
+
+      <div class="phases-carousel anim-fade-up" id="phasesCarousel">
+
+        <!-- Tab bar -->
+        <div class="phases-tabs" id="phasesTabs" role="tablist">
+          <button class="phases-tab active" data-index="0" role="tab" aria-selected="true">
+            <span class="phases-tab-num">01</span>
+            <span class="phases-tab-name">Recon</span>
+          </button>
+          <button class="phases-tab" data-index="1" role="tab" aria-selected="false">
+            <span class="phases-tab-num">02</span>
+            <span class="phases-tab-name">Arm &amp; Deliver</span>
+          </button>
+          <button class="phases-tab" data-index="2" role="tab" aria-selected="false">
+            <span class="phases-tab-num">03</span>
+            <span class="phases-tab-name">Exploit</span>
+          </button>
+          <button class="phases-tab" data-index="3" role="tab" aria-selected="false">
+            <span class="phases-tab-num">04</span>
+            <span class="phases-tab-name">Control</span>
+          </button>
+          <button class="phases-tab" data-index="4" role="tab" aria-selected="false">
+            <span class="phases-tab-num">05</span>
+            <span class="phases-tab-name">Exfiltrate</span>
+          </button>
+          <div class="phases-tab-indicator" id="phasesTabIndicator"></div>
+        </div>
+
+        <!-- Carousel viewport -->
+        <div class="phases-viewport">
+          <div class="phases-track" id="phasesTrack">
+
+            <!-- ====== PHASE 1: Reconnaissance ====== -->
+            <div class="phases-slide active" data-index="0">
+              <div class="scene" data-scene="recon">
+                <div class="scene-label">
+                  <span class="scene-num">01</span>
+                  <h3 class="scene-name">Reconnaissance</h3>
+                  <span class="scene-aka">LinkedIn Harvesting</span>
+                </div>
+                <div class="scene-stage">
+                  <div class="mockup-window">
+                    <div class="mockup-titlebar">
+                      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+                      <div class="mockup-url"><span class="mockup-lock">&#128274;</span> linkedin.com/company/acme-corp/people</div>
+                    </div>
+                    <div class="mockup-body mockup-body--recon">
+                      <div class="recon-sidebar">
+                        <div class="recon-logo">ACME</div>
+                        <div class="recon-nav-item active">People</div>
+                        <div class="recon-nav-item">About</div>
+                        <div class="recon-nav-item">Jobs</div>
+                      </div>
+                      <div class="recon-main">
+                        <div class="recon-search-bar">
+                          <span class="recon-search-icon">&#128269;</span>
+                          <span class="recon-search-text recon-search-placeholder">Search employees...</span><span class="recon-search-caret"></span>
+                        </div>
+                        <div class="recon-profiles" id="reconProfiles"></div>
+                      </div>
+                      <div class="recon-harvest" id="reconHarvest">
+                        <div class="harvest-header">
+                          <span class="harvest-icon">&#128196;</span> target_emails.txt
+                        </div>
+                        <div class="harvest-list" id="harvestList"></div>
+                        <div class="harvest-count"><span id="harvestCount">0</span> emails collected</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="scene-actions" data-scene-actions="recon">
+                  <button class="scene-action-btn primary" data-action="scan">
+                    <span class="scene-action-icon">&#9655;</span> Start Scan
+                  </button>
+                  <button class="scene-action-btn" data-action="harvestAll" disabled>
+                    Harvest All
+                  </button>
+                  <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" disabled>
+                    &#8635; Reset
+                  </button>
+                  <span class="scene-hint" data-scene-hint>Click <strong>Start Scan</strong> to begin searching for employee data.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ====== PHASE 2: Arm & Deliver ====== -->
+            <div class="phases-slide" data-index="1">
+              <div class="scene" data-scene="armdeliver">
+                <div class="scene-label">
+                  <span class="scene-num">02</span>
+                  <h3 class="scene-name">Arm &amp; Deliver</h3>
+                  <span class="scene-aka">Crafting &amp; Sending the Attack</span>
+                </div>
+                <div class="scene-stage">
+                  <div class="armdeliver-grid">
+                    <div class="armdeliver-panel">
+                      <div class="mockup-window mockup-window--terminal">
+                        <div class="mockup-titlebar mockup-titlebar--dark">
+                          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+                          <div class="mockup-url">attacker@kali:~/payloads</div>
+                        </div>
+                        <div class="mockup-body mockup-body--terminal" id="armTerminal">
+                          <div class="term-line visible term-placeholder">$ <span class="term-caret">_</span></div>
+                        </div>
+                      </div>
+                      <div class="weapon-output" id="armOutput">
+                        <div class="weapon-file">
+                          <div class="weapon-file-icon">
+                            <svg width="40" height="48" viewBox="0 0 40 48"><rect x="0" y="0" width="40" height="48" rx="4" fill="#1c1c28" stroke="#2a2a3a"/><rect x="8" y="10" width="18" height="2" rx="1" fill="#3a3a4a"/><rect x="8" y="16" width="24" height="2" rx="1" fill="#3a3a4a"/><rect x="8" y="22" width="14" height="2" rx="1" fill="#3a3a4a"/><rect x="8" y="34" width="8" height="8" rx="2" fill="#ff4757" opacity="0.3"/><text x="12" y="41" font-size="6" fill="#ff4757" font-family="monospace">&#60;/&#62;</text></svg>
+                          </div>
+                          <div class="weapon-file-info">
+                            <span class="weapon-file-name">Q1_Invoice.docm</span>
+                            <span class="weapon-file-meta">Contains hidden macro payload</span>
+                          </div>
+                          <span class="weapon-file-badge">WEAPONIZED</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="armdeliver-connector" id="armConnector">
+                      <div class="armdeliver-connector-track"></div>
+                      <div class="armdeliver-connector-pulse"></div>
+                      <div class="armdeliver-connector-label">SENT</div>
+                    </div>
+                    <div class="armdeliver-panel">
+                      <div class="mockup-window">
+                        <div class="mockup-titlebar">
+                          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+                          <div class="mockup-url"><span class="mockup-lock">&#128274;</span> mail.acme-corp.com</div>
+                        </div>
+                        <div class="mockup-body mockup-body--email-compact">
+                          <div class="email-inbox-label">
+                            <span>&#128229;</span> Inbox: m.smith@acme-corp.com
+                            <span class="email-badge" id="armEmailBadge">0</span>
+                          </div>
+                          <div class="email-main-compact" id="armEmailMain">
+                            <div class="email-empty">No new messages</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="scene-actions" data-scene-actions="armdeliver">
+                  <button class="scene-action-btn primary" data-action="build">
+                    <span class="scene-action-num">1</span> Build Payload
+                  </button>
+                  <button class="scene-action-btn" data-action="weaponize" disabled>
+                    <span class="scene-action-num">2</span> Weaponize Doc
+                  </button>
+                  <button class="scene-action-btn" data-action="send" disabled>
+                    <span class="scene-action-num">3</span> Send Phishing Email
+                  </button>
+                  <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" disabled>
+                    &#8635; Reset
+                  </button>
+                  <span class="scene-hint" data-scene-hint>Walk through the three steps to craft and deliver the attack.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ====== PHASE 3: Exploitation ====== -->
+            <div class="phases-slide" data-index="2">
+              <div class="scene" data-scene="exploit">
+                <div class="scene-label">
+                  <span class="scene-num">03</span>
+                  <h3 class="scene-name">Exploitation</h3>
+                  <span class="scene-aka">Macro Code Execution</span>
+                </div>
+                <div class="scene-stage">
+                  <div class="exploit-desktop">
+                    <div class="exploit-doc-window" id="exploitDoc">
+                      <div class="mockup-titlebar">
+                        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+                        <div class="mockup-url">Q1_Invoice.docm · Document Editor</div>
+                      </div>
+                      <div class="mockup-body mockup-body--doc">
+                        <div class="doc-content">
+                          <div class="doc-banner" id="docBanner">
+                            <span class="doc-banner-icon">&#9888;</span>
+                            <span>Macros have been disabled.</span>
+                            <button class="doc-enable-btn" id="docEnableBtn">Enable Content</button>
+                          </div>
+                          <div class="doc-text">
+                            <div class="doc-line doc-line--title"></div>
+                            <div class="doc-line"></div>
+                            <div class="doc-line" style="width:80%"></div>
+                            <div class="doc-line" style="width:60%"></div>
+                            <br>
+                            <div class="doc-line"></div>
+                            <div class="doc-line" style="width:90%"></div>
+                            <div class="doc-line" style="width:70%"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="exploit-terminal-overlay" id="exploitOverlay">
+                      <div class="exploit-terminal-header">
+                        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+                        <span class="exploit-terminal-title">Hidden Process: cmd.exe</span>
+                      </div>
+                      <div class="exploit-terminal-body" id="exploitTerminal"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="scene-actions" data-scene-actions="exploit">
+                  <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" disabled>
+                    &#8635; Reset
+                  </button>
+                  <span class="scene-hint" data-scene-hint>Click the glowing <strong>Enable Content</strong> button to see what really happens.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ====== PHASE 4: Establish Control ====== -->
+            <div class="phases-slide" data-index="3">
+              <div class="scene" data-scene="control">
+                <div class="scene-label">
+                  <span class="scene-num">04</span>
+                  <h3 class="scene-name">Establish Control</h3>
+                  <span class="scene-aka">Persistence &amp; Command Channel</span>
+                </div>
+                <div class="scene-stage">
+                  <div class="control-grid">
+                    <div class="mockup-window mockup-window--terminal">
+                      <div class="mockup-titlebar mockup-titlebar--dark">
+                        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+                        <div class="mockup-url">System Activity Monitor</div>
+                      </div>
+                      <div class="mockup-body mockup-body--install">
+                        <div class="install-log" id="controlLog">
+                          <div class="install-empty">Waiting for attacker activity…</div>
+                        </div>
+                        <div class="install-fs" id="controlFs">
+                          <div class="install-fs-header">File System Changes</div>
+                          <div class="install-fs-tree" id="controlTree"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="control-c2-wrap">
+                      <div class="c2-layout">
+                        <div class="c2-endpoint c2-endpoint--victim">
+                          <div class="c2-machine">
+                            <svg width="48" height="40" viewBox="0 0 48 40" fill="none"><rect x="4" y="2" width="40" height="28" rx="3" stroke="currentColor" stroke-width="1.5"/><line x1="14" y1="34" x2="34" y2="34" stroke="currentColor" stroke-width="1.5"/><line x1="24" y1="30" x2="24" y2="34" stroke="currentColor" stroke-width="1.5"/></svg>
+                          </div>
+                          <span class="c2-label">Victim Machine</span>
+                          <span class="c2-ip">10.0.0.47</span>
+                        </div>
+                        <div class="c2-channel" id="controlChannel">
+                          <div class="c2-wire"><div class="c2-wire-line"></div></div>
+                          <div class="c2-packets" id="controlPackets"></div>
+                          <div class="c2-label-encrypted">AES-256 Encrypted</div>
+                        </div>
+                        <div class="c2-endpoint c2-endpoint--attacker">
+                          <div class="c2-machine c2-machine--bad">
+                            <svg width="48" height="40" viewBox="0 0 48 40" fill="none"><rect x="4" y="2" width="40" height="28" rx="3" stroke="currentColor" stroke-width="1.5"/><line x1="14" y1="34" x2="34" y2="34" stroke="currentColor" stroke-width="1.5"/><line x1="24" y1="30" x2="24" y2="34" stroke="currentColor" stroke-width="1.5"/></svg>
+                          </div>
+                          <span class="c2-label">C2 Server</span>
+                          <span class="c2-ip">185.47.xx.xx</span>
+                        </div>
+                      </div>
+                      <div class="c2-console" id="controlConsole">
+                        <div class="mockup-titlebar mockup-titlebar--dark">
+                          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+                          <div class="mockup-url">Attacker Console</div>
+                        </div>
+                        <div class="mockup-body mockup-body--terminal c2-console-body" id="controlTerminal">
+                          <div class="term-line visible term-placeholder">meterpreter&gt; <span class="term-caret">_</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="scene-actions" data-scene-actions="control">
+                  <button class="scene-action-btn primary" data-action="install">
+                    <span class="scene-action-num">1</span> Install Persistence
+                  </button>
+                  <button class="scene-action-btn" data-action="beacon" disabled>
+                    <span class="scene-action-num">2</span> Open C2 Channel
+                  </button>
+                  <button class="scene-action-btn" data-action="execute" disabled>
+                    <span class="scene-action-num">3</span> Send Commands
+                  </button>
+                  <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" disabled>
+                    &#8635; Reset
+                  </button>
+                  <span class="scene-hint" data-scene-hint>Run each step to watch persistence get planted and the backdoor come alive.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ====== PHASE 5: Exfiltration ====== -->
+            <div class="phases-slide" data-index="4">
+              <div class="scene" data-scene="exfil">
+                <div class="scene-label">
+                  <span class="scene-num">05</span>
+                  <h3 class="scene-name">Exfiltration</h3>
+                  <span class="scene-aka">Data Theft</span>
+                </div>
+                <div class="scene-stage">
+                  <div class="exfil-layout">
+                    <div class="exfil-source" id="exfilSource">
+                      <div class="exfil-source-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                        Sensitive Files
+                      </div>
+                      <div class="exfil-files" id="exfilFiles"></div>
+                    </div>
+                    <div class="exfil-stream" id="exfilStream">
+                      <div class="exfil-arrow-track">
+                        <div class="exfil-arrow-line"></div>
+                      </div>
+                      <div class="exfil-progress-wrap">
+                        <div class="exfil-progress-label" id="exfilLabel">Idle</div>
+                        <div class="exfil-progress-bar"><div class="exfil-progress-fill" id="exfilFill"></div></div>
+                        <div class="exfil-progress-bytes" id="exfilBytes">0 MB / 2.4 GB</div>
+                        <div class="exfil-progress-count"><span id="exfilCount">0</span> / 7 files stolen</div>
+                      </div>
+                    </div>
+                    <div class="exfil-dest">
+                      <div class="exfil-dest-box">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        <span>Attacker's Server</span>
+                        <span class="c2-ip">185.47.xx.xx</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="scene-actions" data-scene-actions="exfil">
+                  <button class="scene-action-btn primary" data-action="stealAll">
+                    <span class="scene-action-icon">&#9889;</span> Steal Everything
+                  </button>
+                  <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" disabled>
+                    &#8635; Reset
+                  </button>
+                  <span class="scene-hint" data-scene-hint>Click any file to exfiltrate it one at a time, or run a full smash-and-grab.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Carousel controls -->
+        <div class="phases-controls">
+          <button class="phases-nav phases-nav--prev" id="phasesPrev" aria-label="Previous phase" disabled>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Prev</span>
+          </button>
+          <div class="phases-counter" aria-live="polite">
+            <span class="phases-counter-current" id="phasesCurrent">01</span>
+            <span class="phases-counter-sep">/</span>
+            <span class="phases-counter-total">05</span>
+          </div>
+          <button class="phases-nav phases-nav--next" id="phasesNext" aria-label="Next phase">
+            <span>Next</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Real-World Case Study -->
+  <section class="section section--casestudy" id="casestudy">
+    <div class="container">
+      <span class="section-label anim-fade-up">Real-World Attack</span>
+      <h2 class="section-title anim-fade-up">The MGM Resorts Breach, 2023</h2>
+
+      <div class="case-timeline anim-fade-up">
+
+        <div class="case-step" data-step="1">
+          <div class="case-step-marker">
+            <span class="case-step-num">01</span>
+            <div class="case-step-line"></div>
+          </div>
+          <div class="case-step-card">
+            <div class="case-step-phase">Recon</div>
+            <h3 class="case-step-title">LinkedIn & Social Profiling</h3>
+          </div>
+        </div>
+
+        <div class="case-step" data-step="2">
+          <div class="case-step-marker">
+            <span class="case-step-num">02</span>
+            <div class="case-step-line"></div>
+          </div>
+          <div class="case-step-card">
+            <div class="case-step-phase">Arm &amp; Deliver</div>
+            <h3 class="case-step-title">The 10-Minute Phone Call</h3>
+          </div>
+        </div>
+
+        <div class="case-step" data-step="3">
+          <div class="case-step-marker">
+            <span class="case-step-num">03</span>
+            <div class="case-step-line"></div>
+          </div>
+          <div class="case-step-card">
+            <div class="case-step-phase">Exploit</div>
+            <h3 class="case-step-title">Identity Provider Takeover</h3>
+            <p class="case-step-desc">With the reset credential, they logged into MGM's Okta tenant and escalated privileges across the identity platform.</p>
+          </div>
+        </div>
+
+        <div class="case-step" data-step="4">
+          <div class="case-step-marker">
+            <span class="case-step-num">04</span>
+            <div class="case-step-line"></div>
+          </div>
+          <div class="case-step-card">
+            <div class="case-step-phase">Control</div>
+            <h3 class="case-step-title">Lateral Movement &amp; Persistence</h3>
+            <p class="case-step-desc">They moved from cloud identity into on-prem Active Directory, installing a secondary identity provider for persistent access.</p>
+          </div>
+        </div>
+
+        <div class="case-step" data-step="5">
+          <div class="case-step-marker">
+            <span class="case-step-num">05</span>
+          </div>
+          <div class="case-step-card">
+            <div class="case-step-phase">Exfiltrate</div>
+            <h3 class="case-step-title">Ransomware &amp; $100M in Losses</h3>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="case-impact anim-fade-up">
+        <div class="case-impact-item">
+          <span class="case-impact-value">$100M+</span>
+          <span class="case-impact-label">Total Losses</span>
+        </div>
+        <div class="case-impact-divider"></div>
+        <div class="case-impact-item">
+          <span class="case-impact-value">10 min</span>
+          <span class="case-impact-label">Phone Call Duration</span>
+        </div>
+        <div class="case-impact-divider"></div>
+        <div class="case-impact-item">
+          <span class="case-impact-value">10 days</span>
+          <span class="case-impact-label">Systems Offline</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Quiz Section -->
+  <section class="section section--quiz" id="quiz">
+    <div class="container">
+      <span class="section-label anim-fade-up">Test Your Knowledge</span>
+      <h2 class="section-title anim-fade-up">Incident Response Challenge</h2>
+
+      <!-- Quiz Part 1: Ordering -->
+      <div class="quiz-challenge" id="quizOrder">
+        <div class="quiz-challenge-header anim-fade-up">
+          <span class="quiz-challenge-number">Challenge 1</span>
+          <h3 class="quiz-challenge-title">Reconstruct the Kill Chain</h3>
+          <p class="quiz-challenge-desc">Drag the phases into the correct order, from first to last.</p>
+        </div>
+        <div class="quiz-dropzone" id="orderZone">
+          <!-- Filled by JS with shuffled cards -->
+        </div>
+      </div>
+
+      <!-- Quiz Part 2: Scenario Matching -->
+      <div class="quiz-challenge" id="quizMatch">
+        <div class="quiz-challenge-header anim-fade-up">
+          <span class="quiz-challenge-number">Challenge 2</span>
+          <h3 class="quiz-challenge-title">Classify the Attack Events</h3>
+          <p class="quiz-challenge-desc">Each event belongs to a phase of the kill chain. Drag each event to the correct phase.</p>
+        </div>
+        <div class="quiz-match-layout">
+          <div class="quiz-events" id="eventPool">
+            <!-- Filled by JS -->
+          </div>
+          <div class="quiz-phases-grid" id="phaseTargets">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Part 3: Defend the Network Simulation -->
+      <div class="quiz-challenge" id="quizDefend">
+        <div class="quiz-challenge-header anim-fade-up">
+          <span class="quiz-challenge-number">Challenge 3</span>
+          <h3 class="quiz-challenge-title">Defend the Network</h3>
+          <p class="quiz-challenge-desc">An attack is unfolding in real-time. At each phase, choose the correct defensive action to stop the attacker before they reach their objective.</p>
+        </div>
+        <div class="defend-arena anim-fade-up" id="defendArena">
+          <div class="defend-timeline" id="defendTimeline"></div>
+          <div class="defend-scenario" id="defendScenario">
+            <div class="defend-waiting">Click <strong>Start Simulation</strong> to begin</div>
+          </div>
+          <button class="defend-start-btn" id="defendStartBtn">
+            <span class="defend-start-icon">&#9889;</span>
+            Start Simulation
+          </button>
+        </div>
+      </div>
+
+      <button class="quiz-submit anim-fade-up" id="quizSubmit">Check My Answers</button>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="section section--results hidden" id="results">
+    <div class="container">
+      <div class="results-card">
+        <div class="results-score-ring">
+          <svg viewBox="0 0 120 120" class="results-ring-svg">
+            <circle cx="60" cy="60" r="54" class="results-ring-bg"/>
+            <circle cx="60" cy="60" r="54" class="results-ring-fill" id="resultRing"/>
+          </svg>
+          <div class="results-score-text" id="resultScore">0%</div>
+        </div>
+        <h2 class="results-title" id="resultTitle">Loading...</h2>
+        <p class="results-message" id="resultMessage"></p>
+        <button class="quiz-submit" id="retryBtn">Try Again</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>COMS 4170W · Design of User Interfaces · Cyber Kill Chain Educational Module</p>
+      <p class="footer-credit">Framework developed by Lockheed Martin · Content adapted for educational purposes</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+
+  <!-- Mascot Guide (React) -->
+  <div id="mascot-root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel" data-presets="react" data-type="module" src="mascot.jsx?v=neko-silent2"></script>
+</body>
+</html>
