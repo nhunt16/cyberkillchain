@@ -1,0 +1,23 @@
+<div class="framework-layout">
+  <div class="chain-diagram" id="chainDiagram"
+       data-chain-nodes='{{ lesson.body.chain_nodes | tojson }}'>
+    <div class="chain-track">
+      <div class="chain-line">
+        <div class="chain-line-fill" id="chainLineFill"></div>
+      </div>
+      <div class="chain-nodes">
+        {% for node in lesson.body.chain_nodes %}
+          <button class="chain-node" data-phase="{{ node.num }}" type="button">
+            <div class="chain-node-ring"><span>{{ node.num }}</span></div>
+            <div class="chain-node-label">{{ node.label }}</div>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="chain-detail" id="chainDetail">
+      <div class="chain-detail-inner">
+        <p class="chain-detail-hint">Select a phase above to see details</p>
+      </div>
+    </div>
+  </div>
+</div>

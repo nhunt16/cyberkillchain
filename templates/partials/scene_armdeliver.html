@@ -1,0 +1,68 @@
+<div class="scene" data-scene="armdeliver"
+     data-target-email="{{ lesson.body.target_email }}"
+     data-target-name="{{ lesson.body.target_name }}">
+  <div class="scene-stage">
+    <div class="armdeliver-grid">
+      <div class="armdeliver-panel">
+        <div class="mockup-window mockup-window--terminal">
+          <div class="mockup-titlebar mockup-titlebar--dark">
+            <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+            <div class="mockup-url">attacker@kali:~/payloads</div>
+          </div>
+          <div class="mockup-body mockup-body--terminal" id="armTerminal">
+            <div class="term-line visible term-placeholder">$ <span class="term-caret">_</span></div>
+          </div>
+        </div>
+        <div class="weapon-output" id="armOutput">
+          <div class="weapon-file">
+            <div class="weapon-file-icon">
+              <svg width="40" height="48" viewBox="0 0 40 48"><rect x="0" y="0" width="40" height="48" rx="4" fill="#1c1c28" stroke="#2a2a3a"/><rect x="8" y="10" width="18" height="2" rx="1" fill="#3a3a4a"/><rect x="8" y="16" width="24" height="2" rx="1" fill="#3a3a4a"/><rect x="8" y="22" width="14" height="2" rx="1" fill="#3a3a4a"/><rect x="8" y="34" width="8" height="8" rx="2" fill="#ff4757" opacity="0.3"/><text x="12" y="41" font-size="6" fill="#ff4757" font-family="monospace">&#60;/&#62;</text></svg>
+            </div>
+            <div class="weapon-file-info">
+              <span class="weapon-file-name">Q1_Invoice.docm</span>
+              <span class="weapon-file-meta">Contains hidden macro payload</span>
+            </div>
+            <span class="weapon-file-badge">WEAPONIZED</span>
+          </div>
+        </div>
+      </div>
+      <div class="armdeliver-connector" id="armConnector">
+        <div class="armdeliver-connector-track"></div>
+        <div class="armdeliver-connector-pulse"></div>
+        <div class="armdeliver-connector-label">SENT</div>
+      </div>
+      <div class="armdeliver-panel">
+        <div class="mockup-window">
+          <div class="mockup-titlebar">
+            <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+            <div class="mockup-url"><span class="mockup-lock">&#128274;</span> mail.acme-corp.com</div>
+          </div>
+          <div class="mockup-body mockup-body--email-compact">
+            <div class="email-inbox-label">
+              <span>&#128229;</span> Inbox: {{ lesson.body.target_email }}
+              <span class="email-badge" id="armEmailBadge">0</span>
+            </div>
+            <div class="email-main-compact" id="armEmailMain">
+              <div class="email-empty">No new messages</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-actions" data-scene-actions="armdeliver">
+    <button class="scene-action-btn primary" data-action="build" type="button">
+      <span class="scene-action-num">1</span> Build Payload
+    </button>
+    <button class="scene-action-btn" data-action="weaponize" type="button" disabled>
+      <span class="scene-action-num">2</span> Weaponize Doc
+    </button>
+    <button class="scene-action-btn" data-action="send" type="button" disabled>
+      <span class="scene-action-num">3</span> Send Phishing Email
+    </button>
+    <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" type="button" disabled>
+      &#8635; Reset
+    </button>
+    <span class="scene-hint" data-scene-hint>Walk through the three steps to craft and deliver the attack.</span>
+  </div>
+</div>

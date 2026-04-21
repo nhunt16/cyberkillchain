@@ -1,0 +1,40 @@
+<div class="scene" data-scene="exfil" data-files='{{ lesson.body.files | tojson }}'>
+  <div class="scene-stage">
+    <div class="exfil-layout">
+      <div class="exfil-source" id="exfilSource">
+        <div class="exfil-source-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Sensitive Files
+        </div>
+        <div class="exfil-files" id="exfilFiles"></div>
+      </div>
+      <div class="exfil-stream" id="exfilStream">
+        <div class="exfil-arrow-track">
+          <div class="exfil-arrow-line"></div>
+        </div>
+        <div class="exfil-progress-wrap">
+          <div class="exfil-progress-label" id="exfilLabel">Idle</div>
+          <div class="exfil-progress-bar"><div class="exfil-progress-fill" id="exfilFill"></div></div>
+          <div class="exfil-progress-bytes" id="exfilBytes">0 MB / 2.4 GB</div>
+          <div class="exfil-progress-count"><span id="exfilCount">0</span> / {{ lesson.body.files | length }} files stolen</div>
+        </div>
+      </div>
+      <div class="exfil-dest">
+        <div class="exfil-dest-box">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <span>Attacker's Server</span>
+          <span class="c2-ip">185.47.xx.xx</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-actions" data-scene-actions="exfil">
+    <button class="scene-action-btn primary" data-action="stealAll" type="button">
+      <span class="scene-action-icon">&#9889;</span> Steal Everything
+    </button>
+    <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" type="button" disabled>
+      &#8635; Reset
+    </button>
+    <span class="scene-hint" data-scene-hint>Click any file to exfiltrate it one at a time, or run a full smash-and-grab.</span>
+  </div>
+</div>

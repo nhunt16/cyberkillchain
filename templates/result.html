@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Your Score · {{ meta.title }}{% endblock %}
+
+{% block body_class %}page-result{% endblock %}
+
+{% block content %}
+<section class="section section--result">
+  <div class="container">
+
+    <div class="results-card anim-fade-up visible">
+      <div class="results-score-ring">
+        <svg viewBox="0 0 120 120" class="results-ring-svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#00c8ff"/>
+              <stop offset="100%" stop-color="#7c5cfc"/>
+            </linearGradient>
+          </defs>
+          <circle cx="60" cy="60" r="54" class="results-ring-bg"/>
+          <circle cx="60" cy="60" r="54" class="results-ring-fill"
+                  id="resultRing" data-score="{{ score }}"/>
+        </svg>
+        <div class="results-score-text">{{ score }}%</div>
+      </div>
+      <h2 class="results-title">{{ title }}</h2>
+      <p class="results-message">{{ message }}</p>
+      <p class="results-sub">You got <strong>{{ correct }}</strong> out of <strong>{{ total }}</strong> points across all three challenges.</p>
+
+      <div class="results-actions">
+        <a href="{{ url_for('learn', n=1) }}" class="lesson-nav-btn lesson-nav-btn--ghost">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Review Lessons</span>
+        </a>
+        <form method="post" action="{{ url_for('start') }}" class="results-restart-form">
+          <button type="submit" class="lesson-nav-btn lesson-nav-btn--primary">
+            <span>Start Over</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8a5 5 0 0 1 8.5-3.5L13 6m0-3v3h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <h3 class="result-review-title anim-fade-up visible">Challenge Review</h3>
+
+    <div class="result-challenges">
+      {% for row in breakdown %}
+        {% set pct = (100 * row.correct / row.total) if row.total else 0 %}
+        <section class="result-challenge{% if row.correct == row.total %} is-perfect{% endif %}">
+          <header class="result-challenge-head">
+            <div>
+              <span class="result-challenge-num">{{ row.challenge.label }}</span>
+              <h4 class="result-challenge-title">{{ row.challenge.title }}</h4>
+            </div>
+            <div class="result-challenge-score">
+              <span class="result-challenge-score-num">{{ row.correct }}/{{ row.total }}</span>
+              <span class="result-challenge-score-label">{{ pct | round | int }}% correct</span>
+            </div>
+          </header>
+
+          {% if row.challenge.type == "order" %}
+            <ol class="result-order-list">
+              {% for item in row.entries %}
+                <li class="result-order-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
+                  <span class="result-order-pos">{{ loop.index }}</span>
+                  <span class="result-order-name">{{ item.actual or '(blank)' }}</span>
+                  {% if not item.is_correct %}
+                    <span class="result-order-expected">should be <strong>{{ item.expected }}</strong></span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ol>
+
+          {% elif row.challenge.type == "match" %}
+            <ul class="result-match-list">
+              {% for item in row.entries %}
+                <li class="result-match-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
+                  <p class="result-match-event">&ldquo;{{ item.event }}&rdquo;</p>
+                  <p class="result-match-answers">
+                    <span>You placed it in <strong>{{ item.actual or '(left in pool)' }}</strong></span>
+                    {% if not item.is_correct %}
+                      <span>Correct phase: <strong>{{ item.expected }}</strong></span>
+                    {% endif %}
+                  </p>
+                </li>
+              {% endfor %}
+            </ul>
+
+          {% elif row.challenge.type == "defend" %}
+            <ul class="result-defend-list">
+              {% for item in row.entries %}
+                <li class="result-defend-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
+                  <p class="result-defend-phase">Phase {{ loop.index }} · {{ item.phase }}</p>
+                  <p class="result-defend-answers">
+                    <span>You chose: <strong>{{ item.picked or '(no choice)' }}</strong></span>
+                    {% if not item.is_correct %}
+                      <span>Correct response: <strong>{{ item.correct_option }}</strong></span>
+                    {% endif %}
+                  </p>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </section>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+{% endblock %}

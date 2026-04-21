@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+<section class="hero hero--home" id="hero">
+  <div class="hero-grid-bg"></div>
+  <canvas class="hero-cyber-bg" id="cyberBgCanvas" aria-hidden="true"></canvas>
+  <div class="hero-glow hero-glow--1"></div>
+  <div class="hero-glow hero-glow--2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge anim-fade-up visible">
+      <span class="hero-badge-dot"></span>
+      {{ home.badge }}
+    </div>
+    <h1 class="hero-title anim-fade-up visible">
+      {{ home.title_html | safe }}
+    </h1>
+    <p class="hero-subtitle anim-fade-up visible">
+      {{ home.subtitle }}
+    </p>
+
+    <div class="mascot-host hero-mascot" data-section="home"
+         data-mascot-script='{{ home.mascot_script | tojson }}'
+         data-mascot-topic="Welcome"></div>
+
+    <form method="post" action="{{ url_for('start') }}" class="hero-start-form anim-fade-up visible">
+      <button type="submit" class="hero-cta">
+        {{ home.start_label }}
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <p class="hero-start-meta">
+        {{ total_lessons }} short lessons &middot; {{ total_challenges }} interactive challenges &middot; ~10 minutes
+      </p>
+    </form>
+  </div>
+</section>
+{% endblock %}

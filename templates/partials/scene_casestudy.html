@@ -1,0 +1,25 @@
+<div class="case-timeline anim-fade-up visible">
+  {% for step in lesson.body.steps %}
+    <div class="case-step active" data-step="{{ step.num }}">
+      <div class="case-step-marker">
+        <span class="case-step-num">{{ '%02d' | format(step.num) }}</span>
+        {% if not loop.last %}<div class="case-step-line"></div>{% endif %}
+      </div>
+      <div class="case-step-card">
+        <div class="case-step-phase">{{ step.phase }}</div>
+        <h3 class="case-step-title">{{ step.title }}</h3>
+        <p class="case-step-desc">{{ step.desc }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<div class="case-impact anim-fade-up visible">
+  {% for item in lesson.body.impact %}
+    <div class="case-impact-item">
+      <span class="case-impact-value">{{ item.value }}</span>
+      <span class="case-impact-label">{{ item.label }}</span>
+    </div>
+    {% if not loop.last %}<div class="case-impact-divider"></div>{% endif %}
+  {% endfor %}
+</div>

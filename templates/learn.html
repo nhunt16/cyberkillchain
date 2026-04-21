@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} · {{ meta.title }}{% endblock %}
+
+{% block body_class %}page-learn page-learn--{{ lesson.id }}{% endblock %}
+
+{% block content %}
+<section class="section section--lesson">
+  <div class="container">
+
+    {% include 'partials/stepper.html' %}
+
+    <div class="mascot-host" data-section="{{ lesson.id }}"
+         data-mascot-script='{{ lesson.mascot_script | tojson }}'
+         data-mascot-topic="{{ lesson.label }}"></div>
+
+    <header class="lesson-header anim-fade-up visible">
+      {% if lesson.phase_num %}
+        <span class="section-label">Phase {{ lesson.phase_num }} of 5{% if lesson.aka %} · {{ lesson.aka }}{% endif %}</span>
+      {% else %}
+        <span class="section-label">{{ lesson.label }}</span>
+      {% endif %}
+      <h2 class="section-title">{{ lesson.title }}</h2>
+    </header>
+
+    <div class="lesson-body anim-fade-up visible"
+         data-lesson-n="{{ n }}"
+         data-lesson-id="{{ lesson.id }}"
+         data-event-url="{{ url_for('learn_event', n=n) }}">
+      {% include 'partials/scene_' ~ lesson.scene ~ '.html' %}
+    </div>
+
+    <nav class="lesson-nav">
+      <a href="{{ prev_url }}" class="lesson-nav-btn lesson-nav-btn--ghost">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Previous</span>
+      </a>
+      <span class="lesson-nav-counter">Lesson {{ n }} / {{ total }}</span>
+      <a href="{{ next_url }}" class="lesson-nav-btn lesson-nav-btn--primary">
+        <span>{{ next_label }}</span>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </nav>
+
+  </div>
+</section>
+{% endblock %}

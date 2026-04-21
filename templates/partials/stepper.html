@@ -1,0 +1,13 @@
+<div class="stepper" aria-label="Lesson progress">
+  {% for i in range(1, total + 1) %}
+    {% set is_current = i == n %}
+    {% set is_past = i < n %}
+    <a href="{{ url_for('learn', n=i) }}"
+       class="stepper-dot{% if is_current %} is-current{% endif %}{% if is_past %} is-past{% endif %}"
+       aria-label="Go to lesson {{ i }}"
+       {% if is_current %}aria-current="step"{% endif %}>
+      <span class="stepper-dot-num">{{ '%02d' | format(i) }}</span>
+    </a>
+    {% if not loop.last %}<span class="stepper-track"></span>{% endif %}
+  {% endfor %}
+</div>

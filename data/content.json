@@ -1,0 +1,266 @@
+{
+  "meta": {
+    "title": "The Cyber Kill Chain",
+    "course": "COMS 4170W · Design of User Interfaces",
+    "subtitle": "Cyber Kill Chain Educational Module",
+    "credit": "by Nicolas Hunt (nh2905@columbia.edu"
+  },
+  "home": {
+    "badge": "Cybersecurity Fundamentals",
+    "title_html": "The Cyber<br>Kill Chain",
+    "subtitle": "Understand the five phases of a cyberattack.",
+    "start_label": "Begin Learning",
+    "mascot_script": [
+      {"text": "Hi! I'm Neko, your guide through the Cyber Kill Chain, nyaa~!", "expr": "wave"},
+      {"text": "I'll walk you through seven short lessons, then a short quiz. Hit Begin Learning whenever you're ready!", "expr": "excited"}
+    ]
+  },
+  "lessons": [
+    {
+      "id": "framework",
+      "num": 1,
+      "label": "The Framework",
+      "phase_num": null,
+      "title": "Every cyberattack tells the same story.",
+      "scene": "framework",
+      "mascot_script": [
+        {"text": "Welcome to lesson 1! The Cyber Kill Chain was developed by Lockheed Martin as a map of how every cyberattack moves forward.", "expr": "teaching"},
+        {"text": "Every breach, big or small, has to complete each of these 5 phases to succeed.", "expr": "thinking"},
+        {"text": "Click any circle below to preview that phase. The magic: break any ONE phase and the whole attack collapses!", "expr": "excited"}
+      ],
+      "body": {
+        "intro_bullets": [
+          "Developed by Lockheed Martin (2011) as a defensive framework.",
+          "Describes 5 sequential phases every attack must complete.",
+          "Breaking any single phase stops the entire attack."
+        ],
+        "chain_nodes": [
+          {"num": 1, "label": "Recon",       "name": "Reconnaissance",     "desc": "The attacker researches the target, scanning networks, harvesting emails, and mapping out the organization's attack surface."},
+          {"num": 2, "label": "Arm & Deliver","name": "Arm & Deliver",      "desc": "The attacker crafts a tailored weapon (malware or a malicious document) and delivers it via phishing or compromised channels."},
+          {"num": 3, "label": "Exploit",     "name": "Exploitation",       "desc": "The weapon activates: a vulnerability is triggered, code executes, and the attacker gains their initial foothold."},
+          {"num": 4, "label": "Control",     "name": "Establish Control",  "desc": "The attacker installs persistent backdoors and establishes an encrypted command channel for ongoing remote access."},
+          {"num": 5, "label": "Exfiltrate",  "name": "Exfiltration",       "desc": "The endgame: sensitive data is located, compressed, and secretly transferred to the attacker's external servers."}
+        ]
+      }
+    },
+    {
+      "id": "recon",
+      "num": 2,
+      "label": "Phase 1 · Recon",
+      "phase_num": 1,
+      "title": "Phase 1 · Reconnaissance",
+      "aka": "LinkedIn Harvesting",
+      "scene": "recon",
+      "mascot_script": [
+        {"text": "Phase 1 · Reconnaissance. The attacker has picked ACME Corp as their target.", "expr": "thinking"},
+        {"text": "This is PASSIVE recon — just Google, LinkedIn, job posts, public leaks. The victim never notices a thing.", "expr": "teaching"},
+        {"text": "Hit Start Scan to watch them harvest employee emails for the next phase!", "expr": "excited"}
+      ],
+      "body": {
+        "company": "ACME Corp",
+        "profiles": [
+          {"initials": "JD", "name": "Jane Doe",     "role": "CFO",              "email": "j.doe@acme-corp.com"},
+          {"initials": "MS", "name": "Mike Smith",   "role": "IT Administrator", "email": "m.smith@acme-corp.com"},
+          {"initials": "AK", "name": "Alice Kim",    "role": "HR Director",      "email": "a.kim@acme-corp.com"},
+          {"initials": "BJ", "name": "Bob Johnson",  "role": "Software Engineer","email": "b.johnson@acme-corp.com"},
+          {"initials": "CL", "name": "Carol Lee",    "role": "Security Analyst", "email": "c.lee@acme-corp.com"},
+          {"initials": "DW", "name": "David Wang",   "role": "VP Engineering",   "email": "d.wang@acme-corp.com"}
+        ]
+      }
+    },
+    {
+      "id": "armdeliver",
+      "num": 3,
+      "label": "Phase 2 · Arm & Deliver",
+      "phase_num": 2,
+      "title": "Phase 2 · Arm & Deliver",
+      "aka": "Crafting & Sending the Attack",
+      "scene": "armdeliver",
+      "mascot_script": [
+        {"text": "Phase 2 · Arm & Deliver. With the target list in hand, they build a weapon and pick a delivery ride.", "expr": "teaching"},
+        {"text": "The #1 ride? Email. Walk through the three steps to craft a malicious doc and phish poor Mike.", "expr": "alert"}
+      ],
+      "body": {
+        "target_email": "m.smith@acme-corp.com",
+        "target_name": "Mike Smith"
+      }
+    },
+    {
+      "id": "exploit",
+      "num": 4,
+      "label": "Phase 3 · Exploit",
+      "phase_num": 3,
+      "title": "Phase 3 · Exploitation",
+      "aka": "Macro Code Execution",
+      "scene": "exploit",
+      "mascot_script": [
+        {"text": "Phase 3 · Exploitation. Mike opens what LOOKS like an invoice. He sees a warning. Just one careless click…", "expr": "alert"},
+        {"text": "Click the glowing Enable Content button yourself to see exactly what fires behind the scenes.", "expr": "teaching"}
+      ],
+      "body": {}
+    },
+    {
+      "id": "control",
+      "num": 5,
+      "label": "Phase 4 · Control",
+      "phase_num": 4,
+      "title": "Phase 4 · Establish Control",
+      "aka": "Persistence & Command Channel",
+      "scene": "control",
+      "mascot_script": [
+        {"text": "Phase 4 · Establish Control. Code is running on Mike's machine. The attacker plants backdoors and calls home.", "expr": "thinking"},
+        {"text": "Run each step in order to watch persistence get installed, then see the encrypted C2 tunnel come alive.", "expr": "teaching"}
+      ],
+      "body": {
+        "victim_ip": "10.0.0.47",
+        "attacker_ip": "185.47.xx.xx"
+      }
+    },
+    {
+      "id": "exfil",
+      "num": 6,
+      "label": "Phase 5 · Exfiltrate",
+      "phase_num": 5,
+      "title": "Phase 5 · Exfiltration",
+      "aka": "Data Theft",
+      "scene": "exfil",
+      "mascot_script": [
+        {"text": "Phase 5 · Exfiltration. Mission-objective time — steal the crown jewels. This is the loud part.", "expr": "worried"},
+        {"text": "Click files one at a time, or smash-and-grab everything at once. Either way, the damage is done.", "expr": "alert"}
+      ],
+      "body": {
+        "files": [
+          {"icon": "\ud83d\udcc4", "name": "customer_database.sql",    "size": "840 MB",  "mb": 840},
+          {"icon": "\ud83d\udcc4", "name": "employee_records.xlsx",    "size": "126 MB",  "mb": 126},
+          {"icon": "\ud83d\udcc4", "name": "financial_report_Q1.pdf",  "size": "42 MB",   "mb": 42},
+          {"icon": "\ud83d\udd11", "name": "ssh_keys.tar.gz",          "size": "8 MB",    "mb": 8},
+          {"icon": "\ud83d\udcc4", "name": "api_credentials.env",      "size": "2 KB",    "mb": 0.002},
+          {"icon": "\ud83d\udcc4", "name": "board_meeting_notes.docx", "size": "18 MB",   "mb": 18},
+          {"icon": "\ud83d\udcc4", "name": "source_code.tar.gz",       "size": "1.4 GB",  "mb": 1400}
+        ]
+      }
+    },
+    {
+      "id": "casestudy",
+      "num": 7,
+      "label": "Case Study",
+      "phase_num": null,
+      "title": "The MGM Resorts Breach, 2023",
+      "scene": "casestudy",
+      "mascot_script": [
+        {"text": "Real-world time! This is MGM Resorts, September 2023. Scattered Spider used every phase you just learned, in exact order.", "expr": "alert"},
+        {"text": "A single 10-minute phone call to the IT help desk caused over $100M in losses. Social engineering is scary powerful!", "expr": "worried"},
+        {"text": "When you're ready, hit Start the Quiz to prove what you learned!", "expr": "excited"}
+      ],
+      "body": {
+        "steps": [
+          {"num": 1, "phase": "Recon",         "title": "LinkedIn & Social Profiling",    "desc": "Attackers profiled an MGM IT staffer by scraping LinkedIn and other social media — his role, his colleagues, even his speaking style."},
+          {"num": 2, "phase": "Arm & Deliver", "title": "The 10-Minute Phone Call",       "desc": "They called the IT help desk impersonating the employee and convinced the agent to reset his credentials — no malware needed."},
+          {"num": 3, "phase": "Exploit",       "title": "Identity Provider Takeover",     "desc": "With the reset credential, they logged into MGM's Okta tenant and escalated privileges across the identity platform."},
+          {"num": 4, "phase": "Control",       "title": "Lateral Movement & Persistence", "desc": "They moved from cloud identity into on-prem Active Directory, installing a secondary identity provider for persistent access."},
+          {"num": 5, "phase": "Exfiltrate",    "title": "Ransomware & $100M in Losses",   "desc": "BlackCat ransomware was deployed across thousands of ESXi hosts; slot machines, room keys, and reservations went dark for 10 days."}
+        ],
+        "impact": [
+          {"value": "$100M+", "label": "Total Losses"},
+          {"value": "10 min", "label": "Phone Call Duration"},
+          {"value": "10 days","label": "Systems Offline"}
+        ]
+      }
+    }
+  ],
+  "quiz": {
+    "correct_order": ["Reconnaissance", "Arm & Deliver", "Exploitation", "Establish Control", "Exfiltration"],
+    "challenges": [
+      {
+        "id": "order",
+        "num": 1,
+        "type": "order",
+        "label": "Challenge 1",
+        "title": "Reconstruct the Kill Chain",
+        "desc": "Drag the phases into the correct order, from first to last.",
+        "mascot_script": [
+          {"text": "First challenge! I'll shuffle the five phases — you drag them back into the correct attack order.", "expr": "teaching"},
+          {"text": "Remember: passive research comes first, stolen data leaves last. You got this!", "expr": "excited"}
+        ]
+      },
+      {
+        "id": "match",
+        "num": 2,
+        "type": "match",
+        "label": "Challenge 2",
+        "title": "Classify the Attack Events",
+        "desc": "Each event belongs to a phase of the kill chain. Drag each event to the correct phase.",
+        "mascot_script": [
+          {"text": "Nice work! Now let's match real events to their phase. Drag each event card onto the phase it belongs to.", "expr": "teaching"},
+          {"text": "If you drop one on the wrong phase, just drag it back out and try again. Take your time!", "expr": "thinking"}
+        ],
+        "events": [
+          {"id": "e1", "text": "Searched LinkedIn for employee emails and job titles", "phase": "Reconnaissance"},
+          {"id": "e2", "text": "Created a malicious document and emailed it to the target", "phase": "Arm & Deliver"},
+          {"id": "e3", "text": "User opened the document, triggering hidden code execution", "phase": "Exploitation"},
+          {"id": "e4", "text": "Backdoor installed and encrypted channel established to attacker", "phase": "Establish Control"},
+          {"id": "e5", "text": "Confidential data compressed and transferred to external server", "phase": "Exfiltration"}
+        ]
+      },
+      {
+        "id": "defend",
+        "num": 3,
+        "type": "defend",
+        "label": "Challenge 3",
+        "title": "Defend the Network",
+        "desc": "An attack is unfolding in real-time. At each phase, choose the correct defensive action to stop the attacker before they reach their objective.",
+        "mascot_script": [
+          {"text": "Final challenge! You're on the blue team now — an attack is unfolding and you have to pick the right defense at each phase.", "expr": "alert"},
+          {"text": "Hit Start Simulation when you're ready. Five phases, one shot each — no pressure, nyaa~!", "expr": "excited"}
+        ],
+        "rounds": [
+          {
+            "phase": "Reconnaissance",
+            "alert": "An unknown entity is scanning your public infrastructure and scraping employee data from social media profiles.",
+            "options": [
+              {"id": "r1a", "text": "Limit public exposure & deploy social engineering awareness training", "correct": true},
+              {"id": "r1b", "text": "Patch all known CVEs on internal application servers", "correct": false},
+              {"id": "r1c", "text": "Deploy DLP tools to monitor outbound data transfers", "correct": false}
+            ]
+          },
+          {
+            "phase": "Arm & Deliver",
+            "alert": "A wave of spoofed emails carrying suspicious attachments is flooding employee inboxes, disguised as urgent invoices from a trusted vendor.",
+            "options": [
+              {"id": "r2a", "text": "Monitor internal network for unusual lateral movement", "correct": false},
+              {"id": "r2b", "text": "Deploy email gateway filtering & sandbox suspicious attachments", "correct": true},
+              {"id": "r2c", "text": "Rotate all employee account passwords immediately", "correct": false}
+            ]
+          },
+          {
+            "phase": "Exploitation",
+            "alert": "An employee opened a document that is exploiting an unpatched vulnerability to execute malicious code on their workstation.",
+            "options": [
+              {"id": "r3a", "text": "Restrict employee LinkedIn profile visibility", "correct": false},
+              {"id": "r3b", "text": "Patch known vulnerabilities & enforce macro-disabled policies", "correct": true},
+              {"id": "r3c", "text": "Implement network segmentation between departments", "correct": false}
+            ]
+          },
+          {
+            "phase": "Establish Control",
+            "alert": "A compromised workstation is making regular encrypted connections to an unknown overseas IP every 30 seconds.",
+            "options": [
+              {"id": "r4a", "text": "Isolate the endpoint & block C2 traffic at the firewall", "correct": true},
+              {"id": "r4b", "text": "Deploy email attachment sandboxing rules", "correct": false},
+              {"id": "r4c", "text": "Conduct a vulnerability scan on public-facing web apps", "correct": false}
+            ]
+          },
+          {
+            "phase": "Exfiltration",
+            "alert": "Anomalous data flows detected: 2.4 GB of compressed files being transferred to an external IP address during off-hours.",
+            "options": [
+              {"id": "r5a", "text": "Enable multi-factor authentication across all accounts", "correct": false},
+              {"id": "r5b", "text": "Implement DLP monitoring & block unauthorized bulk transfers", "correct": true},
+              {"id": "r5c", "text": "Deploy an updated email security gateway", "correct": false}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

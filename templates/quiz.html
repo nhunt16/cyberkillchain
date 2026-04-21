@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ challenge.label }} · {{ challenge.title }} · {{ meta.title }}{% endblock %}
+
+{% block body_class %}page-quiz{% endblock %}
+
+{% block content %}
+<section class="section section--quiz-q">
+  <div class="container">
+
+    <div class="stepper stepper--quiz" aria-label="Quiz progress">
+      {% for i in range(1, total + 1) %}
+        {% set is_current = i == n %}
+        {% set is_past = i < n %}
+        <span class="stepper-dot{% if is_current %} is-current{% endif %}{% if is_past %} is-past{% endif %}"
+              {% if is_current %}aria-current="step"{% endif %}>
+          <span class="stepper-dot-num">{{ '%02d' | format(i) }}</span>
+        </span>
+        {% if not loop.last %}<span class="stepper-track"></span>{% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="mascot-host" data-section="quiz-{{ challenge.id }}"
+         data-mascot-script='{{ challenge.mascot_script | tojson }}'
+         data-mascot-topic="{{ challenge.label }}"></div>
+
+    <form method="post" action="{{ url_for('quiz', n=n) }}" id="quizChallengeForm"
+          data-challenge-type="{{ challenge.type }}"
+          data-challenge-id="{{ challenge.id }}">
+      <input type="hidden" name="submission" id="quizSubmissionField" value="">
+
+      <div class="quiz-challenge" id="quizChallenge{{ challenge.num }}"
+           data-challenge='{{ challenge | tojson }}'
+           data-correct-order='{{ correct_order | tojson }}'
+           data-saved-submission='{{ saved_submission | tojson }}'>
+        <div class="quiz-challenge-header anim-fade-up visible">
+          <span class="quiz-challenge-number">{{ challenge.label }}</span>
+          <h3 class="quiz-challenge-title">{{ challenge.title }}</h3>
+          <p class="quiz-challenge-desc">{{ challenge.desc }}</p>
+        </div>
+
+        {% if challenge.type == "order" %}
+          {% include "partials/quiz_order.html" %}
+        {% elif challenge.type == "match" %}
+          {% include "partials/quiz_match.html" %}
+        {% elif challenge.type == "defend" %}
+          {% include "partials/quiz_defend.html" %}
+        {% endif %}
+      </div>
+
+      <nav class="lesson-nav">
+        <a href="{{ prev_url }}" class="lesson-nav-btn lesson-nav-btn--ghost">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Previous</span>
+        </a>
+        <span class="lesson-nav-counter">{{ challenge.label }} / {{ total }}</span>
+        <button type="submit" class="lesson-nav-btn lesson-nav-btn--primary" id="quizSubmitBtn" disabled>
+          <span>{% if is_last %}Finish &amp; See Score{% else %}Next Challenge{% endif %}</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </nav>
+    </form>
+
+  </div>
+</section>
+{% endblock %}

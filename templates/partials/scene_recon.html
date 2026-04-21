@@ -1,0 +1,44 @@
+<div class="scene" data-scene="recon" data-profiles='{{ lesson.body.profiles | tojson }}'>
+  <div class="scene-stage">
+    <div class="mockup-window">
+      <div class="mockup-titlebar">
+        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+        <div class="mockup-url"><span class="mockup-lock">&#128274;</span> linkedin.com/company/acme-corp/people</div>
+      </div>
+      <div class="mockup-body mockup-body--recon">
+        <div class="recon-sidebar">
+          <div class="recon-logo">{{ lesson.body.company[:4] | upper }}</div>
+          <div class="recon-nav-item active">People</div>
+          <div class="recon-nav-item">About</div>
+          <div class="recon-nav-item">Jobs</div>
+        </div>
+        <div class="recon-main">
+          <div class="recon-search-bar">
+            <span class="recon-search-icon">&#128269;</span>
+            <span class="recon-search-text recon-search-placeholder">Search employees...</span><span class="recon-search-caret"></span>
+          </div>
+          <div class="recon-profiles" id="reconProfiles"></div>
+        </div>
+        <div class="recon-harvest" id="reconHarvest">
+          <div class="harvest-header">
+            <span class="harvest-icon">&#128196;</span> target_emails.txt
+          </div>
+          <div class="harvest-list" id="harvestList"></div>
+          <div class="harvest-count"><span id="harvestCount">0</span> emails collected</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scene-actions" data-scene-actions="recon">
+    <button class="scene-action-btn primary" data-action="scan" type="button">
+      <span class="scene-action-icon">&#9655;</span> Start Scan
+    </button>
+    <button class="scene-action-btn" data-action="harvestAll" type="button" disabled>
+      Harvest All
+    </button>
+    <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" type="button" disabled>
+      &#8635; Reset
+    </button>
+    <span class="scene-hint" data-scene-hint>Click <strong>Start Scan</strong> to begin searching for employee data.</span>
+  </div>
+</div>
