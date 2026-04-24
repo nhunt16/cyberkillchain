@@ -3468,9 +3468,17 @@ body.app-body {
 
 /* On the home page we let the hero grow tall enough to fit the
    title, CTA, and the Neko narrator all on the same gradient
-   background — no separate dark "well" sitting under it. */
+   background — no separate dark "well" sitting under it. The
+   hero also stretches to fill the main column so its world-map
+   background reaches all the way down to the footer (no dark
+   gap between the canvas and the footer's top border). */
+.page-home .app-main {
+  display: flex;
+  flex-direction: column;
+}
 .hero--home {
   min-height: auto;
+  flex: 1 0 auto;
   padding-top: calc(var(--spacing-8) + 40px);
   padding-bottom: var(--spacing-6);
   align-items: flex-start;   /* push content up inside the tall hero */

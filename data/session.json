@@ -20,6 +20,48 @@
       "time_iso": "2026-04-23T01:54:28.683984Z",
       "lesson": 1,
       "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777027876.026135,
+      "time_iso": "2026-04-24T10:51:16.027030Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777027879.192663,
+      "time_iso": "2026-04-24T10:51:19.192680Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777027897.028439,
+      "time_iso": "2026-04-24T10:51:37.028445Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "order",
+      "time": 1777027898.5042229,
+      "time_iso": "2026-04-24T10:51:38.504237Z",
+      "challenge_num": 1,
+      "challenge_id": "order"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777027918.496537,
+      "time_iso": "2026-04-24T10:51:58.496548Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "order",
+      "time": 1777027919.24611,
+      "time_iso": "2026-04-24T10:51:59.246127Z",
+      "challenge_num": 1,
+      "challenge_id": "order"
     }
   ],
   "quiz_answers": {},
