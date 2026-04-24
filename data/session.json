@@ -1,195 +1,28 @@
 {
-  "started_at": null,
-  "started_at_iso": null,
+  "started_at": 1776909259.5940962,
+  "started_at_iso": "2026-04-23T01:54:19.594117Z",
   "events": [
     {
-      "type": "lesson_event",
-      "time": 1776742982.997926,
-      "time_iso": "2026-04-21T03:43:02.997940Z",
-      "lesson": 6,
-      "lesson_id": "exfil",
-      "action": "exfil_steal_file",
-      "detail": {
-        "file": "employee_records.xlsx",
-        "size": "126 MB"
-      }
-    },
-    {
-      "type": "lesson_event",
-      "time": 1776742983.4243479,
-      "time_iso": "2026-04-21T03:43:03.424354Z",
-      "lesson": 6,
-      "lesson_id": "exfil",
-      "action": "exfil_steal_file",
-      "detail": {
-        "file": "financial_report_Q1.pdf",
-        "size": "42 MB"
-      }
-    },
-    {
-      "type": "lesson_event",
-      "time": 1776742983.795427,
-      "time_iso": "2026-04-21T03:43:03.795447Z",
-      "lesson": 6,
-      "lesson_id": "exfil",
-      "action": "exfil_steal_file",
-      "detail": {
-        "file": "ssh_keys.tar.gz",
-        "size": "8 MB"
-      }
-    },
-    {
-      "type": "lesson_event",
-      "time": 1776742984.164486,
-      "time_iso": "2026-04-21T03:43:04.164501Z",
-      "lesson": 6,
-      "lesson_id": "exfil",
-      "action": "exfil_steal_file",
-      "detail": {
-        "file": "api_credentials.env",
-        "size": "2 KB"
-      }
-    },
-    {
-      "type": "lesson_event",
-      "time": 1776742984.532063,
-      "time_iso": "2026-04-21T03:43:04.532074Z",
-      "lesson": 6,
-      "lesson_id": "exfil",
-      "action": "exfil_steal_file",
-      "detail": {
-        "file": "board_meeting_notes.docx",
-        "size": "18 MB"
-      }
-    },
-    {
-      "type": "lesson_event",
-      "time": 1776742984.9000268,
-      "time_iso": "2026-04-21T03:43:04.900040Z",
-      "lesson": 6,
-      "lesson_id": "exfil",
-      "action": "exfil_steal_file",
-      "detail": {
-        "file": "source_code.tar.gz",
-        "size": "1.4 GB"
-      }
-    },
-    {
-      "type": "lesson_event",
-      "time": 1776742985.516646,
-      "time_iso": "2026-04-21T03:43:05.516663Z",
-      "lesson": 6,
-      "lesson_id": "exfil",
-      "action": "exfil_complete",
-      "detail": {
-        "total_mb": 2434
-      }
+      "type": "session_start",
+      "time": 1776909259.594128,
+      "time_iso": "2026-04-23T01:54:19.594130Z"
     },
     {
       "type": "lesson_enter",
-      "time": 1776742988.059338,
-      "time_iso": "2026-04-21T03:43:08.059361Z",
-      "lesson": 7,
-      "lesson_id": "casestudy"
+      "time": 1776909259.601248,
+      "time_iso": "2026-04-23T01:54:19.601264Z",
+      "lesson": 1,
+      "lesson_id": "framework"
     },
     {
-      "type": "order",
-      "time": 1776743000.1670039,
-      "time_iso": "2026-04-21T03:43:20.167016Z",
-      "challenge_num": 1,
-      "challenge_id": "order"
-    },
-    {
-      "type": "order",
-      "time": 1776743015.456974,
-      "time_iso": "2026-04-21T03:43:35.456987Z",
-      "challenge_num": 1,
-      "challenge_id": "order",
-      "correct": 5,
-      "total": 5
-    },
-    {
-      "type": "match",
-      "time": 1776743015.467618,
-      "time_iso": "2026-04-21T03:43:35.467629Z",
-      "challenge_num": 2,
-      "challenge_id": "match"
-    },
-    {
-      "type": "match",
-      "time": 1776743032.219192,
-      "time_iso": "2026-04-21T03:43:52.219207Z",
-      "challenge_num": 2,
-      "challenge_id": "match",
-      "correct": 5,
-      "total": 5
-    },
-    {
-      "type": "defend",
-      "time": 1776743032.229269,
-      "time_iso": "2026-04-21T03:43:52.229288Z",
-      "challenge_num": 3,
-      "challenge_id": "defend"
-    },
-    {
-      "type": "defend",
-      "time": 1776743059.919229,
-      "time_iso": "2026-04-21T03:44:19.919241Z",
-      "challenge_num": 3,
-      "challenge_id": "defend",
-      "correct": 5,
-      "total": 5
-    },
-    {
-      "type": "quiz_complete",
-      "time": 1776743059.93253,
-      "time_iso": "2026-04-21T03:44:19.932534Z",
-      "score": 100,
-      "correct": 15,
-      "total": 15
+      "type": "lesson_enter",
+      "time": 1776909268.683976,
+      "time_iso": "2026-04-23T01:54:28.683984Z",
+      "lesson": 1,
+      "lesson_id": "framework"
     }
   ],
-  "quiz_answers": {
-    "1": {
-      "challenge_id": "order",
-      "type": "order",
-      "submission": [
-        "Reconnaissance",
-        "Arm & Deliver",
-        "Exploitation",
-        "Establish Control",
-        "Exfiltration"
-      ],
-      "correct": 5,
-      "total": 5
-    },
-    "2": {
-      "challenge_id": "match",
-      "type": "match",
-      "submission": {
-        "e1": "Reconnaissance",
-        "e2": "Arm & Deliver",
-        "e3": "Exploitation",
-        "e4": "Establish Control",
-        "e5": "Exfiltration"
-      },
-      "correct": 5,
-      "total": 5
-    },
-    "3": {
-      "challenge_id": "defend",
-      "type": "defend",
-      "submission": {
-        "0": "r1a",
-        "1": "r2b",
-        "2": "r3b",
-        "3": "r4a",
-        "4": "r5b"
-      },
-      "correct": 5,
-      "total": 5
-    }
-  },
-  "quiz_score": 100,
-  "quiz_completed_at": "2026-04-21T03:44:19.932512Z"
+  "quiz_answers": {},
+  "quiz_score": null,
+  "quiz_completed_at": null
 }

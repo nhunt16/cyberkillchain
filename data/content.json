@@ -25,8 +25,8 @@
       "scene": "framework",
       "mascot_script": [
         {"text": "Welcome to lesson 1! The Cyber Kill Chain was developed by Lockheed Martin as a map of how every cyberattack moves forward.", "expr": "teaching"},
-        {"text": "Every breach, big or small, has to complete each of these 5 phases to succeed.", "expr": "thinking"},
-        {"text": "Click any circle below to preview that phase. The magic: break any ONE phase and the whole attack collapses!", "expr": "excited"}
+        {"text": "Every breach, big or small, typically to complete each of these 5 phases to succeed.", "expr": "thinking"},
+        {"text": "Click any circle below to preview that phase.", "expr": "excited"}
       ],
       "body": {
         "intro_bullets": [
@@ -54,7 +54,7 @@
       "mascot_script": [
         {"text": "Phase 1 · Reconnaissance. The attacker has picked ACME Corp as their target.", "expr": "thinking"},
         {"text": "This is PASSIVE recon — just Google, LinkedIn, job posts, public leaks. The victim never notices a thing.", "expr": "teaching"},
-        {"text": "Hit Start Scan to watch them harvest employee emails for the next phase!", "expr": "excited"}
+        {"text": "Hit Start Scan to watch them harvest employee emails from LinkedIn!", "expr": "excited"}
       ],
       "body": {
         "company": "ACME Corp",
@@ -95,7 +95,7 @@
       "scene": "exploit",
       "mascot_script": [
         {"text": "Phase 3 · Exploitation. Mike opens what LOOKS like an invoice. He sees a warning. Just one careless click…", "expr": "alert"},
-        {"text": "Click the glowing Enable Content button yourself to see exactly what fires behind the scenes.", "expr": "teaching"}
+        {"text": "Victim POV: Click the glowing Enable Content button yourself to see exactly what fires behind the scenes.", "expr": "teaching"}
       ],
       "body": {}
     },
