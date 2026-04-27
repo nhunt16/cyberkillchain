@@ -25,7 +25,7 @@
       </div>
       <h2 class="results-title">{{ title }}</h2>
       <p class="results-message">{{ message }}</p>
-      <p class="results-sub">You got <strong>{{ correct }}</strong> out of <strong>{{ total }}</strong> points across all three challenges.</p>
+      <p class="results-sub">You got <strong>{{ correct }}</strong> out of <strong>{{ total }}</strong> points across both challenges.</p>
 
       <div class="results-actions">
         <a href="{{ url_for('learn', n=1) }}" class="lesson-nav-btn lesson-nav-btn--ghost">
@@ -62,7 +62,25 @@
             </div>
           </header>
 
-          {% if row.challenge.type == "order" %}
+          {% if row.challenge.type == "attack_plan" %}
+            <ul class="result-attack-list">
+              {% for item in row.entries %}
+                <li class="result-attack-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
+                  <p class="result-attack-phase">Step {{ loop.index }} · {{ item.step_label }} — {{ item.step_heading }}</p>
+                  <p class="result-attack-answers">
+                    <span>You picked: <strong>{{ item.picked or '(no choice)' }}</strong></span>
+                    {% if not item.is_correct %}
+                      <span>Best option: <strong>{{ item.correct_option }}</strong></span>
+                    {% endif %}
+                  </p>
+                  {% if item.picked_rationale %}
+                    <p class="result-attack-rationale">{{ item.picked_rationale }}</p>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+
+          {% elif row.challenge.type == "order" %}
             <ol class="result-order-list">
               {% for item in row.entries %}
                 <li class="result-order-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
@@ -74,21 +92,6 @@
                 </li>
               {% endfor %}
             </ol>
-
-          {% elif row.challenge.type == "match" %}
-            <ul class="result-match-list">
-              {% for item in row.entries %}
-                <li class="result-match-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
-                  <p class="result-match-event">&ldquo;{{ item.event }}&rdquo;</p>
-                  <p class="result-match-answers">
-                    <span>You placed it in <strong>{{ item.actual or '(left in pool)' }}</strong></span>
-                    {% if not item.is_correct %}
-                      <span>Correct phase: <strong>{{ item.expected }}</strong></span>
-                    {% endif %}
-                  </p>
-                </li>
-              {% endfor %}
-            </ul>
 
           {% elif row.challenge.type == "defend" %}
             <ul class="result-defend-list">

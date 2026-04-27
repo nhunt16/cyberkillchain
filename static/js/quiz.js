@@ -1,14 +1,14 @@
 /* ============================================================
-   QUIZ · three-challenge interactive flow
+   QUIZ · two-challenge interactive flow
    ------------------------------------------------------------
    Each quiz page mounts exactly one `.quiz-challenge` node whose
    data-* attributes carry the JSON config for the challenge and
    any previously-saved submission. This module reads that config,
-   initializes the correct interaction (drag-reorder, drag-match,
-   or the defend-simulation click flow), keeps a running
-   "submission" object, and serializes it into a hidden input on
-   the form so the Flask backend can grade + persist it.
-   Uses jQuery per course requirement.
+   initializes the correct interaction (the attacker-workbench
+   plan-the-breach flow or the defend-simulation click flow),
+   keeps a running "submission" object, and serializes it into a
+   hidden input on the form so the Flask backend can grade +
+   persist it. Uses jQuery per course requirement.
    ============================================================ */
 
 (function ($) {
@@ -25,7 +25,260 @@
   }
 
   /* ------------------------------------------------------------
-     Challenge 1 · Reconstruct the Kill Chain
+     Challenge 1 · Plan the Breach (attacker workbench)
+     ------------------------------------------------------------
+     Five sequential decisions (target → pretext → channel → lure
+     → payload). Each step renders option cards; picking one
+     reveals an intel rationale ribbon and unlocks "Next". After
+     the last pick we show an ATTACK DOSSIER recap and the quiz
+     submit button is enabled. Honors saved submissions so the
+     back-button still reflects prior picks. */
+  function initAttackPlan(root, challenge, saved) {
+    var stepper = root.querySelector('#attackStepper');
+    var stage = root.querySelector('#attackStage');
+    if (!stepper || !stage) return null;
+
+    var steps = Array.isArray(challenge.steps) ? challenge.steps : [];
+    if (!steps.length) return null;
+
+    var picks = (saved && typeof saved === 'object' && !Array.isArray(saved))
+      ? Object.assign({}, saved)
+      : {};
+
+    var currentIdx = 0;
+    for (var i = 0; i < steps.length; i++) {
+      if (!picks[steps[i].id]) { currentIdx = i; break; }
+      if (i === steps.length - 1) currentIdx = steps.length;
+    }
+
+    function optionById(step, id) {
+      for (var i = 0; i < (step.options || []).length; i++) {
+        if (step.options[i].id === id) return step.options[i];
+      }
+      return null;
+    }
+
+    function renderStepper() {
+      stepper.innerHTML = '';
+      steps.forEach(function (step, i) {
+        var pill = document.createElement('div');
+        var state = 'pending';
+        if (picks[step.id]) state = 'done';
+        else if (i === currentIdx) state = 'current';
+        pill.className = 'attack-step-pill is-' + state;
+        pill.innerHTML =
+          '<span class="attack-step-pill-num">' + (i + 1) + '</span>' +
+          '<span class="attack-step-pill-label">' + step.label + '</span>';
+        stepper.appendChild(pill);
+        if (i < steps.length - 1) {
+          var track = document.createElement('span');
+          track.className = 'attack-step-track' + (picks[step.id] ? ' is-done' : '');
+          stepper.appendChild(track);
+        }
+      });
+    }
+
+    function renderStep(idx) {
+      currentIdx = idx;
+      renderStepper();
+      var step = steps[idx];
+      var existing = picks[step.id];
+
+      var optionsHtml = (step.options || []).map(function (opt) {
+        var chipsHtml = (opt.chips || []).map(function (c) {
+          return '<li class="attack-chip">' + escapeHtml(c) + '</li>';
+        }).join('');
+        var isPicked = existing === opt.id;
+        return (
+          '<button type="button" class="attack-card' + (isPicked ? ' is-picked' : '') + '" ' +
+                  'data-option-id="' + opt.id + '" ' +
+                  'data-correct="' + (opt.correct ? 'true' : 'false') + '">' +
+            '<div class="attack-card-head">' +
+              '<div class="attack-card-titles">' +
+                '<div class="attack-card-title">' + escapeHtml(opt.title) + '</div>' +
+                (opt.subtitle ? '<div class="attack-card-subtitle">' + escapeHtml(opt.subtitle) + '</div>' : '') +
+              '</div>' +
+              '<div class="attack-card-cta">Select</div>' +
+            '</div>' +
+            (chipsHtml ? '<ul class="attack-chips">' + chipsHtml + '</ul>' : '') +
+          '</button>'
+        );
+      }).join('');
+
+      stage.innerHTML =
+        '<div class="attack-step-panel" data-step-id="' + step.id + '">' +
+          '<div class="attack-step-head">' +
+            '<span class="attack-step-kicker">STEP ' + (idx + 1) + ' / ' + steps.length + ' · ' + escapeHtml(step.label) + '</span>' +
+            '<h4 class="attack-step-heading">' + escapeHtml(step.heading) + '</h4>' +
+            '<p class="attack-step-prompt">' + escapeHtml(step.prompt) + '</p>' +
+          '</div>' +
+          '<div class="attack-card-grid">' + optionsHtml + '</div>' +
+          '<div class="attack-intel" id="attackIntel" hidden>' +
+            '<div class="attack-intel-head">' +
+              '<span class="attack-intel-badge"><span class="attack-intel-dot"></span>INTEL</span>' +
+              '<span class="attack-intel-verdict" id="attackIntelVerdict"></span>' +
+            '</div>' +
+            '<p class="attack-intel-text" id="attackIntelText"></p>' +
+            '<button type="button" class="attack-next-btn" id="attackNextBtn"></button>' +
+          '</div>' +
+        '</div>';
+
+      stage.querySelectorAll('.attack-card').forEach(function (card) {
+        card.addEventListener('click', function () { handlePick(step, card); });
+      });
+
+      if (existing) {
+        var picked = stage.querySelector('.attack-card[data-option-id="' + cssEscape(existing) + '"]');
+        if (picked) revealIntel(step, picked, { skipAnimate: true });
+      }
+    }
+
+    function handlePick(step, card) {
+      if (stage.querySelector('.attack-card.is-picked')) return;
+      var optId = card.dataset.optionId;
+      picks[step.id] = optId;
+      setSubmission(picks);
+      revealIntel(step, card, { skipAnimate: false });
+    }
+
+    function revealIntel(step, card, opts) {
+      var optId = card.dataset.optionId;
+      var opt = optionById(step, optId);
+      var isCorrect = !!(opt && opt.correct);
+      var panel = stage.querySelector('.attack-step-panel');
+      if (panel) panel.classList.add('is-committed');
+
+      stage.querySelectorAll('.attack-card').forEach(function (c) {
+        c.disabled = true;
+        c.classList.remove('is-picked', 'is-correct', 'is-incorrect', 'is-faded');
+        var cId = c.dataset.optionId;
+        if (cId === optId) {
+          c.classList.add('is-picked', isCorrect ? 'is-correct' : 'is-incorrect');
+        } else if (c.dataset.correct === 'true') {
+          c.classList.add('is-correct');
+        } else {
+          c.classList.add('is-faded');
+        }
+      });
+
+      var intel = stage.querySelector('#attackIntel');
+      var verdict = stage.querySelector('#attackIntelVerdict');
+      var text = stage.querySelector('#attackIntelText');
+      var btn = stage.querySelector('#attackNextBtn');
+      if (!intel || !verdict || !text || !btn) return;
+
+      verdict.textContent = isCorrect ? 'VIABLE' : 'BURNED';
+      verdict.className = 'attack-intel-verdict ' + (isCorrect ? 'is-ok' : 'is-bad');
+      text.textContent = opt && opt.rationale ? opt.rationale : '';
+      intel.hidden = false;
+      if (!opts || !opts.skipAnimate) {
+        intel.classList.remove('anim-in');
+        void intel.offsetWidth;
+        intel.classList.add('anim-in');
+      }
+
+      var isLast = currentIdx === steps.length - 1;
+      btn.textContent = isLast ? 'Assemble dossier →' : 'Next step: ' + steps[currentIdx + 1].label + ' →';
+      btn.onclick = function () {
+        if (isLast) {
+          renderDossier();
+        } else {
+          renderStep(currentIdx + 1);
+        }
+      };
+    }
+
+    function renderDossier() {
+      currentIdx = steps.length;
+      renderStepper();
+      var rows = steps.map(function (step) {
+        var pickedId = picks[step.id];
+        var opt = optionById(step, pickedId);
+        var correct = opt && opt.correct;
+        return (
+          '<li class="dossier-row ' + (correct ? 'is-correct' : 'is-incorrect') + '">' +
+            '<span class="dossier-row-phase">' + escapeHtml(step.label) + '</span>' +
+            '<span class="dossier-row-pick">' + escapeHtml(opt ? opt.title : '—') + '</span>' +
+            '<span class="dossier-row-verdict">' + (correct ? 'viable' : 'burned') + '</span>' +
+          '</li>'
+        );
+      }).join('');
+
+      var hits = steps.filter(function (s) {
+        var o = optionById(s, picks[s.id]);
+        return o && o.correct;
+      }).length;
+      var total = steps.length;
+
+      var banner, bannerClass;
+      if (hits === total) {
+        banner = 'Operation clean. Payload detonated, C2 live, defenders blind.';
+        bannerClass = 'is-success';
+      } else if (hits >= Math.ceil(total * 0.6)) {
+        banner = 'Partial success. ' + (total - hits) + ' step' + (total - hits === 1 ? '' : 's') + ' tripped defenders — SOC is now hunting you.';
+        bannerClass = 'is-warn';
+      } else {
+        banner = 'Operation burned. ' + (total - hits) + ' critical failures. The blue team is reading your playbook.';
+        bannerClass = 'is-bad';
+      }
+
+      stage.innerHTML =
+        '<div class="attack-dossier ' + bannerClass + '">' +
+          '<div class="dossier-head">' +
+            '<span class="dossier-kicker">ATTACK DOSSIER</span>' +
+            '<h4 class="dossier-title">Operation: ACME / Mike Smith</h4>' +
+            '<p class="dossier-banner">' + escapeHtml(banner) + '</p>' +
+          '</div>' +
+          '<ol class="dossier-list">' + rows + '</ol>' +
+          '<div class="dossier-score">' +
+            '<span class="dossier-score-num">' + hits + ' / ' + total + '</span>' +
+            '<span class="dossier-score-label">decisions viable</span>' +
+          '</div>' +
+          '<button type="button" class="attack-reset-btn" id="attackResetBtn">Reset plan</button>' +
+        '</div>';
+
+      var reset = stage.querySelector('#attackResetBtn');
+      if (reset) reset.addEventListener('click', resetAll);
+      updateSubmitEnabled();
+    }
+
+    function resetAll() {
+      picks = {};
+      setSubmission(picks);
+      renderStep(0);
+    }
+
+    if (currentIdx >= steps.length) {
+      renderDossier();
+    } else {
+      renderStep(currentIdx);
+    }
+
+    setSubmission(picks);
+
+    return {
+      valid: function () {
+        for (var i = 0; i < steps.length; i++) {
+          if (!picks[steps[i].id]) return false;
+        }
+        return true;
+      }
+    };
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /* ------------------------------------------------------------
+     Legacy · Reconstruct the Kill Chain (drag-to-reorder)
+     Kept for backward-compat with any order-type challenge
+     content, though the default quiz now opens with attack_plan.
      ------------------------------------------------------------ */
   function initOrder(root, challenge, correctOrder, saved) {
     var zone = root.querySelector('#orderZone');
@@ -151,118 +404,7 @@
   }
 
   /* ------------------------------------------------------------
-     Challenge 2 · Classify the Attack Events
-     ------------------------------------------------------------ */
-  function initMatch(root, challenge, correctOrder, saved) {
-    var pool = root.querySelector('#eventPool');
-    var grid = root.querySelector('#phaseTargets');
-    if (!pool || !grid) return null;
-
-    var events = challenge.events || [];
-    var savedMap = (saved && typeof saved === 'object' && !Array.isArray(saved)) ? saved : null;
-
-    // Phase targets, in the canonical chain order.
-    correctOrder.forEach(function (label) {
-      var t = document.createElement('div');
-      t.className = 'quiz-phase-target';
-      t.dataset.phase = label;
-      t.innerHTML =
-        '<div class="quiz-phase-target-label">' + label + '</div>' +
-        '<div class="quiz-phase-target-content"></div>';
-      grid.appendChild(t);
-    });
-
-    // Event cards. Start in the pool (shuffled), or restore into
-    // the previously-chosen phase bucket if we have a saved map.
-    shuffle(events).forEach(function (ev) {
-      var el = document.createElement('div');
-      el.className = 'quiz-event';
-      el.setAttribute('draggable', 'true');
-      el.dataset.id = ev.id;
-      el.dataset.phase = ev.phase;
-      el.textContent = ev.text;
-
-      var savedPhase = savedMap ? savedMap[ev.id] : null;
-      if (savedPhase) {
-        var target = grid.querySelector('.quiz-phase-target[data-phase="' + cssEscape(savedPhase) + '"] .quiz-phase-target-content');
-        if (target) { target.appendChild(el); el.classList.add('placed'); return; }
-      }
-      pool.appendChild(el);
-    });
-
-    bindMatchDrag(root);
-    syncMatch(root);
-
-    root.addEventListener('matchchanged', function () { syncMatch(root); });
-    return {
-      valid: function () {
-        return root.querySelectorAll('.quiz-phase-target-content .quiz-event').length === events.length;
-      }
-    };
-  }
-
-  function bindMatchDrag(root) {
-    var dragged = null;
-    root.addEventListener('dragstart', function (e) {
-      var el = e.target.closest && e.target.closest('.quiz-event');
-      if (!el) return;
-      dragged = el; el.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', el.dataset.id || '');
-    });
-    root.addEventListener('dragend', function (e) {
-      var el = e.target.closest && e.target.closest('.quiz-event');
-      if (!el) return;
-      el.classList.remove('dragging');
-      root.querySelectorAll('.quiz-phase-target').forEach(function (t) { t.classList.remove('drag-over'); });
-      dragged = null;
-    });
-
-    root.querySelectorAll('.quiz-phase-target').forEach(function (target) {
-      target.addEventListener('dragover', function (e) { e.preventDefault(); target.classList.add('drag-over'); });
-      target.addEventListener('dragleave', function () { target.classList.remove('drag-over'); });
-      target.addEventListener('drop', function (e) {
-        e.preventDefault();
-        target.classList.remove('drag-over');
-        if (!dragged) return;
-        var content = target.querySelector('.quiz-phase-target-content');
-        var existing = content.querySelector('.quiz-event');
-        if (existing && existing !== dragged) {
-          existing.classList.remove('placed');
-          root.querySelector('#eventPool').appendChild(existing);
-        }
-        dragged.classList.add('placed');
-        dragged.classList.remove('dragging');
-        content.appendChild(dragged);
-        root.dispatchEvent(new CustomEvent('matchchanged'));
-      });
-    });
-
-    // Click a placed card to pop it back to the pool.
-    root.querySelectorAll('.quiz-phase-target-content').forEach(function (c) {
-      c.addEventListener('click', function (e) {
-        var ev = e.target.closest('.quiz-event');
-        if (!ev) return;
-        ev.classList.remove('placed');
-        root.querySelector('#eventPool').appendChild(ev);
-        root.dispatchEvent(new CustomEvent('matchchanged'));
-      });
-    });
-  }
-
-  function syncMatch(root) {
-    var map = {};
-    root.querySelectorAll('.quiz-phase-target').forEach(function (t) {
-      var ev = t.querySelector('.quiz-event');
-      if (ev) map[ev.dataset.id] = t.dataset.phase;
-    });
-    setSubmission(map);
-    // Also revalidate the submit button.
-    updateSubmitEnabled();
-  }
-
-  /* ------------------------------------------------------------
-     Challenge 3 · Defend the Network (5-round simulation)
+     Challenge 2 · Defend the Network (5-round simulation)
      ------------------------------------------------------------ */
   function initDefend(root, challenge) {
     var startBtn = root.querySelector('#defendStartBtn');
@@ -414,8 +556,8 @@
     if (!challenge) return;
 
     var handle;
-    if (challenge.type === 'order')       handle = initOrder(root, challenge, correctOrder, saved);
-    else if (challenge.type === 'match')  handle = initMatch(root, challenge, correctOrder, saved);
+    if (challenge.type === 'attack_plan') handle = initAttackPlan(root, challenge, saved);
+    else if (challenge.type === 'order')  handle = initOrder(root, challenge, correctOrder, saved);
     else if (challenge.type === 'defend') handle = initDefend(root, challenge);
 
     currentValidator = handle && handle.valid ? handle.valid : function () { return false; };

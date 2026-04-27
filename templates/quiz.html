@@ -39,10 +39,10 @@
           <p class="quiz-challenge-desc">{{ challenge.desc }}</p>
         </div>
 
-        {% if challenge.type == "order" %}
+        {% if challenge.type == "attack_plan" %}
+          {% include "partials/quiz_attack.html" %}
+        {% elif challenge.type == "order" %}
           {% include "partials/quiz_order.html" %}
-        {% elif challenge.type == "match" %}
-          {% include "partials/quiz_match.html" %}
         {% elif challenge.type == "defend" %}
           {% include "partials/quiz_defend.html" %}
         {% endif %}

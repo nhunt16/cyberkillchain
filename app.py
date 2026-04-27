@@ -177,6 +177,38 @@ def _grade_challenge(challenge: dict, submitted, correct_order):
     page. Unknown / missing submissions are counted as zero correct."""
     ctype = challenge["type"]
 
+    if ctype == "attack_plan":
+        submitted_map = submitted if isinstance(submitted, dict) else {}
+        items = []
+        correct = 0
+        for step in challenge.get("steps", []):
+            picked_id = submitted_map.get(step["id"])
+            picked = next(
+                (o for o in step.get("options", []) if o.get("id") == picked_id),
+                None,
+            )
+            right = next(
+                (o for o in step.get("options", []) if o.get("correct")),
+                None,
+            )
+            ok = bool(picked and picked.get("correct"))
+            if ok:
+                correct += 1
+            items.append({
+                "step_label": step.get("label", step.get("id", "")),
+                "step_heading": step.get("heading", ""),
+                "picked": picked.get("title") if picked else None,
+                "picked_rationale": picked.get("rationale") if picked else None,
+                "correct_option": right.get("title") if right else None,
+                "correct_rationale": right.get("rationale") if right else None,
+                "is_correct": ok,
+            })
+        return {
+            "correct": correct,
+            "total": len(challenge.get("steps", [])),
+            "items": items,
+        }
+
     if ctype == "order":
         submitted_list = submitted if isinstance(submitted, list) else []
         items = []
@@ -188,23 +220,6 @@ def _grade_challenge(challenge: dict, submitted, correct_order):
                 correct += 1
             items.append({"expected": expected, "actual": actual, "is_correct": ok})
         return {"correct": correct, "total": len(correct_order), "items": items}
-
-    if ctype == "match":
-        submitted_map = submitted if isinstance(submitted, dict) else {}
-        items = []
-        correct = 0
-        for ev in challenge["events"]:
-            actual = submitted_map.get(ev["id"])
-            ok = actual == ev["phase"]
-            if ok:
-                correct += 1
-            items.append({
-                "event": ev["text"],
-                "expected": ev["phase"],
-                "actual": actual,
-                "is_correct": ok,
-            })
-        return {"correct": correct, "total": len(challenge["events"]), "items": items}
 
     if ctype == "defend":
         submitted_map = submitted if isinstance(submitted, dict) else {}

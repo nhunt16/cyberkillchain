@@ -1,67 +1,88 @@
 {
-  "started_at": 1776909259.5940962,
-  "started_at_iso": "2026-04-23T01:54:19.594117Z",
+  "started_at": 1777298286.1133,
+  "started_at_iso": "2026-04-27T13:58:06.113950Z",
   "events": [
     {
       "type": "session_start",
-      "time": 1776909259.594128,
-      "time_iso": "2026-04-23T01:54:19.594130Z"
+      "time": 1777298286.11396,
+      "time_iso": "2026-04-27T13:58:06.113986Z"
     },
     {
       "type": "lesson_enter",
-      "time": 1776909259.601248,
-      "time_iso": "2026-04-23T01:54:19.601264Z",
+      "time": 1777298286.11939,
+      "time_iso": "2026-04-27T13:58:06.119396Z",
       "lesson": 1,
       "lesson_id": "framework"
     },
     {
       "type": "lesson_enter",
-      "time": 1776909268.683976,
-      "time_iso": "2026-04-23T01:54:28.683984Z",
-      "lesson": 1,
-      "lesson_id": "framework"
+      "time": 1777298287.8560379,
+      "time_iso": "2026-04-27T13:58:07.856056Z",
+      "lesson": 2,
+      "lesson_id": "recon"
     },
     {
       "type": "lesson_enter",
-      "time": 1777027876.026135,
-      "time_iso": "2026-04-24T10:51:16.027030Z",
-      "lesson": 1,
-      "lesson_id": "framework"
+      "time": 1777298289.521247,
+      "time_iso": "2026-04-27T13:58:09.521261Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
     },
     {
       "type": "lesson_enter",
-      "time": 1777027879.192663,
-      "time_iso": "2026-04-24T10:51:19.192680Z",
-      "lesson": 1,
-      "lesson_id": "framework"
+      "time": 1777298290.1121159,
+      "time_iso": "2026-04-27T13:58:10.112126Z",
+      "lesson": 4,
+      "lesson_id": "exploit"
     },
     {
       "type": "lesson_enter",
-      "time": 1777027897.028439,
-      "time_iso": "2026-04-24T10:51:37.028445Z",
-      "lesson": 1,
-      "lesson_id": "framework"
+      "time": 1777298290.930656,
+      "time_iso": "2026-04-27T13:58:10.930676Z",
+      "lesson": 5,
+      "lesson_id": "control"
     },
     {
-      "type": "order",
-      "time": 1777027898.5042229,
-      "time_iso": "2026-04-24T10:51:38.504237Z",
+      "type": "lesson_enter",
+      "time": 1777298294.680656,
+      "time_iso": "2026-04-27T13:58:14.680674Z",
+      "lesson": 6,
+      "lesson_id": "exfil"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777298296.173697,
+      "time_iso": "2026-04-27T13:58:16.173710Z",
+      "lesson": 7,
+      "lesson_id": "casestudy"
+    },
+    {
+      "type": "attack_plan",
+      "time": 1777298436.281121,
+      "time_iso": "2026-04-27T14:00:36.281126Z",
       "challenge_num": 1,
-      "challenge_id": "order"
+      "challenge_id": "attack"
     },
     {
       "type": "lesson_enter",
-      "time": 1777027918.496537,
-      "time_iso": "2026-04-24T10:51:58.496548Z",
+      "time": 1777298761.4439611,
+      "time_iso": "2026-04-27T14:06:01.443991Z",
       "lesson": 1,
       "lesson_id": "framework"
     },
     {
-      "type": "order",
-      "time": 1777027919.24611,
-      "time_iso": "2026-04-24T10:51:59.246127Z",
+      "type": "lesson_enter",
+      "time": 1777298816.685364,
+      "time_iso": "2026-04-27T14:06:56.685372Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "attack_plan",
+      "time": 1777298817.937397,
+      "time_iso": "2026-04-27T14:06:57.937411Z",
       "challenge_num": 1,
-      "challenge_id": "order"
+      "challenge_id": "attack"
     }
   ],
   "quiz_answers": {},
