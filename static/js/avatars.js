@@ -54,7 +54,7 @@
       var card = ev.target.closest('.avatar-card');
       if (!card) return;
       if (card.getAttribute('data-locked') === 'true') {
-        showToast('Locked. Defeat Inu in the Final Battle to unlock.');
+        showToast('Locked. Defeat Cyber Inu in the Final Battle to unlock.');
         return;
       }
       var avatarId = card.getAttribute('data-avatar-id');

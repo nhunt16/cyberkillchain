@@ -69,7 +69,7 @@
           <h4 class="battle-combatant-name">{{ opp.name }}</h4>
         </header>
 
-        <div class="battle-detection" aria-label="Inu's detection meter">
+        <div class="battle-detection" aria-label="Cyber Inu's detection meter">
           <div class="battle-detection-row">
             <span class="battle-detection-label">DETECTION</span>
             <span class="battle-detection-text">
@@ -104,11 +104,26 @@
       <div class="battle-moves" id="battleMoves" role="group" aria-label="Available attack moves"></div>
     </div>
 
-    <div class="battle-log-wrap">
-      <div class="battle-log-head">
-        <span class="battle-log-kicker">BATTLE LOG</span>
-        <span class="battle-log-turn" id="battleTurnIndicator">Turn 1 / {{ rules.max_turns }}</span>
-      </div>
+    <div class="battle-log-wrap" id="battleLogWrap" data-collapsed="true">
+      <button type="button"
+              class="battle-log-head"
+              id="battleLogToggle"
+              aria-expanded="false"
+              aria-controls="battleLog">
+        <span class="battle-log-head-left">
+          <span class="battle-log-kicker">BATTLE LOG</span>
+          <span class="battle-log-count" id="battleLogCount" aria-hidden="true">0 entries</span>
+        </span>
+        <span class="battle-log-head-right">
+          <span class="battle-log-turn" id="battleTurnIndicator">Turn 1 / {{ rules.max_turns }}</span>
+          <span class="battle-log-chevron" aria-hidden="true">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.75"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </span>
+      </button>
       <ol class="battle-log" id="battleLog" aria-live="polite"></ol>
     </div>
 
@@ -119,10 +134,21 @@
     <div class="battle-move-showcase-backdrop" aria-hidden="true"></div>
     <div class="battle-move-showcase-card" role="dialog" aria-modal="true"
          aria-labelledby="battleShowcaseTitle">
-      <button type="button" class="battle-move-showcase-skip" id="battleShowcaseSkip">Skip</button>
+      <button type="button" class="battle-move-showcase-skip" id="battleShowcaseSkip">Skip ▸</button>
       <header class="battle-move-showcase-head">
-        <span class="battle-move-showcase-kicker" id="battleShowcaseKicker">—</span>
-        <h3 class="battle-move-showcase-title" id="battleShowcaseTitle">Move</h3>
+        <div class="battle-showcase-actor" id="battleShowcaseActor">
+          <div class="battle-showcase-actor-portrait" id="battleShowcaseActorPortrait">
+            <img class="battle-showcase-actor-img" id="battleShowcaseActorImg" alt="" />
+          </div>
+          <div class="battle-showcase-actor-text">
+            <span class="battle-move-showcase-kicker" id="battleShowcaseKicker">—</span>
+            <span class="battle-showcase-actor-line">
+              <strong id="battleShowcaseActorName">—</strong>
+              <span class="battle-showcase-actor-verb">uses</span>
+            </span>
+            <h3 class="battle-move-showcase-title" id="battleShowcaseTitle">Move</h3>
+          </div>
+        </div>
       </header>
       <div class="battle-move-showcase-stage" id="battleShowcaseStage" aria-hidden="true">
 

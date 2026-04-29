@@ -1,13 +1,53 @@
 {
-  "started_at": null,
-  "started_at_iso": null,
+  "started_at": 1777503094.850145,
+  "started_at_iso": "2026-04-29T22:51:34.850210Z",
   "events": [
     {
+      "type": "session_start",
+      "time": 1777503094.8502212,
+      "time_iso": "2026-04-29T22:51:34.850223Z"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777503094.8551638,
+      "time_iso": "2026-04-29T22:51:34.855170Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
       "type": "battle",
-      "time": 1777486463.5276532,
-      "time_iso": "2026-04-29T18:14:23.527658Z",
+      "time": 1777503097.759776,
+      "time_iso": "2026-04-29T22:51:37.759788Z",
       "challenge_num": 1,
       "challenge_id": "battle"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777503219.336829,
+      "time_iso": "2026-04-29T22:53:39.336843Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777503224.273063,
+      "time_iso": "2026-04-29T22:53:44.273076Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "battle",
+      "time": 1777503224.8585868,
+      "time_iso": "2026-04-29T22:53:44.858601Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777503235.682882,
+      "time_iso": "2026-04-29T22:53:55.682894Z",
+      "lesson": 1,
+      "lesson_id": "framework"
     }
   ],
   "quiz_answers": {},

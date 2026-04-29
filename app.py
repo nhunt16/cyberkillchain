@@ -449,10 +449,10 @@ def quiz_result():
 
     if victory and score >= 90:
         title = "Kill Chain Complete · Flawless Run"
-        message = "You read every posture and ran the kill chain end-to-end without spooking the SOC. Inu has been added to your roster."
+        message = "You read every posture and ran the kill chain end-to-end without spooking the SOC. Cyber Inu has been added to your roster."
     elif victory:
         title = "Kill Chain Complete"
-        message = "Mission accomplished — you reached the objective before the IR clock ran out. Inu has been added to your roster."
+        message = "Mission accomplished — you reached the objective before the IR clock ran out. Cyber Inu has been added to your roster."
     elif score >= 50:
         title = "Caught at the Finish Line"
         message = "You walked most of the kill chain, but the SOC pieced your campaign together before the objective. Review the postures and try again from the Quiz tab."

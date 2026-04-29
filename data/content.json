@@ -183,13 +183,13 @@
       },
       {
         "id": "inu",
-        "name": "Inu",
+        "name": "Cyber Inu",
         "pronoun": "he",
-        "subtitle": "Blue-team boss · the dog-boy defender",
-        "flavor": "A laid-back Shiba-eared analyst who lives in the SOC. Defeat him once in the Final Battle and he joins your roster as a selectable narrator.",
-        "tags": ["Defender", "Blue Team", "Boss reward"],
+        "subtitle": "Blue-team boss · cybernetic SOC sentinel",
+        "flavor": "A half-machine Shiba-eared analyst who lives wired into the SOC. His cybernetic HUD eye sees every packet on the wire. Defeat him once in the Final Battle and he joins your roster as a selectable narrator.",
+        "tags": ["Cyborg", "Blue Team", "Boss reward"],
         "default_unlocked": false,
-        "unlock_hint": "Defeat Inu in the Final Battle.",
+        "unlock_hint": "Defeat Cyber Inu in the Final Battle.",
         "pose_prefix": "inu"
       }
     ]
@@ -201,12 +201,12 @@
         "num": 1,
         "type": "battle",
         "label": "Final Challenge",
-        "title": "Final Battle: Inu",
-        "desc": "One challenge to rule them all. Face Inu, the blue-team boss, in a turn-based duel. Pick the right attack against his current defensive posture and win the day.",
+        "title": "Final Battle: Cyber Inu",
+        "desc": "One challenge to rule them all. Face Cyber Inu, the cybernetic blue-team boss, in a turn-based duel. Pick the right attack against his current defensive posture and win the day.",
         "mascot_script": [
-          {"text": "This is it. The Final Battle pits you against Inu — the SOC's blue-team analyst. No HP bars this time; you actually have to run the full kill chain on him.", "expr": "alert"},
-          {"text": "Race two clocks: clear all five phases — Recon → Arm/Deliver → Exploit → Control → Exfil — before his Detection bar maxes out, and inside 12 turns. Land the Critical Insight pick and you clear the phase in a single move.", "expr": "teaching"},
-          {"text": "Read Inu's posture each turn — exactly one move per phase counters it. Reach Phase 5 and finish with Exfiltration or Ransomware to win, and Inu joins your roster~", "expr": "excited"}
+          {"text": "This is it. The Final Battle pits you against Cyber Inu, a security defender.", "expr": "alert"},
+          {"text": "Your objective is to clear all five phases in 12 turns: Recon → Arm/Deliver → Exploit → Control → Exfil before his Detection bar maxes out.", "expr": "teaching"},
+          {"text": "Cyber Inu will deploy defensive measures to counter your attacks.", "expr": "excited"}
         ],
         "commit_label": "Begin Battle",
         "battle": {
@@ -233,7 +233,7 @@
           },
           "opponent": {
             "id": "inu",
-            "name": "Inu",
+            "name": "Cyber Inu",
             "title": "Blue Team",
             "pose_prefix": "inu",
             "ir_move": {
@@ -259,7 +259,7 @@
               "short_label": "Recon",
               "kicker": "P1 · RECON",
               "posture": "honeypotting",
-              "intro_line": "Inu hasn't pinged you yet. Map his real attack surface before he raises an alarm.",
+              "intro_line": "Cyber Inu hasn't pinged you yet — his HUD eye is still calibrating. Map his real attack surface before he raises an alarm.",
               "player_moves": [
                 {
                   "id": "recon_linkedin",
@@ -563,29 +563,29 @@
             "exfil": {
               "kicker": "EXFILTRATION COMPLETE",
               "title": "Crown Jewels Stolen",
-              "text": "Customer databases, source code, and signing keys reached your C2 before Inu's IR team closed the window. Mission complete — Inu joins your roster."
+              "text": "Customer databases, source code, and signing keys reached your C2 before Cyber Inu's IR team closed the window. Mission complete — Cyber Inu joins your roster."
             },
             "ransom": {
               "kicker": "RANSOMWARE DEPLOYED",
               "title": "Network Held Hostage",
-              "text": "BlackCat encryption rolled across thousands of ESXi hosts before the SOC could pull the plug. Mission complete — Inu joins your roster."
+              "text": "BlackCat encryption rolled across thousands of ESXi hosts before the SOC could pull the plug. Mission complete — Cyber Inu joins your roster."
             },
             "wipe": {
               "kicker": "TRACKS WIPED",
               "title": "Ghost Out",
-              "text": "Logs scrubbed, breadcrumbs erased — but a real campaign needs an objective. Mission complete with caveats — Inu joins your roster."
+              "text": "Logs scrubbed, breadcrumbs erased — but a real campaign needs an objective. Mission complete with caveats — Cyber Inu joins your roster."
             }
           },
           "defeat_modes": {
             "detection": {
               "kicker": "DETECTED",
               "title": "Incident Response Activated",
-              "text": "Inu's SOC pieced your campaign together before you could exfil. The blue team holds the line. Try the battle again from the Quiz tab."
+              "text": "Cyber Inu's SOC pieced your campaign together before you could exfil. The blue team holds the line. Try the battle again from the Quiz tab."
             },
             "timeout": {
               "kicker": "WINDOW CLOSED",
               "title": "Engagement Window Expired",
-              "text": "You burned too many turns inside Inu's network. The SOC's threat-hunt loop caught up with you. Try the battle again from the Quiz tab."
+              "text": "You burned too many turns inside Cyber Inu's network. The SOC's threat-hunt loop caught up with you. Try the battle again from the Quiz tab."
             }
           }
         }

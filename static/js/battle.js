@@ -103,6 +103,9 @@
     var postureTile   = root.querySelector('#battlePostureTile');
 
     var logList       = root.querySelector('#battleLog');
+    var logWrap       = root.querySelector('#battleLogWrap');
+    var logToggle     = root.querySelector('#battleLogToggle');
+    var logCount      = root.querySelector('#battleLogCount');
     var turnIndicator = root.querySelector('#battleTurnIndicator');
     var movesContainer= root.querySelector('#battleMoves');
     var movesHint     = root.querySelector('#battleMovesHint');
@@ -122,6 +125,9 @@
     var showcaseTitleEl= workbench.querySelector('#battleShowcaseTitle');
     var showcaseResult = workbench.querySelector('#battleShowcaseResult');
     var showcaseScenes = workbench.querySelectorAll('.battle-move-scene');
+    var showcaseActorImg  = workbench.querySelector('#battleShowcaseActorImg');
+    var showcaseActorName = workbench.querySelector('#battleShowcaseActorName');
+    var showcaseStage = workbench.querySelector('#battleShowcaseStage');
 
     var submissionField = formEl && formEl.querySelector('#quizSubmissionField');
     var submitBtn = document.getElementById('quizSubmitBtn');
@@ -260,6 +266,12 @@
       decorateMoveButtons();
     }
 
+    function updateLogCount() {
+      if (!logCount) return;
+      var n = logList ? logList.children.length : 0;
+      logCount.textContent = n + (n === 1 ? ' entry' : ' entries');
+    }
+
     function appendLog(line, kind) {
       var li = document.createElement('li');
       li.className = 'battle-log-line' + (kind ? ' battle-log-line--' + kind : '');
@@ -267,6 +279,16 @@
       logList.appendChild(li);
       logList.scrollTop = logList.scrollHeight;
       state.log.push({ text: li.textContent, kind: kind || 'info' });
+      updateLogCount();
+    }
+
+    function setLogCollapsed(collapsed) {
+      if (!logWrap || !logToggle) return;
+      logWrap.dataset.collapsed = collapsed ? 'true' : 'false';
+      logToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+      if (!collapsed && logList) {
+        logList.scrollTop = logList.scrollHeight;
+      }
     }
 
     function floatNumber(host, text, kind) {
@@ -373,8 +395,13 @@
        Turn flow — plan → move showcase (~5s) → apply
        ------------------------------------------------------------ */
 
-    var SHOWCASE_MS = 5000;
-    var SHOWCASE_MS_REDUCED = 450;
+    // Two-phase showcase: scene plays, then a result reveal lands so
+    // the user clearly sees how the attack landed.
+    var SCENE_MS  = 6500;
+    var RESULT_MS = 3200;
+    var SHOWCASE_MS = SCENE_MS + RESULT_MS;
+    var SHOWCASE_MS_REDUCED = 700;
+    var showcaseSceneTimer = null;
 
     function prefersReducedMotion() {
       return window.matchMedia &&
@@ -512,31 +539,51 @@
       return 'Neutral';
     }
 
+    function effectivenessFor(plan) {
+      if (plan.side === 'opponent') {
+        if (plan.isIr) {
+          return { tone: 'ir',      label: "DETECTED — IR ACTIVATED" };
+        }
+        return     { tone: 'defense', label: "DEFENDED" };
+      }
+      if (!plan.hit || plan.outcome.verdict === 'miss') {
+        return { tone: 'miss', label: 'MISSED' };
+      }
+      if (plan.phaseClearedNow) {
+        return { tone: 'crit', label: 'PHASE CLEARED!' };
+      }
+      if (plan.strength === 'strong') {
+        return { tone: 'crit', label: "IT'S SUPER EFFECTIVE!" };
+      }
+      if (plan.strength === 'weak') {
+        return { tone: 'weak', label: "NOT VERY EFFECTIVE" };
+      }
+      return     { tone: 'neutral', label: "IT'S EFFECTIVE" };
+    }
+
     function populateShowcaseResult(plan) {
       if (!showcaseResult) return;
+      var eff = effectivenessFor(plan);
+      var stats = '';
       if (plan.side === 'opponent') {
-        var oppPillClass = plan.isIr ? 'is-ir' : 'is-defense';
-        var oppPillText  = plan.isIr ? 'Incident Response' : 'Defensive Counter';
         var detAdd = plan.detectionAdd || 0;
-        showcaseResult.innerHTML =
-          '<div class="battle-showcase-result-inner">' +
-            '<span class="battle-showcase-verdict ' + oppPillClass + '">' + escapeHtml(oppPillText) + '</span>' +
-            '<span class="battle-showcase-stat mono">+' + detAdd + ' detection</span>' +
-            (plan.isIr ? '<span class="battle-showcase-note">SOC mobilizing</span>' : '') +
-          '</div>';
-        return;
+        stats =
+          '<span class="battle-showcase-stat is-bad mono">+' + detAdd + ' detection on you</span>';
+      } else {
+        var pc = plan.outcome.progress;
+        var det = plan.outcome.detection;
+        var progressClass = pc > 0 ? 'is-good' : 'is-muted';
+        var detClass = det > 0 ? 'is-bad' : 'is-muted';
+        stats =
+          '<span class="battle-showcase-stat ' + progressClass + ' mono">+' + pc + '% phase</span>' +
+          '<span class="battle-showcase-stat ' + detClass + ' mono">+' + det + ' detection</span>';
       }
-      var vClass = verdictPillClass(plan);
-      var vText = verdictPillText(plan);
-      var pc = plan.outcome.progress;
-      var det = plan.outcome.detection;
-      var phaseNote = plan.phaseClearedNow ? 'Phase cleared' : '';
       showcaseResult.innerHTML =
         '<div class="battle-showcase-result-inner">' +
-          '<span class="battle-showcase-verdict ' + vClass + '">' + escapeHtml(vText) + '</span>' +
-          '<span class="battle-showcase-stat mono">+' + pc + '% phase</span>' +
-          '<span class="battle-showcase-stat mono">+' + det + ' detection</span>' +
-          (phaseNote ? '<span class="battle-showcase-note">' + escapeHtml(phaseNote) + '</span>' : '') +
+          '<div class="battle-showcase-effect" data-tone="' + eff.tone + '">' +
+            '<span class="battle-showcase-effect-label">' + escapeHtml(eff.label) + '</span>' +
+          '</div>' +
+          '<div class="battle-showcase-stats">' + stats + '</div>' +
         '</div>';
     }
 
@@ -547,17 +594,25 @@
       });
     }
 
+    function clearShowcaseTimers() {
+      if (showcaseTimer) { clearTimeout(showcaseTimer); showcaseTimer = null; }
+      if (showcaseSceneTimer) { clearTimeout(showcaseSceneTimer); showcaseSceneTimer = null; }
+    }
+
+    function revealShowcaseResult() {
+      if (!showcaseRoot || !showcaseOpen) return;
+      showcaseRoot.dataset.showcaseStage = 'result';
+    }
+
     function closeShowcaseThenApply(plan) {
-      if (showcaseTimer) {
-        clearTimeout(showcaseTimer);
-        showcaseTimer = null;
-      }
+      clearShowcaseTimers();
       if (!showcaseOpen) return;
       showcaseOpen = false;
       pendingShowcasePlan = null;
       if (showcaseRoot) {
         delete showcaseRoot.dataset.battleVerdict;
         delete showcaseRoot.dataset.battleSide;
+        delete showcaseRoot.dataset.showcaseStage;
         showcaseRoot.classList.remove('is-open');
         showcaseRoot.hidden = true;
         showcaseRoot.setAttribute('aria-hidden', 'true');
@@ -587,6 +642,24 @@
       showcaseKicker.textContent = plan.move.kicker || plan.move.id;
       showcaseTitleEl.textContent = plan.move.name || 'Move';
       showcaseRoot.setAttribute('aria-labelledby', 'battleShowcaseTitle');
+
+      if (showcaseActorName && showcaseActorImg) {
+        var actorName = plan.side === 'opponent' ? oppName : playerLabel;
+        var actorPrefix = plan.side === 'opponent' ? oppPrefix : playerPrefix;
+        var actorPose = 'happy';
+        if (plan.side === 'player') {
+          if (!plan.hit || plan.outcome.verdict === 'miss') actorPose = 'worried';
+          else if (plan.strength === 'strong') actorPose = 'excited';
+          else if (plan.strength === 'weak') actorPose = 'worried';
+          else actorPose = 'teaching';
+        } else {
+          actorPose = plan.isIr ? 'excited' : 'thinking';
+        }
+        showcaseActorName.textContent = actorName;
+        showcaseActorImg.src = poseBase + poseFile(actorPrefix, actorPose);
+        showcaseActorImg.alt = actorName + ' — ' + (plan.move.name || 'Move');
+      }
+
       populateShowcaseResult(plan);
       hideAllShowcaseScenes();
       var sid = plan.move.id || 'generic';
@@ -598,6 +671,7 @@
         void scene.offsetWidth;
         scene.classList.add('is-playing');
       }
+      showcaseRoot.dataset.showcaseStage = 'playing';
       showcaseRoot.hidden = false;
       showcaseRoot.setAttribute('aria-hidden', 'false');
       requestAnimationFrame(function () {
@@ -606,11 +680,28 @@
       if (showcaseSkip) {
         try { showcaseSkip.focus(); } catch (e) { /* ignore */ }
       }
-      var wait = prefersReducedMotion() ? SHOWCASE_MS_REDUCED : SHOWCASE_MS;
+
+      clearShowcaseTimers();
+      if (prefersReducedMotion()) {
+        // Reduced motion: skip the long scene; reveal result immediately,
+        // then auto-close after a short hold.
+        revealShowcaseResult();
+        showcaseTimer = setTimeout(function () {
+          showcaseTimer = null;
+          closeShowcaseThenApply(plan);
+        }, SHOWCASE_MS_REDUCED);
+        return;
+      }
+
+      showcaseSceneTimer = setTimeout(function () {
+        showcaseSceneTimer = null;
+        revealShowcaseResult();
+      }, SCENE_MS);
+
       showcaseTimer = setTimeout(function () {
         showcaseTimer = null;
         closeShowcaseThenApply(plan);
-      }, wait);
+      }, SHOWCASE_MS);
     }
 
     function applyPlayerTurnPlan(plan) {
@@ -772,7 +863,7 @@
         outcome = objectiveOutcomes[key] || objectiveOutcomes.exfil || {
           kicker: 'VICTORY',
           title: 'Mission Complete',
-          text: 'You ran the kill chain end-to-end before Inu pieced it together.'
+          text: 'You ran the kill chain end-to-end before Cyber Inu pieced it together.'
         };
         setPose(playerImg, 'excited', 'player');
         setPose(oppImg, 'worried', 'opp');
@@ -820,14 +911,12 @@
     }
 
     function reset() {
-      if (showcaseTimer) {
-        clearTimeout(showcaseTimer);
-        showcaseTimer = null;
-      }
+      clearShowcaseTimers();
       pendingShowcasePlan = null;
       showcaseOpen = false;
       if (showcaseRoot) {
         delete showcaseRoot.dataset.battleVerdict;
+        delete showcaseRoot.dataset.showcaseStage;
         showcaseRoot.classList.remove('is-open');
         showcaseRoot.hidden = true;
         showcaseRoot.setAttribute('aria-hidden', 'true');
@@ -837,6 +926,8 @@
       overlay.classList.remove('is-open');
       overlay.hidden = true;
       logList.innerHTML = '';
+      updateLogCount();
+      setLogCollapsed(true);
       state = newState();
       renderKillchain();
       renderDetection();
@@ -862,10 +953,30 @@
     state = newState();
     reset();
 
+    if (logToggle) {
+      logToggle.addEventListener('click', function () {
+        var collapsed = logWrap && logWrap.dataset.collapsed === 'true';
+        setLogCollapsed(!collapsed);
+      });
+    }
+
     if (showcaseSkip) {
       showcaseSkip.addEventListener('click', function () {
         var plan = pendingShowcasePlan;
         if (!plan) return;
+        var stage = showcaseRoot && showcaseRoot.dataset.showcaseStage;
+        if (stage === 'playing') {
+          // Don't bypass the result — jump straight to the effectiveness
+          // banner and give the user a brief moment to read it.
+          if (showcaseSceneTimer) { clearTimeout(showcaseSceneTimer); showcaseSceneTimer = null; }
+          if (showcaseTimer) { clearTimeout(showcaseTimer); showcaseTimer = null; }
+          revealShowcaseResult();
+          showcaseTimer = setTimeout(function () {
+            showcaseTimer = null;
+            closeShowcaseThenApply(plan);
+          }, prefersReducedMotion() ? 250 : 1400);
+          return;
+        }
         closeShowcaseThenApply(plan);
       });
     }
