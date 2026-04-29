@@ -1,0 +1,45 @@
+{
+  "title": "AVATARS — Pokédex grid",
+  "subtitle": "Two-column grid of identical card components. The active card is differentiated by ONE visual signal: a cyan border.",
+  "regions": [
+    {
+      "x": 0, "y": 0, "w": 1772, "h": 90,
+      "kind": "nav",
+      "label": "GLOBAL NAV",
+      "tag_pos": "top-right"
+    },
+    {
+      "x": 250, "y": 100, "w": 1280, "h": 240,
+      "kind": "hero",
+      "label": "PAGE HEADER",
+      "tag_pos": "top-right",
+      "note": "Centered alignment. Different from lesson pages on purpose: signals 'hub, not step in a flow.'",
+      "note_anchor": "below",
+      "note_chars": 60
+    },
+    {
+      "x": 25, "y": 390, "w": 855, "h": 825,
+      "kind": "accent",
+      "label": "ACTIVE CARD",
+      "tag_pos": "top-right",
+      "note": "Same card template as Inu; signaled active by a single cyan outline + glow. ONE attribute.",
+      "note_anchor": "in",
+      "note_chars": 60
+    },
+    {
+      "x": 905, "y": 390, "w": 855, "h": 825,
+      "kind": "content",
+      "label": "ROSTER CARD",
+      "tag_pos": "top-right",
+      "note": "Identical structure: portrait, name, role, flavor, tag pills. Repetition = peers.",
+      "note_anchor": "in",
+      "note_chars": 60
+    }
+  ],
+  "legend": [
+    {"kind": "nav", "label": "Navigation"},
+    {"kind": "hero", "label": "Page header"},
+    {"kind": "accent", "label": "Active state"},
+    {"kind": "content", "label": "Roster card"}
+  ]
+}

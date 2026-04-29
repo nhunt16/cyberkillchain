@@ -1,0 +1,53 @@
+{
+  "title": "QUIZ — battle intro (above the fold)",
+  "subtitle": "The quiz reuses lesson chrome but pivots into a head-to-head combatant layout. Color codes the two sides.",
+  "regions": [
+    {
+      "x": 0, "y": 0, "w": 1772, "h": 90,
+      "kind": "nav",
+      "label": "GLOBAL NAV",
+      "tag_pos": "top-right"
+    },
+    {
+      "x": 470, "y": 110, "w": 830, "h": 110,
+      "kind": "nav",
+      "label": "STEPPER · 1 of 1",
+      "tag_pos": "top-right",
+      "note": "Single-phase quiz = one node. Same dot component as the lesson stepper.",
+      "note_anchor": "right",
+      "note_chars": 26
+    },
+    {
+      "x": 25, "y": 430, "w": 1500, "h": 290,
+      "kind": "hero",
+      "label": "PAGE HEADER",
+      "tag_pos": "top-right",
+      "note": "'FINAL CHALLENGE' eyebrow tells the user: this is the boss room.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 25, "y": 770, "w": 855, "h": 440,
+      "kind": "accent",
+      "label": "RED TEAM",
+      "tag_pos": "top-right",
+      "note": "Pink accent rule on the LEFT edge. Pink kicker label = attacker role. Mirrors the blue card on the right.",
+      "note_anchor": "in",
+      "note_chars": 60
+    },
+    {
+      "x": 905, "y": 770, "w": 855, "h": 440,
+      "kind": "nav",
+      "label": "BLUE TEAM",
+      "tag_pos": "top-right",
+      "note": "Cyan accent rule on the RIGHT edge. Same card silhouette = equal billing. 'VS' badge sits exactly between them on the grid axis.",
+      "note_anchor": "in",
+      "note_chars": 60
+    }
+  ],
+  "legend": [
+    {"kind": "nav", "label": "Nav / Blue team"},
+    {"kind": "hero", "label": "Page header"},
+    {"kind": "accent", "label": "Red team"}
+  ]
+}

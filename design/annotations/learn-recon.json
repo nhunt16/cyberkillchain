@@ -1,0 +1,50 @@
+{
+  "title": "LESSON 2 — Phase 1 · Reconnaissance",
+  "subtitle": "Same lesson chrome as Lesson 1 (consistency), but the body morphs into a phase-specific interactive scene.",
+  "regions": [
+    {
+      "x": 0, "y": 0, "w": 1772, "h": 90,
+      "kind": "nav",
+      "label": "GLOBAL NAV",
+      "tag_pos": "top-right"
+    },
+    {
+      "x": 410, "y": 110, "w": 950, "h": 110,
+      "kind": "nav",
+      "label": "STEPPER · 02 ACTIVE",
+      "tag_pos": "top-right",
+      "note": "Active dot is filled + scaled up. Other 6 dots stay dim.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 590, "y": 230, "w": 600, "h": 110,
+      "kind": "support",
+      "label": "NARRATOR"
+    },
+    {
+      "x": 25, "y": 380, "w": 1700, "h": 230,
+      "kind": "hero",
+      "label": "PAGE HEADER",
+      "tag_pos": "top-right",
+      "note": "Eyebrow gives the curriculum slot ('PHASE 1 OF 5 LINKEDIN HARVESTING'); title is the formal phase name.",
+      "note_anchor": "below",
+      "note_chars": 64
+    },
+    {
+      "x": 25, "y": 615, "w": 1720, "h": 590,
+      "kind": "content",
+      "label": "INTERACTIVE SCENE",
+      "tag_pos": "top-right",
+      "note": "Skeuomorphic browser chrome (traffic-light dots + URL bar) signals 'real-feeling demo, not a slide.' Code-monospace label below grounds the metaphor.",
+      "note_anchor": "in",
+      "note_chars": 68
+    }
+  ],
+  "legend": [
+    {"kind": "nav", "label": "Navigation"},
+    {"kind": "hero", "label": "Page header"},
+    {"kind": "support", "label": "Narrator"},
+    {"kind": "content", "label": "Interactive scene"}
+  ]
+}

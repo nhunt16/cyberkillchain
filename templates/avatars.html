@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Avatars · {{ meta.title }}{% endblock %}
+
+{% block body_class %}page-avatars{% endblock %}
+
+{% block content %}
+<section class="section section--avatars">
+  <div class="container">
+
+    <header class="avatars-header anim-fade-up visible">
+      <span class="avatars-kicker">AVATARS</span>
+      <h1 class="avatars-title">Pick your guide</h1>
+      <p class="avatars-subtitle">
+        Your active avatar narrates lessons, hosts the quiz, and stars in the
+        Final Battle. Defeat Inu in the battle to add him to your roster.
+      </p>
+    </header>
+
+    {% set portrait_files = {'neko': 'mascot-base-happy-transparent.png', 'inu': 'inu-base-happy-transparent.png'} %}
+    <div class="avatars-grid" id="avatarsGrid">
+      {% for card in cards %}
+        {% set pose_prefix = card.pose_prefix or ('inu' if card.id == 'inu' else 'mascot') %}
+        {% set portrait_file = portrait_files.get(card.id, pose_prefix ~ '-base-happy-transparent.png') %}
+        <button type="button"
+                class="avatar-card"
+                data-avatar-id="{{ card.id }}"
+                data-active="{{ 'true' if card.active else 'false' }}"
+                data-locked="{{ 'true' if not card.unlocked else 'false' }}"
+                {% if not card.unlocked %}aria-disabled="true"{% endif %}>
+
+          <div class="avatar-portrait">
+            <img class="avatar-portrait-img"
+                 src="{{ url_for('static', filename='assets/' + portrait_file) }}"
+                 alt="{{ card.name }}">
+            {% if not card.unlocked %}
+              <div class="avatar-portrait-lock" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span>??? · Locked</span>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="avatar-meta">
+            <h3 class="avatar-name">
+              {% if card.unlocked %}{{ card.name }}{% else %}???{% endif %}
+            </h3>
+            <span class="avatar-subtitle">
+              {% if card.unlocked %}{{ card.subtitle }}{% else %}{{ card.unlock_hint or 'Defeat in the Final Battle to unlock.' }}{% endif %}
+            </span>
+          </div>
+
+          {% if card.unlocked %}
+            <p class="avatar-flavor">{{ card.flavor }}</p>
+            {% if card.tags %}
+              <ul class="avatar-tags">
+                {% for tag in card.tags %}
+                  <li class="avatar-tag">{{ tag }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          {% else %}
+            <p class="avatar-flavor">A mysterious silhouette. Win the Final Battle to bring them into the roster.</p>
+          {% endif %}
+
+          <div class="avatar-status">
+            <span class="avatar-status-dot"></span>
+            <span class="avatar-status-text">
+              {% if card.active %}Active{% elif card.unlocked %}Tap to equip{% else %}Locked{% endif %}
+            </span>
+          </div>
+        </button>
+      {% endfor %}
+    </div>
+
+    <div class="avatar-toast" id="avatarToast" role="status" aria-live="polite"></div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,52 @@
+{
+  "title": "RESULT — score card",
+  "subtitle": "Single centered card. Numeric score is the largest element. Two CTAs at the bottom answer 'where do I go now?'",
+  "regions": [
+    {
+      "x": 0, "y": 0, "w": 1772, "h": 90,
+      "kind": "nav",
+      "label": "GLOBAL NAV",
+      "tag_pos": "top-right"
+    },
+    {
+      "x": 280, "y": 100, "w": 1210, "h": 1110,
+      "kind": "content",
+      "label": "SCORE CARD · single column, centered",
+      "tag_pos": "top-right"
+    },
+    {
+      "x": 380, "y": 145, "w": 1010, "h": 350,
+      "kind": "hero",
+      "label": "SCORE RING",
+      "tag_pos": "top-right",
+      "note": "Circular gradient ring + 96 px figure. Highest visual weight = highest information value.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 380, "y": 525, "w": 1010, "h": 470,
+      "kind": "support",
+      "label": "VERDICT COPY",
+      "tag_pos": "top-right",
+      "note": "Bold verdict, one congratulation line, one quantified summary line.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 540, "y": 1085, "w": 700, "h": 130,
+      "kind": "cta",
+      "label": "ACTION ROW",
+      "tag_pos": "top-right",
+      "note": "Outlined secondary + filled primary. Color hierarchy = importance.",
+      "note_anchor": "right",
+      "note_chars": 24
+    }
+  ],
+  "legend": [
+    {"kind": "nav", "label": "Navigation"},
+    {"kind": "content", "label": "Score card"},
+    {"kind": "hero", "label": "Score ring"},
+    {"kind": "support", "label": "Verdict copy"},
+    {"kind": "cta", "label": "CTAs"}
+  ]
+}

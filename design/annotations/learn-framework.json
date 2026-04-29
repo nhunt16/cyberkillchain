@@ -1,0 +1,54 @@
+{
+  "title": "LESSON 1 — kill chain framework",
+  "subtitle": "A repeatable lesson chrome: stepper, narrator card, page header, then a phase-specific content panel. Same skeleton on every lesson.",
+  "regions": [
+    {
+      "x": 0, "y": 0, "w": 1772, "h": 90,
+      "kind": "nav",
+      "label": "GLOBAL NAV",
+      "tag_pos": "top-right"
+    },
+    {
+      "x": 410, "y": 110, "w": 950, "h": 110,
+      "kind": "nav",
+      "label": "STEPPER · 7 DOTS",
+      "tag_pos": "top-right",
+      "note": "Active dot fills with accent + glow. Passed dots filled solid; future dim. Connector = sequence.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 590, "y": 230, "w": 600, "h": 110,
+      "kind": "support",
+      "label": "NARRATOR",
+      "tag_pos": "top-right",
+      "note": "Reused across home / lessons / quiz so the avatar feels like a constant companion.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 25, "y": 380, "w": 1700, "h": 250,
+      "kind": "hero",
+      "label": "PAGE HEADER",
+      "tag_pos": "top-right",
+      "note": "Tracked eyebrow tells WHERE you are in the curriculum; huge title says WHAT this lesson is about.",
+      "note_anchor": "below",
+      "note_chars": 64
+    },
+    {
+      "x": 25, "y": 700, "w": 1720, "h": 200,
+      "kind": "content",
+      "label": "PHASE CHAIN",
+      "tag_pos": "top-right",
+      "note": "Sequential row replicates the kill chain itself. Each node is clickable; connectors enforce read order.",
+      "note_anchor": "below",
+      "note_chars": 60
+    }
+  ],
+  "legend": [
+    {"kind": "nav", "label": "Navigation"},
+    {"kind": "hero", "label": "Page header"},
+    {"kind": "support", "label": "Narrator"},
+    {"kind": "content", "label": "Lesson content"}
+  ]
+}

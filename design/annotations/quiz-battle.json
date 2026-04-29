@@ -1,0 +1,63 @@
+{
+  "title": "QUIZ — battle workbench",
+  "subtitle": "Three-zone workbench: posture (what's happening), battle log (what just happened), move palette (what you do next).",
+  "regions": [
+    {
+      "x": 770, "y": 85, "w": 970, "h": 250,
+      "kind": "accent",
+      "label": "POSTURE CARD",
+      "tag_pos": "top-right",
+      "note": "Pink-bordered tile in the top-right. Kicker tag, bold name, 2-line blurb. Single source of truth for the next decision.",
+      "note_anchor": "in",
+      "note_chars": 64
+    },
+    {
+      "x": 25, "y": 400, "w": 1735, "h": 295,
+      "kind": "support",
+      "label": "BATTLE LOG",
+      "tag_pos": "top-right",
+      "note": "Italic intro line, bold opener, phase intro. Right-aligned 'Turn 1' = persistent state badge. Latest entry at the bottom.",
+      "note_anchor": "in",
+      "note_chars": 70
+    },
+    {
+      "x": 25, "y": 720, "w": 1735, "h": 70,
+      "kind": "meta",
+      "label": "PALETTE HEADER · KICKER LEFT, LIVE HINT RIGHT",
+      "tag_pos": "top-right"
+    },
+    {
+      "x": 25, "y": 800, "w": 575, "h": 410,
+      "kind": "content",
+      "label": "STRONG MOVE",
+      "tag_pos": "top-right",
+      "note": "Green badge + green border + 'STRONG VS …' chip. Three independent visual cues converge on the optimal pick.",
+      "note_anchor": "in",
+      "note_chars": 60
+    },
+    {
+      "x": 615, "y": 800, "w": 575, "h": 410,
+      "kind": "meta",
+      "label": "NEUTRAL MOVE",
+      "tag_pos": "top-right",
+      "note": "Same chassis, purple badge, gray chip. Lower information density says 'fine, but uninspired.'",
+      "note_anchor": "in",
+      "note_chars": 60
+    },
+    {
+      "x": 1205, "y": 800, "w": 555, "h": 410,
+      "kind": "accent",
+      "label": "WEAK MOVE",
+      "tag_pos": "top-right",
+      "note": "Pink border + 'WEAK VS …' chip. Same chassis preserves comparability; the color is the warning.",
+      "note_anchor": "in",
+      "note_chars": 60
+    }
+  ],
+  "legend": [
+    {"kind": "accent", "label": "Posture / Weak"},
+    {"kind": "support", "label": "Battle log"},
+    {"kind": "content", "label": "Strong move"},
+    {"kind": "meta", "label": "Neutral / Header"}
+  ]
+}

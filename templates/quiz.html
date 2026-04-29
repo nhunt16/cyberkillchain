@@ -31,20 +31,17 @@
 
       <div class="quiz-challenge" id="quizChallenge{{ challenge.num }}"
            data-challenge='{{ challenge | tojson }}'
-           data-correct-order='{{ correct_order | tojson }}'
            data-saved-submission='{{ saved_submission | tojson }}'>
         <div class="quiz-challenge-header anim-fade-up visible">
           <span class="quiz-challenge-number">{{ challenge.label }}</span>
-          <h3 class="quiz-challenge-title">{{ challenge.title }}</h3>
-          <p class="quiz-challenge-desc">{{ challenge.desc }}</p>
+          {% if challenge.type != "battle" %}
+            <h3 class="quiz-challenge-title">{{ challenge.title }}</h3>
+            <p class="quiz-challenge-desc">{{ challenge.desc }}</p>
+          {% endif %}
         </div>
 
-        {% if challenge.type == "attack_plan" %}
-          {% include "partials/quiz_attack.html" %}
-        {% elif challenge.type == "order" %}
-          {% include "partials/quiz_order.html" %}
-        {% elif challenge.type == "defend" %}
-          {% include "partials/quiz_defend.html" %}
+        {% if challenge.type == "battle" %}
+          {% include "partials/quiz_battle.html" %}
         {% endif %}
       </div>
 

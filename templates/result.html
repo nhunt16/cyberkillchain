@@ -25,7 +25,7 @@
       </div>
       <h2 class="results-title">{{ title }}</h2>
       <p class="results-message">{{ message }}</p>
-      <p class="results-sub">You got <strong>{{ correct }}</strong> out of <strong>{{ total }}</strong> points across both challenges.</p>
+      <p class="results-sub">You landed <strong>{{ correct }}</strong> Critical Insight {% if correct == 1 %}pick{% else %}picks{% endif %} across <strong>{{ total }}</strong> {% if total == 1 %}turn{% else %}turns{% endif %}{% if victory %} and <strong>completed the kill chain</strong>{% endif %}.</p>
 
       <div class="results-actions">
         <a href="{{ url_for('learn', n=1) }}" class="lesson-nav-btn lesson-nav-btn--ghost">
@@ -45,7 +45,21 @@
       </div>
     </div>
 
-    <h3 class="result-review-title anim-fade-up visible">Challenge Review</h3>
+    {% if victory %}
+      <div class="result-battle-banner anim-fade-up visible">
+        <div class="result-battle-banner-portrait">
+          <img src="{{ url_for('static', filename='assets/inu-base-happy-transparent.png') }}" alt="Inu">
+        </div>
+        <div class="result-battle-banner-text">
+          <span class="result-battle-banner-kicker">AVATAR UNLOCKED</span>
+          <h4 class="result-battle-banner-title">Inu has joined your roster.</h4>
+          <p class="result-battle-banner-sub">Equip him on the Avatars page — he'll narrate every page you visit.</p>
+        </div>
+        <a class="result-battle-banner-cta" href="{{ url_for('avatars_page') }}">View in Avatars →</a>
+      </div>
+    {% endif %}
+
+    <h3 class="result-review-title anim-fade-up visible">Battle Recap</h3>
 
     <div class="result-challenges">
       {% for row in breakdown %}
@@ -58,55 +72,68 @@
             </div>
             <div class="result-challenge-score">
               <span class="result-challenge-score-num">{{ row.correct }}/{{ row.total }}</span>
-              <span class="result-challenge-score-label">{{ pct | round | int }}% correct</span>
+              <span class="result-challenge-score-label">Critical Insights</span>
             </div>
           </header>
 
-          {% if row.challenge.type == "attack_plan" %}
-            <ul class="result-attack-list">
-              {% for item in row.entries %}
-                <li class="result-attack-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
-                  <p class="result-attack-phase">Step {{ loop.index }} · {{ item.step_label }} — {{ item.step_heading }}</p>
-                  <p class="result-attack-answers">
-                    <span>You picked: <strong>{{ item.picked or '(no choice)' }}</strong></span>
-                    {% if not item.is_correct %}
-                      <span>Best option: <strong>{{ item.correct_option }}</strong></span>
-                    {% endif %}
-                  </p>
-                  {% if item.picked_rationale %}
-                    <p class="result-attack-rationale">{{ item.picked_rationale }}</p>
-                  {% endif %}
-                </li>
-              {% endfor %}
+          {% if row.challenge.type == "battle" %}
+            <ul class="result-battle-stats">
+              <li class="result-battle-stat">
+                <span class="result-battle-stat-num">{{ row.phases_cleared if row.phases_cleared is not none else 0 }}<span class="result-battle-stat-of">/{{ row.phases_total or 5 }}</span></span>
+                <span class="result-battle-stat-label">Phases Cleared</span>
+              </li>
+              <li class="result-battle-stat">
+                <span class="result-battle-stat-num">{{ row.detection_final if row.detection_final is not none else 0 }}<span class="result-battle-stat-of">/{{ row.detection_max or 100 }}</span></span>
+                <span class="result-battle-stat-label">Detection at End</span>
+              </li>
+              <li class="result-battle-stat">
+                <span class="result-battle-stat-num">{{ row.turns_used or 0 }}<span class="result-battle-stat-of">/{{ row.max_turns or 12 }}</span></span>
+                <span class="result-battle-stat-label">Turns Used</span>
+              </li>
+              <li class="result-battle-stat">
+                {% set outcome_kicker =
+                  ('EXFIL' if row.victory_mode == 'exfil'
+                   else 'RANSOM' if row.victory_mode == 'ransom'
+                   else 'WIPE' if row.victory_mode == 'wipe'
+                   else 'DETECTED' if row.defeat_mode == 'detection'
+                   else 'TIMEOUT' if row.defeat_mode == 'timeout'
+                   else '—') %}
+                <span class="result-battle-stat-num result-battle-stat-num--small{% if row.victory %} is-victory{% else %} is-defeat{% endif %}">{{ outcome_kicker }}</span>
+                <span class="result-battle-stat-label">Outcome</span>
+              </li>
             </ul>
 
-          {% elif row.challenge.type == "order" %}
-            <ol class="result-order-list">
-              {% for item in row.entries %}
-                <li class="result-order-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
-                  <span class="result-order-pos">{{ loop.index }}</span>
-                  <span class="result-order-name">{{ item.actual or '(blank)' }}</span>
-                  {% if not item.is_correct %}
-                    <span class="result-order-expected">should be <strong>{{ item.expected }}</strong></span>
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ol>
-
-          {% elif row.challenge.type == "defend" %}
-            <ul class="result-defend-list">
-              {% for item in row.entries %}
-                <li class="result-defend-item{% if item.is_correct %} is-correct{% else %} is-incorrect{% endif %}">
-                  <p class="result-defend-phase">Phase {{ loop.index }} · {{ item.phase }}</p>
-                  <p class="result-defend-answers">
-                    <span>You chose: <strong>{{ item.picked or '(no choice)' }}</strong></span>
-                    {% if not item.is_correct %}
-                      <span>Correct response: <strong>{{ item.correct_option }}</strong></span>
-                    {% endif %}
-                  </p>
-                </li>
-              {% endfor %}
-            </ul>
+            {% if row.entries %}
+              <ol class="result-battle-list">
+                {% for item in row.entries %}
+                  {% set verdict_class =
+                       'is-correct' if item.verdict == 'strong'
+                       else ('is-incorrect' if item.verdict == 'weak'
+                       else ('is-miss' if item.verdict == 'miss'
+                       else 'is-neutral')) %}
+                  <li class="result-battle-item {{ verdict_class }}{% if item.phase_cleared %} is-phase-cleared{% endif %}">
+                    <span class="result-battle-turn">TURN {{ '%02d' | format(item.turn or loop.index) }}</span>
+                    <span class="result-battle-move">
+                      {{ item.move_name or '(no move)' }}{% if not item.hit %} · <em>missed</em>{% endif %}
+                    </span>
+                    <span class="result-battle-posture">vs {{ item.posture_name or '—' }}</span>
+                    <span class="result-battle-deltas">
+                      <span class="result-battle-delta result-battle-delta--progress">+{{ item.progress_added or 0 }}% phase</span>
+                      <span class="result-battle-delta result-battle-delta--detection">+{{ item.detection_added or 0 }} det</span>
+                    </span>
+                    <span class="result-battle-verdict">
+                      {% if item.verdict == 'strong' %}Critical Insight
+                      {% elif item.verdict == 'weak' %}Weak pick
+                      {% elif item.verdict == 'miss' %}Missed
+                      {% else %}Neutral{% endif %}
+                      {% if item.phase_cleared %} · phase cleared{% endif %}
+                    </span>
+                  </li>
+                {% endfor %}
+              </ol>
+            {% else %}
+              <p class="result-empty">No turn-log was recorded for this attempt.</p>
+            {% endif %}
           {% endif %}
         </section>
       {% endfor %}

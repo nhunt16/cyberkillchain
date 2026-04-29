@@ -1,0 +1,45 @@
+{
+  "title": "HOME — visual hierarchy",
+  "subtitle": "One screen, four conceptual rings of attention. The world-map background fades back so the centered stack pops forward.",
+  "regions": [
+    {
+      "x": 0, "y": 0, "w": 1772, "h": 90,
+      "kind": "nav",
+      "label": "GLOBAL NAV",
+      "tag_pos": "top-right",
+      "note": "Persistent shell across every page. Logo left, link group right, single high-contrast pill anchors the action.",
+      "note_anchor": "below",
+      "note_chars": 60
+    },
+    {
+      "x": 320, "y": 195, "w": 880, "h": 545,
+      "kind": "hero",
+      "label": "HERO STACK",
+      "note": "14 px tracked eyebrow, 96 px display title, 24 px subtitle. Top-aligned single column = top-down read.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 615, "y": 875, "w": 580, "h": 130,
+      "kind": "support",
+      "label": "NARRATOR",
+      "note": "Smaller, lower contrast. Sits BELOW the title — clearly subordinate.",
+      "note_anchor": "right",
+      "note_chars": 24
+    },
+    {
+      "x": 615, "y": 1075, "w": 580, "h": 130,
+      "kind": "cta",
+      "label": "PRIMARY CTA",
+      "note": "The only saturated control on the page. Whitespace + color isolation = unmistakable next step.",
+      "note_anchor": "right",
+      "note_chars": 24
+    }
+  ],
+  "legend": [
+    {"kind": "nav", "label": "Navigation"},
+    {"kind": "hero", "label": "Hero/Title"},
+    {"kind": "support", "label": "Supporting"},
+    {"kind": "cta", "label": "Primary CTA"}
+  ]
+}

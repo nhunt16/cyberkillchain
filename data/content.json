@@ -168,299 +168,427 @@
       }
     }
   ],
-  "quiz": {
-    "correct_order": ["Reconnaissance", "Arm & Deliver", "Exploitation", "Establish Control", "Exfiltration"],
-    "challenges": [
+  "avatars": {
+    "default": "neko",
+    "roster": [
       {
-        "id": "attack",
-        "num": 1,
-        "type": "attack_plan",
-        "label": "Challenge 1",
-        "title": "Plan the Breach",
-        "desc": "You're the attacker now. Make five decisions — from OSINT to payload — to build a phishing operation against ACME Corp. Pick wrong and you get burned.",
-        "mascot_script": [
-          {"text": "Time to switch sides, nyaa~! For this challenge you ARE the attacker.", "expr": "alert"},
-          {"text": "Five decisions: target, pretext, channel, lure, payload. Each one you get right, the operation survives. Each one you get wrong, the defenders catch you.", "expr": "teaching"},
-          {"text": "Think like a red-teamer. Who's the easiest mark? What story would THEY fall for? What payload bypasses 2024 defenses? Let's plan this breach!", "expr": "excited"}
-        ],
-        "commit_label": "Launch Operation",
-        "steps": [
-          {
-            "id": "target",
-            "label": "Target",
-            "heading": "Pick Your Mark",
-            "prompt": "You've scraped LinkedIn, breach dumps, and public posts for four ACME employees. Who has the highest attacker value?",
-            "options": [
-              {
-                "id": "t_carol",
-                "title": "Carol Lee",
-                "subtitle": "Security Analyst",
-                "chips": [
-                  "CISSP-certified, 8 yrs in IR",
-                  "Runs ACME's internal phishing-awareness program",
-                  "Posts detection engineering tips on Twitter weekly"
-                ],
-                "correct": false,
-                "rationale": "Carol literally teaches Mike how to spot you. She'll read the email headers, sandbox the attachment, and have your C2 domain reported before lunch. Hard pass."
-              },
-              {
-                "id": "t_mike",
-                "title": "Mike Smith",
-                "subtitle": "IT Administrator",
-                "chips": [
-                  "Local-admin on 200+ endpoints (per his job post)",
-                  "Email appears in 2021 LinkedIn breach dump — 87% of users reuse",
-                  "Tweeted yesterday: 'drowning in tickets, someone save me'"
-                ],
-                "correct": true,
-                "rationale": "Jackpot. Admin privileges turn a foothold into domain dominance. His password is in a public dump, so he probably reuses it. And he's overloaded — distracted people click fast."
-              },
-              {
-                "id": "t_jane",
-                "title": "Jane Doe",
-                "subtitle": "Chief Financial Officer",
-                "chips": [
-                  "Listed on ACME's public About page",
-                  "Frequent international travel (EU conferences)",
-                  "Standard user privileges — no admin rights"
-                ],
-                "correct": false,
-                "rationale": "Great for Business Email Compromise, but she can't install anything. You'd land in a fancy inbox with nowhere to pivot. Wrong tool for a foothold-first op."
-              },
-              {
-                "id": "t_bob",
-                "title": "Bob Johnson",
-                "subtitle": "Software Engineer",
-                "chips": [
-                  "LinkedIn updated: 'Open to work' — left ACME 2 weeks ago",
-                  "Email auto-reply: 'I am no longer with ACME'",
-                  "Personal blog dormant since 2019"
-                ],
-                "correct": false,
-                "rationale": "Dead account. His mail bounces, his badge is deactivated, and his old endpoint was wiped. You'd be phishing a ghost."
-              }
-            ]
-          },
-          {
-            "id": "pretext",
-            "label": "Pretext",
-            "heading": "Craft the Pretext",
-            "prompt": "Mike's an overloaded sysadmin. Which backstory would actually grab HIS attention?",
-            "options": [
-              {
-                "id": "p_ceo",
-                "title": "Mandatory CEO all-hands survey",
-                "subtitle": "From: CEO · Feedback request",
-                "chips": ["Generic", "Wide broadcast", "Not role-specific"],
-                "correct": false,
-                "rationale": "Mike doesn't care about all-hands fluff. He'll archive it in 0.2 seconds, like every other sysadmin on earth."
-              },
-              {
-                "id": "p_crowdstrike",
-                "title": "Crowdstrike Falcon license renewal — URGENT",
-                "subtitle": "From: Crowdstrike Billing · DocuSign",
-                "chips": ["Exact vendor Mike manages", "Creates urgency (license lapse)", "Tied to his Jira workload"],
-                "correct": true,
-                "rationale": "Perfect. Crowdstrike is the EDR Mike maintains; a lapsed license = executives screaming = tickets = his exact pain. He'll click without reading headers."
-              },
-              {
-                "id": "p_invoice",
-                "title": "Overdue vendor invoice — please remit",
-                "subtitle": "From: Accounts Payable",
-                "chips": ["AP-themed", "Not IT's purview", "Wrong department"],
-                "correct": false,
-                "rationale": "Mike doesn't handle accounts payable. He'd forward this to finance and keep ticket-crunching. Zero engagement."
-              },
-              {
-                "id": "p_hr",
-                "title": "Happy Birthday from ACME HR",
-                "subtitle": "From: HR · Cheer",
-                "chips": ["Warm fuzzy", "No action required", "Ignorable"],
-                "correct": false,
-                "rationale": "Cute. Useless. There's nothing to click, nothing urgent, nothing he'd even read past the subject."
-              }
-            ]
-          },
-          {
-            "id": "channel",
-            "label": "Channel",
-            "heading": "Pick the Delivery Channel",
-            "prompt": "How do you get a 'Crowdstrike renewal' in front of Mike without tripping alarms?",
-            "options": [
-              {
-                "id": "c_email",
-                "title": "Spoofed corporate email",
-                "subtitle": "billing@crowdstrlke.com (typo-squat)",
-                "chips": ["Matches vendor workflow", "Bypasses InMail/SMS friction", "Typo-squat evades naive filters"],
-                "correct": true,
-                "rationale": "Vendor billing lives in email. The typo-squat domain fools casual scanning, and the pretext matches the channel's expected traffic. Defensive filters exist but are beatable with a warmed-up sending domain."
-              },
-              {
-                "id": "c_sms",
-                "title": "SMS to his personal cell",
-                "subtitle": "Harvested via Apollo.io lookup",
-                "chips": ["Bypasses corp filters", "But: vendor billing over SMS is bizarre", "High suspicion trigger"],
-                "correct": false,
-                "rationale": "No legit SaaS vendor texts license renewals to personal cells. Mike would smell it immediately and forward to Carol."
-              },
-              {
-                "id": "c_linkedin",
-                "title": "LinkedIn InMail",
-                "subtitle": "From 'Crowdstrike Account Exec' profile",
-                "chips": ["Off-channel for billing", "LinkedIn warns on unknown contacts", "Requires profile warming"],
-                "correct": false,
-                "rationale": "LinkedIn isn't where renewals happen. The platform flags unknown-contact messages, and Mike's not checking InMail while drowning in tickets."
-              },
-              {
-                "id": "c_slack",
-                "title": "Slack DM via compromised integration",
-                "subtitle": "From a breached third-party bot",
-                "chips": ["Very high trust", "But: requires existing foothold", "Cart before the horse"],
-                "correct": false,
-                "rationale": "This is the dream delivery — but it needs an existing compromise of a vendor or integration. You don't have one. That's what the whole op is FOR."
-              }
-            ]
-          },
-          {
-            "id": "lure",
-            "label": "Lure",
-            "heading": "Weaponize the Lure",
-            "prompt": "You've got the inbox. Now write the email. Which subject line + body gets Mike to click?",
-            "options": [
-              {
-                "id": "l_urgent",
-                "title": "\"Hello friend, please open invoice.pdf\"",
-                "subtitle": "Bare, grammatically-broken body. No branding.",
-                "chips": ["1990s energy", "Triggers every spam filter", "Obvious even to non-technical users"],
-                "correct": false,
-                "rationale": "This is bait for your grandma, not a sysadmin. Proofpoint eats it for breakfast and Mike laughs at it in the quarantine report."
-              },
-              {
-                "id": "l_perf",
-                "title": "\"Q1 performance review — action required\"",
-                "subtitle": "HR-style body, no vendor branding.",
-                "chips": ["Off-pretext", "HR tone for an IT target", "Tonally wrong"],
-                "correct": false,
-                "rationale": "You committed to the Crowdstrike pretext two steps ago. Now you're sending an HR email? Mike sees the mismatch and flags it."
-              },
-              {
-                "id": "l_crowd",
-                "title": "\"ACTION REQUIRED: Falcon sensor license expires today — DocuSign\"",
-                "subtitle": "Branded Crowdstrike template, DocuSign button, countdown timer.",
-                "chips": ["Matches pretext exactly", "Real-vendor template (scraped)", "Urgency (24-hour window)", "One clear CTA"],
-                "correct": true,
-                "rationale": "Consistency + urgency + branding. The subject line names Mike's exact product and tool. The countdown creates panic. The single DocuSign CTA removes decision friction. He'll click in under 10 seconds."
-              },
-              {
-                "id": "l_package",
-                "title": "\"Your package will be delivered tomorrow\"",
-                "subtitle": "FedEx-style tracking email.",
-                "chips": ["Wrong pretext", "Low credibility from work email", "Random"],
-                "correct": false,
-                "rationale": "Package-delivery phishing is for consumer mass-campaigns, not targeted ops. And you already committed to Crowdstrike — stay in character."
-              }
-            ]
-          },
-          {
-            "id": "payload",
-            "label": "Payload",
-            "heading": "Arm the Payload",
-            "prompt": "DocuSign button clicked. Now — what fires? Pick the payload that survives modern defenses.",
-            "options": [
-              {
-                "id": "y_macro",
-                "title": ".docm macro-enabled invoice",
-                "subtitle": "Classic Office macro → PowerShell dropper",
-                "chips": ["Blocked by default since Office 2022", "Triggers MOTW warnings", "Stale tradecraft"],
-                "correct": false,
-                "rationale": "Microsoft disabled internet-origin macros by default in 2022. Your payload dies at the 'Enable Content' wall that almost nobody sees anymore. Outdated."
-              },
-              {
-                "id": "y_html",
-                "title": "HTML smuggling → ISO → LNK → stager",
-                "subtitle": "Embed blob in HTML, user mounts ISO, LNK runs script",
-                "chips": ["HTML bypasses Mark-of-the-Web", "ISO strips MOTW from contents", "LNK chains a living-off-the-land stager", "Used by APT29, Qakbot, Emotet in 2023–24"],
-                "correct": true,
-                "rationale": "This is the 2024 red-team playbook. HTML smuggling sneaks the payload past perimeter scanners. ISO mounting detaches the Mark-of-the-Web so Windows doesn't warn. The LNK fires a PowerShell stager that lives off the land. Beautiful."
-              },
-              {
-                "id": "y_exe",
-                "title": ".exe renamed to .pdf",
-                "subtitle": "Double-extension trick from 2005",
-                "chips": ["Every mail gateway blocks .exe", "Icon spoofing detected by SmartScreen", "Embarrassing"],
-                "correct": false,
-                "rationale": "No mail gateway on earth lets a bare .exe through anymore. This is the cybersecurity equivalent of showing up to a gunfight with a slingshot."
-              },
-              {
-                "id": "y_zeroday",
-                "title": "Chrome zero-day drive-by RCE",
-                "subtitle": "0-day browser exploit from a gray-market broker",
-                "chips": ["Would definitely work", "Costs $500k–$2M per bug", "Burned after one use", "Wildly disproportionate ROI"],
-                "correct": false,
-                "rationale": "Yes, it'd pop Mike's browser instantly. Also: you just spent a million-dollar zero-day on a mid-size company. Real operators save 0-days for targets worth nation-state budgets."
-              }
-            ]
-          }
-        ]
+        "id": "neko",
+        "name": "Neko",
+        "pronoun": "she",
+        "subtitle": "Your Cyber Kill Chain guide",
+        "flavor": "A friendly cat-girl analyst who narrates every lesson and walks you through the kill chain. Always unlocked.",
+        "tags": ["Guide", "Default"],
+        "default_unlocked": true,
+        "pose_prefix": "mascot"
       },
       {
-        "id": "defend",
-        "num": 2,
-        "type": "defend",
-        "label": "Challenge 2",
-        "title": "Defend the Network",
-        "desc": "Now flip sides. An attack is unfolding in real-time and you're the blue team. At each phase, pick the correct defensive action to stop the attacker before they reach their objective.",
+        "id": "inu",
+        "name": "Inu",
+        "pronoun": "he",
+        "subtitle": "Blue-team boss · the dog-boy defender",
+        "flavor": "A laid-back Shiba-eared analyst who lives in the SOC. Defeat him once in the Final Battle and he joins your roster as a selectable narrator.",
+        "tags": ["Defender", "Blue Team", "Boss reward"],
+        "default_unlocked": false,
+        "unlock_hint": "Defeat Inu in the Final Battle.",
+        "pose_prefix": "inu"
+      }
+    ]
+  },
+  "quiz": {
+    "challenges": [
+      {
+        "id": "battle",
+        "num": 1,
+        "type": "battle",
+        "label": "Final Challenge",
+        "title": "Final Battle: Inu",
+        "desc": "One challenge to rule them all. Face Inu, the blue-team boss, in a turn-based duel. Pick the right attack against his current defensive posture and win the day.",
         "mascot_script": [
-          {"text": "Final challenge! You just played the attacker — now you're on the blue team. An attack is unfolding and you have to pick the right defense at each phase.", "expr": "alert"},
-          {"text": "Hit Start Simulation when you're ready. Five phases, one shot each — no pressure, nyaa~!", "expr": "excited"}
+          {"text": "This is it. The Final Battle pits you against Inu — the SOC's blue-team analyst. No HP bars this time; you actually have to run the full kill chain on him.", "expr": "alert"},
+          {"text": "Race two clocks: clear all five phases — Recon → Arm/Deliver → Exploit → Control → Exfil — before his Detection bar maxes out, and inside 12 turns. Land the Critical Insight pick and you clear the phase in a single move.", "expr": "teaching"},
+          {"text": "Read Inu's posture each turn — exactly one move per phase counters it. Reach Phase 5 and finish with Exfiltration or Ransomware to win, and Inu joins your roster~", "expr": "excited"}
         ],
-        "rounds": [
-          {
-            "phase": "Reconnaissance",
-            "alert": "An unknown entity is scanning your public infrastructure and scraping employee data from social media profiles.",
-            "options": [
-              {"id": "r1a", "text": "Limit public exposure & deploy social engineering awareness training", "correct": true},
-              {"id": "r1b", "text": "Patch all known CVEs on internal application servers", "correct": false},
-              {"id": "r1c", "text": "Deploy DLP tools to monitor outbound data transfers", "correct": false}
-            ]
+        "commit_label": "Begin Battle",
+        "battle": {
+          "rules": {
+            "max_turns": 12,
+            "detection_max": 100,
+            "ir_threshold": 75,
+            "progress": {
+              "strong": 100,
+              "neutral": 50,
+              "weak": 20,
+              "miss": 0
+            },
+            "detection_cost": {
+              "strong": 5,
+              "neutral": 12,
+              "weak": 20,
+              "miss": 14
+            }
           },
-          {
-            "phase": "Arm & Deliver",
-            "alert": "A wave of spoofed emails carrying suspicious attachments is flooding employee inboxes, disguised as urgent invoices from a trusted vendor.",
-            "options": [
-              {"id": "r2a", "text": "Monitor internal network for unusual lateral movement", "correct": false},
-              {"id": "r2b", "text": "Deploy email gateway filtering & sandbox suspicious attachments", "correct": true},
-              {"id": "r2c", "text": "Rotate all employee account passwords immediately", "correct": false}
-            ]
+          "player": {
+            "name": "Neko",
+            "title": "Red Team"
           },
-          {
-            "phase": "Exploitation",
-            "alert": "An employee opened a document that is exploiting an unpatched vulnerability to execute malicious code on their workstation.",
-            "options": [
-              {"id": "r3a", "text": "Restrict employee LinkedIn profile visibility", "correct": false},
-              {"id": "r3b", "text": "Patch known vulnerabilities & enforce macro-disabled policies", "correct": true},
-              {"id": "r3c", "text": "Implement network segmentation between departments", "correct": false}
-            ]
+          "opponent": {
+            "id": "inu",
+            "name": "Inu",
+            "title": "Blue Team",
+            "pose_prefix": "inu",
+            "ir_move": {
+              "id": "ir",
+              "name": "Incident Response",
+              "kicker": "IR",
+              "tagline": "Calls in the IR team. Detection spikes hard.",
+              "detection": 18,
+              "flavor": "He calls in the full IR team. Logs replayed, anomalies surfaced — your stealth window is closing fast."
+            }
           },
-          {
-            "phase": "Establish Control",
-            "alert": "A compromised workstation is making regular encrypted connections to an unknown overseas IP every 30 seconds.",
-            "options": [
-              {"id": "r4a", "text": "Isolate the endpoint & block C2 traffic at the firewall", "correct": true},
-              {"id": "r4b", "text": "Deploy email attachment sandboxing rules", "correct": false},
-              {"id": "r4c", "text": "Conduct a vulnerability scan on public-facing web apps", "correct": false}
-            ]
+          "postures": [
+            {"id": "honeypotting", "name": "Honeypotting", "kicker": "HONEY",  "blurb": "He's laying decoys to bait scanners. Map the REAL surface and ignore the bait."},
+            {"id": "hunting",      "name": "Hunting",      "kicker": "HUNT",   "blurb": "He's deep in his SIEM hunting odd packets. A human-layer attack will slip past."},
+            {"id": "firewalled",   "name": "Firewalled",   "kicker": "WALL",   "blurb": "His perimeter is locked down. Only an unknown vulnerability will crack it."},
+            {"id": "patching",     "name": "Patching",     "kicker": "PATCH",  "blurb": "He's rushing fixes onto the edge. Pivot laterally through the soft interior."},
+            {"id": "triaging",     "name": "Triaging",     "kicker": "TRIAGE", "blurb": "He's chasing IoCs in his dashboard. Move the data while his eyes are on the wrong screen."}
+          ],
+          "phases": [
+            {
+              "phase": 1,
+              "label": "Reconnaissance",
+              "short_label": "Recon",
+              "kicker": "P1 · RECON",
+              "posture": "honeypotting",
+              "intro_line": "Inu hasn't pinged you yet. Map his real attack surface before he raises an alarm.",
+              "player_moves": [
+                {
+                  "id": "recon_linkedin",
+                  "name": "LinkedIn Harvest",
+                  "kicker": "OSINT",
+                  "phase": 1,
+                  "phase_label": "Reconnaissance",
+                  "tagline": "Scrape real employees. Reveals his next posture.",
+                  "accuracy": 1.0,
+                  "strong_vs": "honeypotting",
+                  "weak_vs": null,
+                  "reveal_next": true,
+                  "flavor": "You build a target list of real employees from LinkedIn.",
+                  "strong_flavor": "Critical insight! While he plants decoys, you focus on real names and pin his next move.",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "recon_subdomain",
+                  "name": "Subdomain Enum",
+                  "kicker": "DNS",
+                  "phase": 1,
+                  "phase_label": "Reconnaissance",
+                  "tagline": "Brute-force DNS. Solid intel, no posture bonus.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": null,
+                  "flavor": "DNS brute-force surfaces three forgotten subdomains.",
+                  "strong_flavor": "",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "recon_jobboard",
+                  "name": "Job-Board Mining",
+                  "kicker": "JOBS",
+                  "phase": 1,
+                  "phase_label": "Reconnaissance",
+                  "tagline": "Read job postings. Easy to fool with fake roles.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": "honeypotting",
+                  "flavor": "Glassdoor and job posts fill in the org chart.",
+                  "strong_flavor": "",
+                  "weak_flavor": "He seeded fake postings — you waste the turn chasing ghost roles."
+                }
+              ],
+              "opponent_move": {
+                "id": "honeypot_phase1",
+                "name": "Decoy Directory",
+                "kicker": "HONEY",
+                "tagline": "Logs your scan attempts. +Detection.",
+                "detection": 4,
+                "flavor": "He spots unfamiliar LDAP queries hitting his decoy directory and tags your IP."
+              }
+            },
+            {
+              "phase": 2,
+              "label": "Arm & Deliver",
+              "short_label": "Arm/Deliver",
+              "kicker": "P2 · ARM & DELIVER",
+              "posture": "hunting",
+              "intro_line": "Target list is loaded. Pick a delivery channel and arm the payload.",
+              "player_moves": [
+                {
+                  "id": "deliver_phish",
+                  "name": "Spear-Phish Email",
+                  "kicker": "PHISH",
+                  "phase": 2,
+                  "phase_label": "Arm & Deliver",
+                  "tagline": "Targeted email with malicious doc.",
+                  "accuracy": 1.0,
+                  "strong_vs": "hunting",
+                  "weak_vs": null,
+                  "flavor": "A perfectly-crafted invoice email lands in his inbox.",
+                  "strong_flavor": "Critical insight! He's deep in SIEM packet logs — the human-layer email walks right past his eyes.",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "deliver_waterhole",
+                  "name": "Watering Hole",
+                  "kicker": "WEB",
+                  "phase": 2,
+                  "phase_label": "Arm & Deliver",
+                  "tagline": "Compromise a site he visits.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": null,
+                  "flavor": "His favorite security blog now serves a malicious script.",
+                  "strong_flavor": "",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "deliver_usb",
+                  "name": "USB Drop",
+                  "kicker": "USB",
+                  "phase": 2,
+                  "phase_label": "Arm & Deliver",
+                  "tagline": "Physical-layer drop. Loud network signature.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": "hunting",
+                  "flavor": "A 'lost' USB stick gets plugged in by a curious intern.",
+                  "strong_flavor": "",
+                  "weak_flavor": "His threat-hunt sweep catches the autorun trying to phone home."
+                }
+              ],
+              "opponent_move": {
+                "id": "hunt_phase2",
+                "name": "Inbound Threat Hunt",
+                "kicker": "HUNT",
+                "tagline": "Sweeps SIEM for inbound IoCs. +Detection.",
+                "detection": 6,
+                "flavor": "He sweeps his SIEM for new domains and weird email patterns — your delivery channel just got a louder signature."
+              }
+            },
+            {
+              "phase": 3,
+              "label": "Exploitation",
+              "short_label": "Exploit",
+              "kicker": "P3 · EXPLOIT",
+              "posture": "firewalled",
+              "intro_line": "Payload landed. Time to fire it. Pick how the foothold detonates.",
+              "player_moves": [
+                {
+                  "id": "exploit_zeroday",
+                  "name": "Zero-Day Exploit",
+                  "kicker": "0-DAY",
+                  "phase": 3,
+                  "phase_label": "Exploitation",
+                  "tagline": "Cracks any firewall. 80% hit chance.",
+                  "accuracy": 0.8,
+                  "strong_vs": "firewalled",
+                  "weak_vs": null,
+                  "flavor": "An unpublished CVE detonates against his perimeter.",
+                  "strong_flavor": "Critical insight! Hardened firewalls fall hardest to exploits they've never seen.",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "exploit_macro",
+                  "name": "Macro Trigger",
+                  "kicker": "MACRO",
+                  "phase": 3,
+                  "phase_label": "Exploitation",
+                  "tagline": "Tricks user into Enable Content.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": null,
+                  "flavor": "He clicks 'Enable Content' and the macro fires.",
+                  "strong_flavor": "",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "exploit_browser",
+                  "name": "Browser Drive-By",
+                  "kicker": "DRIVE",
+                  "phase": 3,
+                  "phase_label": "Exploitation",
+                  "tagline": "Public CVE in browser engine.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": "firewalled",
+                  "flavor": "JavaScript pwns his Chromium build mid-page-load.",
+                  "strong_flavor": "",
+                  "weak_flavor": "His firewall is already blocking the exploit's outbound stage-2."
+                }
+              ],
+              "opponent_move": {
+                "id": "edr_phase3",
+                "name": "EDR Quarantine",
+                "kicker": "EDR",
+                "tagline": "Endpoint sensor flags the exploit. +Detection.",
+                "detection": 8,
+                "flavor": "His EDR catches part of the exploit chain mid-detonation. The SOC notices."
+              }
+            },
+            {
+              "phase": 4,
+              "label": "Establish Control",
+              "short_label": "Control",
+              "kicker": "P4 · CONTROL",
+              "posture": "patching",
+              "intro_line": "Foothold is live. Lock it in and pivot deeper before he kicks you out.",
+              "player_moves": [
+                {
+                  "id": "control_lateral",
+                  "name": "Lateral Move",
+                  "kicker": "PIVOT",
+                  "phase": 4,
+                  "phase_label": "Establish Control",
+                  "tagline": "Pivot to the next host using his admin tools.",
+                  "accuracy": 1.0,
+                  "strong_vs": "patching",
+                  "weak_vs": null,
+                  "flavor": "You hop sideways into a neighboring host using his own admin tooling.",
+                  "strong_flavor": "Critical insight! He's patching the perimeter while you waltz across the soft interior.",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "control_persist",
+                  "name": "Persistence Backdoor",
+                  "kicker": "PERSIST",
+                  "phase": 4,
+                  "phase_label": "Establish Control",
+                  "tagline": "Schedule a recurring task.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": null,
+                  "flavor": "A scheduled task ensures access survives reboots.",
+                  "strong_flavor": "",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "control_c2",
+                  "name": "C2 Beacon",
+                  "kicker": "C2",
+                  "phase": 4,
+                  "phase_label": "Establish Control",
+                  "tagline": "Encrypted call-home channel.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": "patching",
+                  "flavor": "An encrypted beacon phones home every 60 seconds.",
+                  "strong_flavor": "",
+                  "weak_flavor": "His patch cycle just rolled out new egress filters and choked your tunnel."
+                }
+              ],
+              "opponent_move": {
+                "id": "patch_phase4",
+                "name": "Emergency Patch Cycle",
+                "kicker": "PATCH",
+                "tagline": "Reseals known holes. +Detection as new logs flow in.",
+                "detection": 10,
+                "flavor": "He rolls out an emergency patch and reseals two of your toeholds. Fresh patch logs feed straight into his SIEM."
+              }
+            },
+            {
+              "phase": 5,
+              "label": "Exfiltration",
+              "short_label": "Exfil",
+              "kicker": "P5 · EXFIL",
+              "posture": "triaging",
+              "intro_line": "You're inside. The crown jewels are reachable. Move them out before forensics catches up.",
+              "player_moves": [
+                {
+                  "id": "exfil_data",
+                  "name": "Data Exfiltration",
+                  "kicker": "EXFIL",
+                  "phase": 5,
+                  "phase_label": "Exfiltration",
+                  "tagline": "Smash-and-grab the crown jewels.",
+                  "accuracy": 1.0,
+                  "strong_vs": "triaging",
+                  "weak_vs": null,
+                  "objective": "exfil",
+                  "flavor": "Customer DBs, source code, and crypto keys stream toward your C2.",
+                  "strong_flavor": "Critical insight! He's still triaging the breach while the crown jewels are already on the wire.",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "exfil_ransom",
+                  "name": "Ransomware Detonate",
+                  "kicker": "RANSOM",
+                  "phase": 5,
+                  "phase_label": "Exfiltration",
+                  "tagline": "Lock & ransom. Loud, but lucrative.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": null,
+                  "objective": "ransom",
+                  "flavor": "BlackCat encrypts thousands of ESXi hosts.",
+                  "strong_flavor": "",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "exfil_wipe",
+                  "name": "Wipe Tracks",
+                  "kicker": "WIPE",
+                  "phase": 5,
+                  "phase_label": "Exfiltration",
+                  "tagline": "Clear logs. Hides the exfil but he sees you do it.",
+                  "accuracy": 1.0,
+                  "strong_vs": null,
+                  "weak_vs": "triaging",
+                  "objective": "wipe",
+                  "flavor": "Event logs cleared. Forensics window collapsing.",
+                  "strong_flavor": "",
+                  "weak_flavor": "He's reading those exact logs in real time and watches them vanish line by line."
+                }
+              ],
+              "opponent_move": {
+                "id": "dlp_phase5",
+                "name": "DLP Triage Sweep",
+                "kicker": "DLP",
+                "tagline": "Inspects egress for sensitive payloads. +Detection.",
+                "detection": 6,
+                "flavor": "His DLP profile flags the throughput spike and starts inspecting outbound traffic. The clock is ticking."
+              }
+            }
+          ],
+          "intro": [],
+          "objective_outcomes": {
+            "exfil": {
+              "kicker": "EXFILTRATION COMPLETE",
+              "title": "Crown Jewels Stolen",
+              "text": "Customer databases, source code, and signing keys reached your C2 before Inu's IR team closed the window. Mission complete — Inu joins your roster."
+            },
+            "ransom": {
+              "kicker": "RANSOMWARE DEPLOYED",
+              "title": "Network Held Hostage",
+              "text": "BlackCat encryption rolled across thousands of ESXi hosts before the SOC could pull the plug. Mission complete — Inu joins your roster."
+            },
+            "wipe": {
+              "kicker": "TRACKS WIPED",
+              "title": "Ghost Out",
+              "text": "Logs scrubbed, breadcrumbs erased — but a real campaign needs an objective. Mission complete with caveats — Inu joins your roster."
+            }
           },
-          {
-            "phase": "Exfiltration",
-            "alert": "Anomalous data flows detected: 2.4 GB of compressed files being transferred to an external IP address during off-hours.",
-            "options": [
-              {"id": "r5a", "text": "Enable multi-factor authentication across all accounts", "correct": false},
-              {"id": "r5b", "text": "Implement DLP monitoring & block unauthorized bulk transfers", "correct": true},
-              {"id": "r5c", "text": "Deploy an updated email security gateway", "correct": false}
-            ]
+          "defeat_modes": {
+            "detection": {
+              "kicker": "DETECTED",
+              "title": "Incident Response Activated",
+              "text": "Inu's SOC pieced your campaign together before you could exfil. The blue team holds the line. Try the battle again from the Quiz tab."
+            },
+            "timeout": {
+              "kicker": "WINDOW CLOSED",
+              "title": "Engagement Window Expired",
+              "text": "You burned too many turns inside Inu's network. The SOC's threat-hunt loop caught up with you. Try the battle again from the Quiz tab."
+            }
           }
-        ]
+        }
       }
     ]
   }

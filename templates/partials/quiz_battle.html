@@ -1,0 +1,668 @@
+{# Final Battle · Race the Kill Chain
+   Player (Red Team) tries to walk all 5 phases of the cyber kill
+   chain before Inu's Detection meter maxes out or the engagement
+   window (turn cap) closes. The whole battle UI is built by
+   static/js/battle.js from the challenge JSON so the rules + tuning
+   live in data/content.json. This shell just gives the JS its mount
+   points and frames the stage with side-by-side combatant slots. #}
+{% set opp = challenge.battle.opponent %}
+{% set rules = challenge.battle.rules %}
+{% set phases = challenge.battle.phases %}
+{% set player_prefix = active_avatar.pose_prefix or 'mascot' %}
+{% set opp_prefix = opp.pose_prefix or 'inu' %}
+{% set player_initial = (player_prefix + '-base-happy-transparent.png') %}
+{% set opp_initial = (opp_prefix + '-thinking-transparent.png') %}
+<div class="battle-workbench" id="battleWorkbench"
+     data-pose-base="{{ url_for('static', filename='assets/') }}"
+     data-player-prefix="{{ player_prefix }}"
+     data-opp-prefix="{{ opp_prefix }}"
+     data-opp-name="{{ opp.name }}">
+
+  <div class="battle-stage" id="battleStage" aria-live="polite">
+
+    <div class="battle-combatants">
+
+      <article class="battle-combatant battle-combatant--player" id="battlePlayer"
+               data-avatar-id="{{ active_avatar.id }}">
+        <div class="battle-combatant-portrait">
+          <img class="battle-combatant-img"
+               src="{{ url_for('static', filename='assets/' + player_initial) }}"
+               alt="{{ active_avatar.name }}, the player">
+          <div class="battle-combatant-floats" aria-hidden="true"></div>
+        </div>
+        <header class="battle-combatant-head">
+          <span class="battle-combatant-kicker">RED TEAM · OBJECTIVE</span>
+          <h4 class="battle-combatant-name" id="battlePlayerName">{{ active_avatar.name }}</h4>
+        </header>
+
+        <div class="battle-killchain" id="battleKillchain" role="list"
+             aria-label="Kill chain progress">
+          {% for ph in phases %}
+            <div class="battle-killchain-tile" role="listitem"
+                 data-phase-idx="{{ loop.index0 }}"
+                 data-phase-id="{{ ph.phase }}">
+              <span class="battle-killchain-num">P{{ ph.phase }}</span>
+              <span class="battle-killchain-label">{{ ph.short_label or ph.label }}</span>
+              <div class="battle-killchain-progress" aria-hidden="true">
+                <span class="battle-killchain-progress-fill"></span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      </article>
+
+      <div class="battle-vs" aria-hidden="true">
+        <span class="battle-vs-text">VS</span>
+      </div>
+
+      <article class="battle-combatant battle-combatant--opponent" id="battleOpponent"
+               data-avatar-id="{{ opp.id }}">
+        <div class="battle-combatant-portrait">
+          <img class="battle-combatant-img"
+               src="{{ url_for('static', filename='assets/' + opp_initial) }}"
+               alt="{{ opp.name }}, the opponent">
+          <div class="battle-combatant-floats" aria-hidden="true"></div>
+        </div>
+        <header class="battle-combatant-head">
+          <span class="battle-combatant-kicker">BLUE TEAM · BOSS</span>
+          <h4 class="battle-combatant-name">{{ opp.name }}</h4>
+        </header>
+
+        <div class="battle-detection" aria-label="Inu's detection meter">
+          <div class="battle-detection-row">
+            <span class="battle-detection-label">DETECTION</span>
+            <span class="battle-detection-text">
+              <span class="battle-detection-current" id="battleDetectionVal">0</span><span
+              class="battle-detection-sep">/</span><span class="battle-detection-max" id="battleDetectionMax">{{ rules.detection_max }}</span>
+            </span>
+          </div>
+          <div class="battle-detection-bar"><span class="battle-detection-fill" id="battleDetectionFill"></span></div>
+          <div class="battle-detection-row battle-detection-row--meta">
+            <span class="battle-detection-meta">IR triggers at {{ rules.ir_threshold }}%</span>
+            <span class="battle-detection-meta" id="battleTurnMeter">Turn 1 / {{ rules.max_turns }}</span>
+          </div>
+        </div>
+
+        <div class="battle-posture" id="battlePosture">
+          <span class="battle-posture-label">CURRENT POSTURE</span>
+          <div class="battle-posture-tile" id="battlePostureTile">
+            <span class="battle-posture-kicker" id="battlePostureKicker">—</span>
+            <span class="battle-posture-name" id="battlePostureName">awaiting first move</span>
+          </div>
+          <p class="battle-posture-blurb" id="battlePostureBlurb">{{ opp.name }} steps onto the field. Pick your opening move.</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="battle-moves-wrap">
+      <div class="battle-moves-head">
+        <span class="battle-moves-kicker">CHOOSE YOUR ATTACK</span>
+        <span class="battle-moves-hint" id="battleMovesHint">Match {{ opp.name }}'s posture for a Critical Insight bonus.</span>
+      </div>
+      <div class="battle-moves" id="battleMoves" role="group" aria-label="Available attack moves"></div>
+    </div>
+
+    <div class="battle-log-wrap">
+      <div class="battle-log-head">
+        <span class="battle-log-kicker">BATTLE LOG</span>
+        <span class="battle-log-turn" id="battleTurnIndicator">Turn 1 / {{ rules.max_turns }}</span>
+      </div>
+      <ol class="battle-log" id="battleLog" aria-live="polite"></ol>
+    </div>
+
+  </div>
+
+  {# Move-action showcase: ~5s CSS scene per move.id, then outcome strip + apply turn. #}
+  <div class="battle-move-showcase" id="battleMoveShowcase" hidden aria-hidden="true">
+    <div class="battle-move-showcase-backdrop" aria-hidden="true"></div>
+    <div class="battle-move-showcase-card" role="dialog" aria-modal="true"
+         aria-labelledby="battleShowcaseTitle">
+      <button type="button" class="battle-move-showcase-skip" id="battleShowcaseSkip">Skip</button>
+      <header class="battle-move-showcase-head">
+        <span class="battle-move-showcase-kicker" id="battleShowcaseKicker">—</span>
+        <h3 class="battle-move-showcase-title" id="battleShowcaseTitle">Move</h3>
+      </header>
+      <div class="battle-move-showcase-stage" id="battleShowcaseStage" aria-hidden="true">
+
+        {# ------------- Generic / fallback ------------- #}
+        <div class="battle-move-scene" data-scene-id="generic" hidden>
+          <div class="scene-ui scene-ui--generic">
+            <div class="scene-generic-pulse" aria-hidden="true"></div>
+            <span class="scene-generic-label mono">// executing tactic</span>
+          </div>
+        </div>
+
+        {# =================== RED TEAM ====================== #}
+
+        <div class="battle-move-scene" data-scene-id="recon_linkedin" hidden>
+          <div class="scene-ui scene-ui--in">
+            <div class="scene-window-bar scene-window-bar--in">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title">in · People at ACME Corp</span>
+            </div>
+            <div class="scene-li-search">
+              <span class="scene-li-search-icon" aria-hidden="true">⌕</span>
+              <span class="scene-li-search-text mono">"ACME Corp"</span>
+              <span class="scene-li-caret" aria-hidden="true"></span>
+            </div>
+            <div class="scene-li-rows">
+              <div class="scene-li-row">
+                <span class="scene-avatar" data-c="0">JD</span>
+                <span class="scene-li-meta">
+                  <span class="scene-li-name">Jane Doe</span>
+                  <span class="scene-li-role">CFO · ACME Corp</span>
+                </span>
+                <span class="scene-li-email mono">j.doe@acme-corp.com</span>
+              </div>
+              <div class="scene-li-row">
+                <span class="scene-avatar" data-c="1">MS</span>
+                <span class="scene-li-meta">
+                  <span class="scene-li-name">Mike Smith</span>
+                  <span class="scene-li-role">IT Administrator</span>
+                </span>
+                <span class="scene-li-email mono">m.smith@acme-corp.com</span>
+              </div>
+              <div class="scene-li-row">
+                <span class="scene-avatar" data-c="2">AK</span>
+                <span class="scene-li-meta">
+                  <span class="scene-li-name">Alice Kim</span>
+                  <span class="scene-li-role">HR Manager</span>
+                </span>
+                <span class="scene-li-email mono">a.kim@acme-corp.com</span>
+              </div>
+            </div>
+            <div class="scene-li-graph" aria-hidden="true">
+              <span class="scene-li-node scene-li-node--1"></span>
+              <span class="scene-li-node scene-li-node--2"></span>
+              <span class="scene-li-node scene-li-node--3"></span>
+              <span class="scene-li-node scene-li-node--4"></span>
+              <span class="scene-li-edge scene-li-edge--a"></span>
+              <span class="scene-li-edge scene-li-edge--b"></span>
+              <span class="scene-li-edge scene-li-edge--c"></span>
+            </div>
+            <div class="scene-li-banner mono">3 targets captured · org chart pinned</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="recon_subdomain" hidden>
+          <div class="scene-ui scene-ui--term">
+            <div class="scene-window-bar scene-window-bar--term">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">user@kali:~$</span>
+            </div>
+            <div class="scene-term-body">
+              <div class="scene-term-line mono">$ dnsenum --enum acme-corp.com</div>
+              <div class="scene-term-line mono">[*] bruting subdomains (top-100k)</div>
+              <div class="scene-term-line scene-term-found mono">[+] vpn.acme-corp.com         &nbsp;&nbsp;A 203.0.113.4</div>
+              <div class="scene-term-line scene-term-found mono">[+] dev.api.acme-corp.com     &nbsp;&nbsp;A 198.51.100.27</div>
+              <div class="scene-term-line scene-term-found mono">[+] mail.acme-corp.com        &nbsp;&nbsp;A 203.0.113.18</div>
+              <div class="scene-term-line mono">$ nmap -sn 10.0.0.0/16 --top-ports 50</div>
+              <div class="scene-term-line mono">[*] 2048 hosts swept · 14 alive</div>
+              <div class="scene-term-line scene-term-found mono">[+] staging.acme-corp.com 10.0.3.12 · 22/tcp open</div>
+              <div class="scene-term-line scene-term-cursor mono">$ <span class="scene-term-caret" aria-hidden="true"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="recon_jobboard" hidden>
+          <div class="scene-ui scene-ui--jobs">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title">Careers · ACME Corp</span>
+            </div>
+            <div class="scene-job-cards">
+              <div class="scene-job-card">
+                <span class="scene-job-role">Senior SOC Analyst</span>
+                <span class="scene-job-meta mono">req-8821 · Denver · "Splunk + CrowdStrike"</span>
+                <span class="scene-job-leak mono">⇢ stack: Splunk · CrowdStrike</span>
+              </div>
+              <div class="scene-job-card">
+                <span class="scene-job-role">Cloud Security Engineer</span>
+                <span class="scene-job-meta mono">req-9012 · Remote · "AWS + Terraform"</span>
+                <span class="scene-job-leak mono">⇢ cloud: AWS · acme-prod-iam</span>
+              </div>
+              <div class="scene-job-card">
+                <span class="scene-job-role">IT Administrator</span>
+                <span class="scene-job-meta mono">req-7740 · HQ · "Windows AD"</span>
+                <span class="scene-job-leak mono">⇢ AD domain: ACMECORP.LOCAL</span>
+              </div>
+            </div>
+            <div class="scene-job-banner mono">tech-stack reconstructed from 12 listings</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="deliver_phish" hidden>
+          <div class="scene-ui scene-ui--mail">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title">Compose · New message</span>
+            </div>
+            <div class="scene-mail-fields">
+              <div class="scene-mail-line"><span class="scene-mail-k">To</span><span class="mono">m.smith@acme-corp.com</span></div>
+              <div class="scene-mail-line"><span class="scene-mail-k">From</span><span class="mono">accounts@acmecorp-billing.io</span></div>
+              <div class="scene-mail-line"><span class="scene-mail-k">Subject</span><span class="scene-mail-typed">Q3 Invoice · Action required<span class="scene-mail-caret" aria-hidden="true"></span></span></div>
+              <div class="scene-mail-body">
+                Hi Mike,<br>
+                Please review the attached invoice and confirm wire details before EOD.
+                <div class="scene-mail-attach mono">📎 Invoice_Q3.xlsm · 84 KB</div>
+              </div>
+            </div>
+            <div class="scene-mail-actions">
+              <span class="scene-mail-send-btn mono">Send</span>
+            </div>
+            <div class="scene-mail-envelope" aria-hidden="true">✉</div>
+            <div class="scene-mail-sent mono">DELIVERED · sender bypassed SPF</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="deliver_waterhole" hidden>
+          <div class="scene-ui scene-ui--browser">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">security-blog.io · CVE roundup</span>
+            </div>
+            <div class="scene-browser-bar">
+              <span class="scene-lock" aria-hidden="true">🔒</span>
+              <span class="mono">https://security-blog.io/post/weekly-cve-roundup</span>
+            </div>
+            <div class="scene-browser-body">
+              <div class="scene-wh-article">
+                <div class="scene-wh-h1">Weekly CVE Roundup</div>
+                <div class="scene-wh-line"></div>
+                <div class="scene-wh-line"></div>
+                <div class="scene-wh-line scene-wh-line--short"></div>
+                <div class="scene-wh-banner">⚠ Sponsored: Free security toolkit · Click to download</div>
+                <div class="scene-wh-line"></div>
+              </div>
+              <div class="scene-wh-script mono">&lt;script src="//cdn.evil-cache.io/loader.min.js"&gt;</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="deliver_usb" hidden>
+          <div class="scene-ui scene-ui--usb">
+            <div class="scene-usb-floor"></div>
+            <div class="scene-usb-laptop" aria-hidden="true">
+              <div class="scene-usb-screen"></div>
+              <div class="scene-usb-keyboard"></div>
+              <div class="scene-usb-port"></div>
+            </div>
+            <div class="scene-usb-stick" aria-hidden="true">
+              <span class="scene-usb-cap"></span>
+              <span class="scene-usb-body"></span>
+              <span class="scene-usb-label mono">PAYROLL</span>
+            </div>
+            <div class="scene-usb-toast mono">
+              <span class="scene-usb-toast-title">⚠ Removable Disk (E:)</span>
+              <span class="scene-usb-toast-text">Autorun.inf · launching setup.exe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="exploit_zeroday" hidden>
+          <div class="scene-ui scene-ui--fw">
+            <div class="scene-fw-grid" aria-hidden="true"></div>
+            <div class="scene-fw-wall" aria-hidden="true">
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
+            </div>
+            <div class="scene-fw-label mono">PERIMETER · stateful FW · acme-edge-01</div>
+            <div class="scene-fw-packet mono">CVE-????-????</div>
+            <div class="scene-fw-shock" aria-hidden="true"></div>
+            <div class="scene-fw-breach">PERIMETER&nbsp;BREACHED</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="exploit_macro" hidden>
+          <div class="scene-ui scene-ui--doc">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title">Microsoft Word · Protected View</span>
+            </div>
+            <div class="scene-doc-ribbon-bar">
+              <span class="scene-doc-warn">⚠ PROTECTED VIEW · Macros have been disabled.</span>
+              <span class="scene-doc-ribbon-btn">Enable Content</span>
+              <span class="scene-doc-cursor" aria-hidden="true">▲</span>
+            </div>
+            <div class="scene-doc-body">
+              <div class="scene-doc-line"></div>
+              <div class="scene-doc-line"></div>
+              <div class="scene-doc-line scene-doc-line--short"></div>
+              <div class="scene-doc-line"></div>
+            </div>
+            <div class="scene-doc-shell mono">
+              <div class="scene-doc-shell-line">Auto_Open() → cmd /c</div>
+              <div class="scene-doc-shell-line">powershell.exe -enc SQBuAH…</div>
+              <div class="scene-doc-shell-line">→ stager.exe staged · pid 4128</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="exploit_browser" hidden>
+          <div class="scene-ui scene-ui--browser">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">Chromium</span>
+            </div>
+            <div class="scene-browser-bar">
+              <span class="scene-lock" aria-hidden="true">🔒</span>
+              <span class="mono scene-browser-url">https://ads.cdn-promo.io/track?id=8af2…</span>
+            </div>
+            <div class="scene-driveby-body">
+              <div class="scene-driveby-stack mono">
+                <div class="scene-driveby-line">[v8] heap spray · 0x4141 × 4096</div>
+                <div class="scene-driveby-line">[v8] type confusion @ jit_array</div>
+                <div class="scene-driveby-line">[rce] shellcode → \\Device\\Tcp</div>
+              </div>
+              <div class="scene-driveby-bar"><span class="scene-bar-fill"></span></div>
+              <div class="scene-driveby-banner mono">RCE · session attached</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="control_lateral" hidden>
+          <div class="scene-ui scene-ui--net">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">INTERNAL · 10.0.0.0/16</span>
+            </div>
+            <div class="scene-net">
+              <span class="scene-net-node scene-net-node--a">
+                <span class="scene-net-icon" aria-hidden="true">🖥</span>
+                <span class="scene-net-label mono">DC01</span>
+              </span>
+              <span class="scene-net-node scene-net-node--b">
+                <span class="scene-net-icon" aria-hidden="true">💻</span>
+                <span class="scene-net-label mono">WS47</span>
+              </span>
+              <span class="scene-net-node scene-net-node--c">
+                <span class="scene-net-icon" aria-hidden="true">🗄</span>
+                <span class="scene-net-label mono">FILE01</span>
+              </span>
+              <span class="scene-net-edge scene-net-edge--ab"></span>
+              <span class="scene-net-edge scene-net-edge--bc"></span>
+              <span class="scene-net-packet" aria-hidden="true"></span>
+            </div>
+            <div class="scene-net-caption mono">PsExec · stolen NTLM hash · token impersonation</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="control_persist" hidden>
+          <div class="scene-ui scene-ui--sched">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title">Task Scheduler · Local</span>
+            </div>
+            <table class="scene-sched mono">
+              <thead>
+                <tr><th>Name</th><th>Trigger</th><th>Action</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <tr class="scene-sched-row scene-sched-row--existing"><td>GoogleUpdate</td><td>Daily 03:00</td><td>GoogleUpdate.exe</td><td><span class="scene-sched-pill">Ready</span></td></tr>
+                <tr class="scene-sched-row scene-sched-row--existing"><td>OneDriveSync</td><td>At log on</td><td>onedrive.exe</td><td><span class="scene-sched-pill">Ready</span></td></tr>
+                <tr class="scene-sched-row scene-sched-row--new"><td>MicrosoftEdgeUpdate</td><td>At log on · every 60m</td><td>rundll32 \\…\\update.dll,Init</td><td><span class="scene-sched-pill scene-sched-pill--new">Registered</span></td></tr>
+              </tbody>
+            </table>
+            <div class="scene-sched-footnote mono">survives reboot · runs as SYSTEM</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="control_c2" hidden>
+          <div class="scene-ui scene-ui--c2">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">Beacon · TLS 1.3 · 60s jitter</span>
+            </div>
+            <div class="scene-c2-map" aria-hidden="true">
+              <span class="scene-c2-map-internal mono">internal · WS47</span>
+              <span class="scene-c2-map-arrow"></span>
+              <span class="scene-c2-map-external mono">185.47.xx.xx:443</span>
+              <span class="scene-c2-map-pulse"></span>
+            </div>
+            <div class="scene-c2-timeline" aria-hidden="true">
+              <span class="scene-c2-tick"></span>
+              <span class="scene-c2-tick"></span>
+              <span class="scene-c2-tick"></span>
+              <span class="scene-c2-tick"></span>
+              <span class="scene-c2-tick"></span>
+              <span class="scene-c2-tick"></span>
+            </div>
+            <div class="scene-c2-lines mono">
+              <div class="scene-c2-line">→ POST /beacon · 204</div>
+              <div class="scene-c2-line">← GET  /tasks  · 200 · run</div>
+              <div class="scene-c2-line">→ POST /result · 204</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="exfil_data" hidden>
+          <div class="scene-ui scene-ui--exfil">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">Egress · bulk transfer · S3-mimic</span>
+            </div>
+            <div class="scene-exfil-rows">
+              <div class="scene-exfil-row">
+                <span class="scene-exfil-name mono">customer_database.sql</span>
+                <span class="scene-exfil-meta mono">312 MB</span>
+                <div class="scene-exfil-bar"><span class="scene-exfil-fill scene-exfil-fill--a"></span></div>
+              </div>
+              <div class="scene-exfil-row">
+                <span class="scene-exfil-name mono">source_code.tar.gz</span>
+                <span class="scene-exfil-meta mono">128 MB</span>
+                <div class="scene-exfil-bar"><span class="scene-exfil-fill scene-exfil-fill--b"></span></div>
+              </div>
+              <div class="scene-exfil-row">
+                <span class="scene-exfil-name mono">ssh_keys.tar.gz</span>
+                <span class="scene-exfil-meta mono">4 MB</span>
+                <div class="scene-exfil-bar"><span class="scene-exfil-fill scene-exfil-fill--c"></span></div>
+              </div>
+            </div>
+            <div class="scene-exfil-banner mono">→ uploaded to attacker bucket · 03:42</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="exfil_ransom" hidden>
+          <div class="scene-ui scene-ui--ransom">
+            <div class="scene-ransom-glitch" aria-hidden="true"></div>
+            <div class="scene-ransom-skull" aria-hidden="true">⚠</div>
+            <div class="scene-ransom-title">YOUR FILES HAVE BEEN ENCRYPTED</div>
+            <div class="scene-ransom-body mono">BlackCat · 4,128 ESXi hosts locked</div>
+            <div class="scene-ransom-meta mono">Algorithm: ChaCha20 + RSA-4096</div>
+            <div class="scene-ransom-timer-row">
+              <span class="scene-ransom-timer-label mono">payment window</span>
+              <span class="scene-ransom-timer mono">71:59:<span class="scene-ransom-secs">59</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="exfil_wipe" hidden>
+          <div class="scene-ui scene-ui--logs">
+            <div class="scene-window-bar">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">Security.evtx · live tail</span>
+            </div>
+            <div class="scene-log-body">
+              <div class="scene-log-line mono">4624 · Logon success · m.smith</div>
+              <div class="scene-log-line mono">4672 · Special privileges · SYSTEM</div>
+              <div class="scene-log-line mono">5140 · Network share access · \\file01\\acct</div>
+              <div class="scene-log-line mono">7045 · Service installed · update_svc</div>
+              <div class="scene-log-line mono">4663 · Object access · payroll.xlsx</div>
+              <div class="scene-log-line mono">1102 · Audit log was cleared</div>
+              <div class="scene-log-shred-bar" aria-hidden="true"></div>
+            </div>
+            <div class="scene-log-shred mono">wevtutil cl Security · purged 12,488 events</div>
+          </div>
+        </div>
+
+        {# =================== BLUE TEAM ===================== #}
+
+        <div class="battle-move-scene" data-scene-id="honeypot_phase1" hidden>
+          <div class="scene-ui scene-ui--honey">
+            <div class="scene-window-bar scene-window-bar--blue">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">acme-soc · Decoy Directory · live</span>
+            </div>
+            <div class="scene-honey-grid" aria-hidden="true">
+              <span class="scene-honey-cell"></span><span class="scene-honey-cell scene-honey-cell--decoy">decoy</span>
+              <span class="scene-honey-cell"></span><span class="scene-honey-cell"></span>
+              <span class="scene-honey-cell scene-honey-cell--decoy">decoy</span><span class="scene-honey-cell"></span>
+              <span class="scene-honey-cell"></span><span class="scene-honey-cell scene-honey-cell--decoy">decoy</span>
+            </div>
+            <div class="scene-honey-radar" aria-hidden="true"></div>
+            <div class="scene-honey-alerts">
+              <div class="scene-honey-alert mono">▲ LDAP query → svc_decoy_01 · 198.51.100.42</div>
+              <div class="scene-honey-alert mono">▲ NTLM probe → fake_share$ · 198.51.100.42</div>
+              <div class="scene-honey-alert mono">▲ source IP tagged · added to watchlist</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="hunt_phase2" hidden>
+          <div class="scene-ui scene-ui--hunt">
+            <div class="scene-window-bar scene-window-bar--blue">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">SIEM · Threat Hunt</span>
+            </div>
+            <div class="scene-hunt-query mono">
+              <span class="scene-hunt-prompt">spl&gt;</span>
+              <span class="scene-hunt-text">index=mail action=DELIVERED domain="acmecorp-billing.io"<span class="scene-hunt-caret" aria-hidden="true"></span></span>
+            </div>
+            <div class="scene-hunt-chart" aria-hidden="true">
+              <span class="scene-hunt-bar"></span>
+              <span class="scene-hunt-bar"></span>
+              <span class="scene-hunt-bar"></span>
+              <span class="scene-hunt-bar scene-hunt-bar--spike"></span>
+              <span class="scene-hunt-bar"></span>
+              <span class="scene-hunt-bar"></span>
+              <span class="scene-hunt-bar"></span>
+            </div>
+            <div class="scene-hunt-results mono">
+              <div class="scene-hunt-row">⟶ 1 match · spoofed sender · SPF=fail</div>
+              <div class="scene-hunt-row">⟶ 1 match · macro-bearing attachment</div>
+              <div class="scene-hunt-row scene-hunt-row--alert">▲ correlation → Campaign-RED-417</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="edr_phase3" hidden>
+          <div class="scene-ui scene-ui--edr">
+            <div class="scene-window-bar scene-window-bar--blue">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">EDR Console · CrowdStrike Falcon</span>
+            </div>
+            <div class="scene-edr-host">
+              <span class="scene-edr-host-icon" aria-hidden="true">💻</span>
+              <span class="scene-edr-host-name mono">WS47 · m.smith</span>
+              <span class="scene-edr-host-status mono">Severity: <strong>HIGH</strong></span>
+              <span class="scene-edr-quarantine" aria-hidden="true"></span>
+            </div>
+            <div class="scene-edr-tree mono">
+              <div class="scene-edr-tree-line">winword.exe (4128)</div>
+              <div class="scene-edr-tree-line">└─ cmd.exe (5912)</div>
+              <div class="scene-edr-tree-line scene-edr-tree-line--bad">&nbsp;&nbsp;&nbsp;└─ powershell.exe -enc …</div>
+              <div class="scene-edr-tree-line scene-edr-tree-line--bad">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ stager.exe → \\Device\\Tcp</div>
+            </div>
+            <div class="scene-edr-actions mono">
+              <span class="scene-edr-pill scene-edr-pill--isolate">Network isolated</span>
+              <span class="scene-edr-pill scene-edr-pill--quarantine">Process quarantined</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="patch_phase4" hidden>
+          <div class="scene-ui scene-ui--patch">
+            <div class="scene-window-bar scene-window-bar--blue">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">SCCM · Emergency Patch Cycle</span>
+            </div>
+            <div class="scene-patch-pipeline" aria-hidden="true">
+              <div class="scene-patch-stage" data-stage="stage"><span class="scene-patch-stage-num">1</span><span class="scene-patch-stage-label mono">stage</span></div>
+              <div class="scene-patch-link"></div>
+              <div class="scene-patch-stage" data-stage="test"><span class="scene-patch-stage-num">2</span><span class="scene-patch-stage-label mono">test</span></div>
+              <div class="scene-patch-link"></div>
+              <div class="scene-patch-stage" data-stage="deploy"><span class="scene-patch-stage-num">3</span><span class="scene-patch-stage-label mono">deploy</span></div>
+              <span class="scene-patch-package mono">📦 KB5037425</span>
+            </div>
+            <div class="scene-patch-list mono">
+              <div class="scene-patch-row">acme-edge-01 · CVE-2024-3199 · <span class="scene-patch-status">queued</span></div>
+              <div class="scene-patch-row">acme-edge-02 · CVE-2024-3199 · <span class="scene-patch-status">queued</span></div>
+              <div class="scene-patch-row">acme-vpn-01  · CVE-2024-2961 · <span class="scene-patch-status">queued</span></div>
+            </div>
+            <div class="scene-patch-banner mono">2 footholds resealed · SIEM ingest spike</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="dlp_phase5" hidden>
+          <div class="scene-ui scene-ui--dlp">
+            <div class="scene-window-bar scene-window-bar--blue">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">DLP · egress inspection</span>
+            </div>
+            <div class="scene-dlp-pipe" aria-hidden="true">
+              <span class="scene-dlp-packet scene-dlp-packet--ok mono">img.png</span>
+              <span class="scene-dlp-packet scene-dlp-packet--ok mono">style.css</span>
+              <span class="scene-dlp-packet scene-dlp-packet--bad mono">customer_db.sql</span>
+              <span class="scene-dlp-packet scene-dlp-packet--ok mono">analytics.json</span>
+              <span class="scene-dlp-scanner"></span>
+            </div>
+            <div class="scene-dlp-rules mono">
+              <div class="scene-dlp-rule">rule: regex(SSN, CCN, AWS_SECRET)</div>
+              <div class="scene-dlp-rule">rule: size &gt; 100 MB AND host ∉ allowlist</div>
+              <div class="scene-dlp-rule scene-dlp-rule--hit">▲ MATCH · 312 MB → 185.47.xx.xx</div>
+            </div>
+            <div class="scene-dlp-banner mono">throughput spike flagged · session paused</div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="ir" hidden>
+          <div class="scene-ui scene-ui--ir">
+            <div class="scene-ir-flash" aria-hidden="true"></div>
+            <div class="scene-ir-banner">
+              <span class="scene-ir-kicker mono">SEV-1 · INCIDENT RESPONSE ACTIVATED</span>
+              <span class="scene-ir-title">All hands · containment war room</span>
+            </div>
+            <div class="scene-ir-team" aria-hidden="true">
+              <span class="scene-ir-analyst">SOC</span>
+              <span class="scene-ir-analyst">IR</span>
+              <span class="scene-ir-analyst">FOR</span>
+              <span class="scene-ir-analyst">EXEC</span>
+            </div>
+            <div class="scene-ir-checklist mono">
+              <div class="scene-ir-step">✔ replay 24h of telemetry</div>
+              <div class="scene-ir-step">✔ pivot on attacker IP space</div>
+              <div class="scene-ir-step">✔ rotate all admin credentials</div>
+              <div class="scene-ir-step scene-ir-step--blink">▶ hunting active intrusion …</div>
+            </div>
+            <div class="scene-ir-meter" aria-hidden="true"><span class="scene-ir-meter-fill"></span></div>
+          </div>
+        </div>
+
+      </div>
+      <footer class="battle-move-showcase-result" id="battleShowcaseResult" aria-live="polite"></footer>
+    </div>
+  </div>
+
+  <div class="battle-overlay" id="battleOverlay" hidden>
+    <div class="battle-overlay-card" id="battleOverlayCard">
+      <span class="battle-overlay-kicker" id="battleOverlayKicker">VICTORY</span>
+      <h3 class="battle-overlay-title" id="battleOverlayTitle">Boss Defeated</h3>
+      <p class="battle-overlay-text" id="battleOverlayText"></p>
+      <div class="battle-overlay-actions">
+        <button type="button" class="lesson-nav-btn lesson-nav-btn--ghost" id="battleResetBtn">
+          <span>Reset Battle</span>
+        </button>
+        <button type="button" class="lesson-nav-btn lesson-nav-btn--primary" id="battleFinishBtn">
+          <span id="battleFinishLabel">See Score</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

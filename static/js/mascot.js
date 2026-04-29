@@ -1,23 +1,40 @@
 /* ============================================================
-   MASCOT · Neko (vanilla, single-page-at-a-time)
+   MASCOT · Active Avatar narrator (vanilla, single-page-at-a-time)
 
    Each page drops a <div class="mascot-host"
                         data-mascot-script='[{text, expr}, ...]'
                         data-mascot-topic="Topic label"></div>
    This module finds every host on the page, renders the narrator
-   panel, and plays the scripted lines through a typewriter.
+   panel, and plays the scripted lines through a typewriter using
+   whichever avatar (Neko, Inu, ...) the user has selected.
    ============================================================ */
 
 (function () {
   'use strict';
 
-  var POSES = {
-    happy:    'static/assets/mascot-base-happy-transparent.png',
-    excited:  'static/assets/mascot-excited-transparent.png',
-    thinking: 'static/assets/mascot-thinking-transparent.png',
-    teaching: 'static/assets/mascot-teaching-transparent.png',
-    worried:  'static/assets/mascot-worried-transparent.png'
-  };
+  // Each avatar has its own PNG family with the same 5 expressions;
+  // just swap the file-name prefix.
+  var POSE_PREFIX = (window.__ACTIVE_AVATAR_POSES__ || 'mascot');
+  var ACTIVE_NAME = (window.__ACTIVE_AVATAR_NAME__ || 'Neko');
+
+  function poseFile(prefix, expr) {
+    // Neko's "happy" file is named "mascot-base-happy" for legacy
+    // reasons; every other expression follows "<prefix>-<expr>".
+    if (expr === 'happy') return prefix + '-base-happy-transparent.png';
+    return prefix + '-' + expr + '-transparent.png';
+  }
+
+  function buildPoseMap(prefix) {
+    return {
+      happy:    'static/assets/' + poseFile(prefix, 'happy'),
+      excited:  'static/assets/' + poseFile(prefix, 'excited'),
+      thinking: 'static/assets/' + poseFile(prefix, 'thinking'),
+      teaching: 'static/assets/' + poseFile(prefix, 'teaching'),
+      worried:  'static/assets/' + poseFile(prefix, 'worried')
+    };
+  }
+
+  var POSES = buildPoseMap(POSE_PREFIX);
 
   var EXPR_TO_POSE = {
     happy: 'happy', wave: 'happy',
@@ -65,7 +82,7 @@
 
   function buildPortrait(poseName) {
     var portrait = h('div', { class: 'mascot-portrait is-mounted', role: 'img',
-                              'aria-label': 'Neko, ' + poseName });
+                              'aria-label': ACTIVE_NAME + ', ' + poseName });
     portrait.appendChild(h('div', { class: 'mascot-ground', 'aria-hidden': 'true' }));
 
     var poseEls = {};
@@ -85,7 +102,7 @@
 
   function setPose(portrait, poseName) {
     var el = portrait.el;
-    el.setAttribute('aria-label', 'Neko, ' + poseName);
+    el.setAttribute('aria-label', ACTIVE_NAME + ', ' + poseName);
     Object.keys(portrait.poseEls).forEach(function (name) {
       portrait.poseEls[name].classList.toggle('is-active', name === poseName);
     });
@@ -136,7 +153,7 @@
     }, ['×']);
 
     var head = h('div', { class: 'mascot-stage-head' }, [
-      h('span', { class: 'mascot-stage-name', text: 'Neko' }),
+      h('span', { class: 'mascot-stage-name', text: ACTIVE_NAME }),
       h('span', { class: 'mascot-stage-topic', text: topic }),
       closeBtn
     ]);
@@ -237,11 +254,11 @@
       var pill = h('button', {
         class: 'mascot-stage-reopen',
         type: 'button',
-        'aria-label': "Reopen Neko's narration"
+        'aria-label': "Reopen " + ACTIVE_NAME + "'s narration"
       }, [
         h('span', { class: 'mascot-stage-reopen-avatar' }, [peekAvatar.el]),
         h('span', { class: 'mascot-stage-reopen-text' }, [
-          h('span', { class: 'mascot-stage-reopen-name', text: 'Neko' }),
+          h('span', { class: 'mascot-stage-reopen-name', text: ACTIVE_NAME }),
           h('span', { class: 'mascot-stage-reopen-cta', text: 'Replay narration →' })
         ])
       ]);
@@ -262,7 +279,16 @@
     showLine();
   }
 
+  function tagActiveAvatar() {
+    // Each avatar now has its own PNG family, so we no longer apply a
+    // hue-rotate skin. We still tag <html> so any layout that wants to
+    // theme around the active avatar can do so via CSS.
+    var active = window.__ACTIVE_AVATAR__ || 'neko';
+    document.documentElement.setAttribute('data-active-avatar', active);
+  }
+
   function init() {
+    tagActiveAvatar();
     var hosts = document.querySelectorAll('.mascot-host[data-mascot-script]');
     hosts.forEach(mountMascot);
   }
