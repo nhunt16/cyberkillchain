@@ -28,8 +28,8 @@ teaches students the five phases of the Cyber Kill Chain.
 1. The Framework (kill chain overview)
 2. Phase 1 · Reconnaissance
 3. Phase 2 · Arm & Deliver
-4. Phase 3 · Exploitation
-5. Phase 4 · Establish Control
+4. Phase 3 · Initial Compromise
+5. Phase 4 · Escalate Privileges
 6. Phase 5 · Exfiltration
 7. Case Study · MGM Resorts Breach (2023)
 
@@ -59,8 +59,8 @@ HW 10/
         ├── scene_framework.html
         ├── scene_recon.html
         ├── scene_armdeliver.html
-        ├── scene_exploit.html
-        ├── scene_control.html
+        ├── scene_compromise.html
+        ├── scene_escalate.html
         ├── scene_exfil.html
         └── scene_casestudy.html
 ```

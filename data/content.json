@@ -25,7 +25,7 @@
       "scene": "framework",
       "mascot_script": [
         {"text": "Welcome to lesson 1! The Cyber Kill Chain was developed by Lockheed Martin as a map of how every cyberattack moves forward.", "expr": "teaching"},
-        {"text": "Every breach, big or small, typically to complete each of these 5 phases to succeed.", "expr": "thinking"},
+        {"text": "Every breach, big or small, typically needs to complete each of these 5 phases to succeed.", "expr": "thinking"},
         {"text": "Click any circle below to preview that phase.", "expr": "excited"}
       ],
       "body": {
@@ -35,11 +35,11 @@
           "Breaking any single phase stops the entire attack."
         ],
         "chain_nodes": [
-          {"num": 1, "label": "Recon",       "name": "Reconnaissance",     "desc": "The attacker researches the target, scanning networks, harvesting emails, and mapping out the organization's attack surface."},
-          {"num": 2, "label": "Arm & Deliver","name": "Arm & Deliver",      "desc": "The attacker crafts a tailored weapon (malware or a malicious document) and delivers it via phishing or compromised channels."},
-          {"num": 3, "label": "Exploit",     "name": "Exploitation",       "desc": "The weapon activates: a vulnerability is triggered, code executes, and the attacker gains their initial foothold."},
-          {"num": 4, "label": "Control",     "name": "Establish Control",  "desc": "The attacker installs persistent backdoors and establishes an encrypted command channel for ongoing remote access."},
-          {"num": 5, "label": "Exfiltrate",  "name": "Exfiltration",       "desc": "The endgame: sensitive data is located, compressed, and secretly transferred to the attacker's external servers."}
+          {"num": 1, "label": "Recon",              "name": "Reconnaissance",      "desc": "The attacker researches the target, scanning networks, harvesting emails, and mapping out the organization's attack surface."},
+          {"num": 2, "label": "Arm & Deliver",      "name": "Arm & Deliver",       "desc": "The attacker crafts a tailored weapon (malware or a malicious document) and delivers it via phishing or compromised channels."},
+          {"num": 3, "label": "Initial Compromise", "name": "Initial Compromise",  "desc": "The weapon detonates: a vulnerability is triggered, code executes, and the attacker locks in persistent access through an encrypted command channel."},
+          {"num": 4, "label": "Escalate Privs",     "name": "Escalate Privileges", "desc": "From a regular user foothold, the attacker hunts for plaintext cloud credentials and chains AWS IAM roles to reach account-admin."},
+          {"num": 5, "label": "Exfiltrate",         "name": "Exfiltration",        "desc": "The endgame: sensitive data is located, compressed, and secretly transferred to the attacker's external servers."}
         ]
       }
     },
@@ -86,34 +86,49 @@
       }
     },
     {
-      "id": "exploit",
+      "id": "compromise",
       "num": 4,
-      "label": "Phase 3 · Exploit",
+      "label": "Phase 3 · Initial Compromise",
       "phase_num": 3,
-      "title": "Phase 3 · Exploitation",
-      "aka": "Macro Code Execution",
-      "scene": "exploit",
+      "title": "Phase 3 · Initial Compromise",
+      "aka": "Foothold + Backdoor",
+      "scene": "compromise",
       "mascot_script": [
-        {"text": "Phase 3 · Exploitation. Mike opens what LOOKS like an invoice. He sees a warning. Just one careless click…", "expr": "alert"},
-        {"text": "Victim POV: Click the glowing Enable Content button yourself to see exactly what fires behind the scenes.", "expr": "teaching"}
-      ],
-      "body": {}
-    },
-    {
-      "id": "control",
-      "num": 5,
-      "label": "Phase 4 · Control",
-      "phase_num": 4,
-      "title": "Phase 4 · Establish Control",
-      "aka": "Persistence & Command Channel",
-      "scene": "control",
-      "mascot_script": [
-        {"text": "Phase 4 · Establish Control. Code is running on Mike's machine. The attacker plants backdoors and calls home.", "expr": "thinking"},
-        {"text": "Run each step in order to watch persistence get installed, then see the encrypted C2 tunnel come alive.", "expr": "teaching"}
+        {"text": "Phase 3 · Initial Compromise. Mike opens what LOOKS like an invoice. He sees a warning. Just one careless click…", "expr": "alert"},
+        {"text": "Click the glowing Enable Content button to fire the macro and watch the reverse shell fly back to the attacker.", "expr": "teaching"},
+        {"text": "Once the foothold is live, run each step in order to plant persistence and bring the encrypted C2 tunnel up.", "expr": "thinking"}
       ],
       "body": {
         "victim_ip": "10.0.0.47",
         "attacker_ip": "185.47.xx.xx"
+      }
+    },
+    {
+      "id": "escalate",
+      "num": 5,
+      "label": "Phase 4 · Escalate Privileges",
+      "phase_num": 4,
+      "title": "Phase 4 · Escalate Privileges",
+      "aka": "AWS Credential Hunt",
+      "scene": "escalate",
+      "mascot_script": [
+        {"text": "Phase 4 · Escalate Privileges. The shell on Mike's box is just a regular user — useless for the crown jewels.", "expr": "thinking"},
+        {"text": "Modern attackers love this trick: grep the disk for ~/.aws/credentials. Devs leave plaintext keys behind ALL the time.", "expr": "teaching"},
+        {"text": "Walk the three steps: hunt the file, read the keys, then sts:AssumeRole into the org-admin role. Game over.", "expr": "alert"}
+      ],
+      "body": {
+        "victim_user": "ACME\\m.smith",
+        "found_file": "C:\\Users\\m.smith\\.aws\\credentials",
+        "leaked_keys": {
+          "access_key": "AKIA5XACMEBUILDER42",
+          "secret_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+          "owner": "jenkins-deployer"
+        },
+        "low_role": "arn:aws:iam::448291:user/jenkins-deployer",
+        "low_role_label": "jenkins-deployer · EC2 ReadOnly",
+        "admin_role": "arn:aws:iam::448291:role/OrganizationAccountAdmin",
+        "admin_role_label": "OrganizationAccountAdmin · ALL ACCESS",
+        "ec2_instance_id": "i-0a7b3c91acme0042"
       }
     },
     {
@@ -122,21 +137,25 @@
       "label": "Phase 5 · Exfiltrate",
       "phase_num": 5,
       "title": "Phase 5 · Exfiltration",
-      "aka": "Data Theft",
+      "aka": "AWS Data Theft via OrgAdmin",
       "scene": "exfil",
       "mascot_script": [
-        {"text": "Phase 5 · Exfiltration. Mission-objective time — steal the crown jewels. This is the loud part.", "expr": "worried"},
-        {"text": "Click files one at a time, or smash-and-grab everything at once. Either way, the damage is done.", "expr": "alert"}
+        {"text": "Phase 5 · Exfiltration. Remember the OrganizationAccountAdmin role you assumed in Phase 4? It can read every S3 bucket, every RDS snapshot, every Secrets Manager entry in the account.", "expr": "worried"},
+        {"text": "The attacker just runs aws s3 cp and aws secretsmanager get-secret-value with their admin session — the API logs it as a totally normal call.", "expr": "teaching"},
+        {"text": "Click any AWS resource to siphon it into the attacker's S3 bucket, or smash-and-grab everything at once.", "expr": "alert"}
       ],
       "body": {
+        "session_role": "OrganizationAccountAdmin",
+        "session_arn": "arn:aws:sts::448291:assumed-role/OrganizationAccountAdmin/red-team-pivot",
+        "attacker_bucket": "s3://red-team-loot-9af2",
         "files": [
-          {"icon": "\ud83d\udcc4", "name": "customer_database.sql",    "size": "840 MB",  "mb": 840},
-          {"icon": "\ud83d\udcc4", "name": "employee_records.xlsx",    "size": "126 MB",  "mb": 126},
-          {"icon": "\ud83d\udcc4", "name": "financial_report_Q1.pdf",  "size": "42 MB",   "mb": 42},
-          {"icon": "\ud83d\udd11", "name": "ssh_keys.tar.gz",          "size": "8 MB",    "mb": 8},
-          {"icon": "\ud83d\udcc4", "name": "api_credentials.env",      "size": "2 KB",    "mb": 0.002},
-          {"icon": "\ud83d\udcc4", "name": "board_meeting_notes.docx", "size": "18 MB",   "mb": 18},
-          {"icon": "\ud83d\udcc4", "name": "source_code.tar.gz",       "size": "1.4 GB",  "mb": 1400}
+          {"icon": "\ud83d\uddc4",  "service": "S3",             "name": "s3://acme-prod-customers/db.snapshot.sql.gz", "size": "840 MB",  "mb": 840},
+          {"icon": "\ud83d\uddc3",  "service": "S3",             "name": "s3://acme-hr-private/employees.xlsx",        "size": "126 MB",  "mb": 126},
+          {"icon": "\ud83d\udcca",  "service": "RDS",            "name": "rds:acme-finance/Q1-export.parquet",         "size": "42 MB",   "mb": 42},
+          {"icon": "\ud83d\udd11",  "service": "Secrets Manager","name": "secretsmanager:prod/deploy_ssh_keys",        "size": "8 KB",    "mb": 0.008},
+          {"icon": "\ud83d\udd10",  "service": "Secrets Manager","name": "secretsmanager:prod/api_credentials",        "size": "2 KB",    "mb": 0.002},
+          {"icon": "\ud83d\udcc4",  "service": "S3",             "name": "s3://acme-board/meeting_notes.docx",         "size": "18 MB",   "mb": 18},
+          {"icon": "\ud83d\udce6",  "service": "S3",             "name": "s3://acme-source/repo.tar.gz",               "size": "1.4 GB",  "mb": 1400}
         ]
       }
     },
@@ -154,11 +173,11 @@
       ],
       "body": {
         "steps": [
-          {"num": 1, "phase": "Recon",         "title": "LinkedIn & Social Profiling",    "desc": "Attackers profiled an MGM IT staffer by scraping LinkedIn and other social media — his role, his colleagues, even his speaking style."},
-          {"num": 2, "phase": "Arm & Deliver", "title": "The 10-Minute Phone Call",       "desc": "They called the IT help desk impersonating the employee and convinced the agent to reset his credentials — no malware needed."},
-          {"num": 3, "phase": "Exploit",       "title": "Identity Provider Takeover",     "desc": "With the reset credential, they logged into MGM's Okta tenant and escalated privileges across the identity platform."},
-          {"num": 4, "phase": "Control",       "title": "Lateral Movement & Persistence", "desc": "They moved from cloud identity into on-prem Active Directory, installing a secondary identity provider for persistent access."},
-          {"num": 5, "phase": "Exfiltrate",    "title": "Ransomware & $100M in Losses",   "desc": "BlackCat ransomware was deployed across thousands of ESXi hosts; slot machines, room keys, and reservations went dark for 10 days."}
+          {"num": 1, "phase": "Recon",              "title": "LinkedIn & Social Profiling",     "desc": "Attackers profiled an MGM IT staffer by scraping LinkedIn and other social media — his role, his colleagues, even his speaking style."},
+          {"num": 2, "phase": "Arm & Deliver",      "title": "The 10-Minute Phone Call",        "desc": "They called the IT help desk impersonating the employee and convinced the agent to reset his credentials — no malware needed."},
+          {"num": 3, "phase": "Initial Compromise", "title": "Okta Tenant Takeover",            "desc": "With the reset credential, they signed into MGM's Okta tenant, dropped a session cookie, and pivoted into on-prem Active Directory for a durable foothold."},
+          {"num": 4, "phase": "Escalate Privileges","title": "Secondary Identity Provider",     "desc": "They added a second, attacker-controlled identity provider to MGM's federation, minting their own admin tokens at will."},
+          {"num": 5, "phase": "Exfiltrate",         "title": "Ransomware & $100M in Losses",    "desc": "BlackCat ransomware was deployed across thousands of ESXi hosts; slot machines, room keys, and reservations went dark for 10 days."}
         ],
         "impact": [
           {"value": "$100M+", "label": "Total Losses"},
@@ -205,7 +224,7 @@
         "desc": "One challenge to rule them all. Face Cyber Inu, the cybernetic blue-team boss, in a turn-based duel. Pick the right attack against his current defensive posture and win the day.",
         "mascot_script": [
           {"text": "This is it. The Final Battle pits you against Cyber Inu, a security defender.", "expr": "alert"},
-          {"text": "Your objective is to clear all five phases in 12 turns: Recon → Arm/Deliver → Exploit → Control → Exfil before his Detection bar maxes out.", "expr": "teaching"},
+          {"text": "Your objective is to clear all five phases in 12 turns: Recon → Arm/Deliver → Initial Compromise → Escalate → Exfil before his Detection bar maxes out.", "expr": "teaching"},
           {"text": "Cyber Inu will deploy defensive measures to counter your attacks.", "expr": "excited"}
         ],
         "commit_label": "Begin Battle",
@@ -248,8 +267,8 @@
           "postures": [
             {"id": "honeypotting", "name": "Honeypotting", "kicker": "HONEY",  "blurb": "He's laying decoys to bait scanners. Map the REAL surface and ignore the bait."},
             {"id": "hunting",      "name": "Hunting",      "kicker": "HUNT",   "blurb": "He's deep in his SIEM hunting odd packets. A human-layer attack will slip past."},
-            {"id": "firewalled",   "name": "Firewalled",   "kicker": "WALL",   "blurb": "His perimeter is locked down. Only an unknown vulnerability will crack it."},
-            {"id": "patching",     "name": "Patching",     "kicker": "PATCH",  "blurb": "He's rushing fixes onto the edge. Pivot laterally through the soft interior."},
+            {"id": "hardening",    "name": "Hardening",    "kicker": "HARDEN", "blurb": "He's tightening EDR + egress filters. Only a quiet, in-memory foothold slips past."},
+            {"id": "rotating",     "name": "Key Rotation", "kicker": "ROTATE", "blurb": "He's rotating every IAM credential he can see. You'll need to grab keys he hasn't reached yet."},
             {"id": "triaging",     "name": "Triaging",     "kicker": "TRIAGE", "blurb": "He's chasing IoCs in his dashboard. Move the data while his eyes are on the wrong screen."}
           ],
           "phases": [
@@ -376,53 +395,53 @@
             },
             {
               "phase": 3,
-              "label": "Exploitation",
-              "short_label": "Exploit",
-              "kicker": "P3 · EXPLOIT",
-              "posture": "firewalled",
-              "intro_line": "Payload landed. Time to fire it. Pick how the foothold detonates.",
+              "label": "Initial Compromise",
+              "short_label": "Compromise",
+              "kicker": "P3 · COMPROMISE",
+              "posture": "hardening",
+              "intro_line": "Payload landed. Time to gain a foothold AND lock it in before his EDR clamps down.",
               "player_moves": [
                 {
-                  "id": "exploit_zeroday",
-                  "name": "Zero-Day Exploit",
-                  "kicker": "0-DAY",
-                  "phase": 3,
-                  "phase_label": "Exploitation",
-                  "tagline": "Cracks any firewall. 80% hit chance.",
-                  "accuracy": 0.8,
-                  "strong_vs": "firewalled",
-                  "weak_vs": null,
-                  "flavor": "An unpublished CVE detonates against his perimeter.",
-                  "strong_flavor": "Critical insight! Hardened firewalls fall hardest to exploits they've never seen.",
-                  "weak_flavor": ""
-                },
-                {
-                  "id": "exploit_macro",
+                  "id": "compromise_macro",
                   "name": "Macro Trigger",
                   "kicker": "MACRO",
                   "phase": 3,
-                  "phase_label": "Exploitation",
-                  "tagline": "Tricks user into Enable Content.",
+                  "phase_label": "Initial Compromise",
+                  "tagline": "Tricks user into Enable Content. Quiet in-memory loader.",
                   "accuracy": 1.0,
+                  "strong_vs": "hardening",
+                  "weak_vs": null,
+                  "flavor": "He clicks 'Enable Content' and the macro fires a reflective loader.",
+                  "strong_flavor": "Critical insight! While he hardens the perimeter, the user-layer macro walks straight past his EDR.",
+                  "weak_flavor": ""
+                },
+                {
+                  "id": "compromise_zeroday",
+                  "name": "Zero-Day Exploit",
+                  "kicker": "0-DAY",
+                  "phase": 3,
+                  "phase_label": "Initial Compromise",
+                  "tagline": "Cracks any firewall. 80% hit chance.",
+                  "accuracy": 0.8,
                   "strong_vs": null,
                   "weak_vs": null,
-                  "flavor": "He clicks 'Enable Content' and the macro fires.",
+                  "flavor": "An unpublished CVE detonates against his perimeter and drops a session.",
                   "strong_flavor": "",
                   "weak_flavor": ""
                 },
                 {
-                  "id": "exploit_browser",
-                  "name": "Browser Drive-By",
-                  "kicker": "DRIVE",
+                  "id": "compromise_persist",
+                  "name": "Persistence Backdoor",
+                  "kicker": "PERSIST",
                   "phase": 3,
-                  "phase_label": "Exploitation",
-                  "tagline": "Public CVE in browser engine.",
+                  "phase_label": "Initial Compromise",
+                  "tagline": "Schedule a recurring task. Loud on EDR.",
                   "accuracy": 1.0,
                   "strong_vs": null,
-                  "weak_vs": "firewalled",
-                  "flavor": "JavaScript pwns his Chromium build mid-page-load.",
+                  "weak_vs": "hardening",
+                  "flavor": "A scheduled task ensures access survives reboots.",
                   "strong_flavor": "",
-                  "weak_flavor": "His firewall is already blocking the exploit's outbound stage-2."
+                  "weak_flavor": "His freshly tuned EDR sees the new schtasks call instantly and tags the host."
                 }
               ],
               "opponent_move": {
@@ -436,62 +455,62 @@
             },
             {
               "phase": 4,
-              "label": "Establish Control",
-              "short_label": "Control",
-              "kicker": "P4 · CONTROL",
-              "posture": "patching",
-              "intro_line": "Foothold is live. Lock it in and pivot deeper before he kicks you out.",
+              "label": "Escalate Privileges",
+              "short_label": "Escalate",
+              "kicker": "P4 · ESCALATE",
+              "posture": "rotating",
+              "intro_line": "You're a regular user on Mike's box. Find admin creds before Cyber Inu rotates them out from under you.",
               "player_moves": [
                 {
-                  "id": "control_lateral",
-                  "name": "Lateral Move",
-                  "kicker": "PIVOT",
+                  "id": "escalate_cred_hunt",
+                  "name": "AWS Cred Hunt",
+                  "kicker": "GREP",
                   "phase": 4,
-                  "phase_label": "Establish Control",
-                  "tagline": "Pivot to the next host using his admin tools.",
+                  "phase_label": "Escalate Privileges",
+                  "tagline": "Grep the disk for ~/.aws/credentials.",
                   "accuracy": 1.0,
-                  "strong_vs": "patching",
+                  "strong_vs": "rotating",
                   "weak_vs": null,
-                  "flavor": "You hop sideways into a neighboring host using his own admin tooling.",
-                  "strong_flavor": "Critical insight! He's patching the perimeter while you waltz across the soft interior.",
+                  "flavor": "You grep the home directory and find an AKIA access key sitting in plaintext.",
+                  "strong_flavor": "Critical insight! You snatch the key seconds before his rotation policy kills it.",
                   "weak_flavor": ""
                 },
                 {
-                  "id": "control_persist",
-                  "name": "Persistence Backdoor",
-                  "kicker": "PERSIST",
+                  "id": "escalate_imds",
+                  "name": "IMDSv2 Steal",
+                  "kicker": "IMDS",
                   "phase": 4,
-                  "phase_label": "Establish Control",
-                  "tagline": "Schedule a recurring task.",
+                  "phase_label": "Escalate Privileges",
+                  "tagline": "Pull instance creds from 169.254.169.254.",
                   "accuracy": 1.0,
                   "strong_vs": null,
                   "weak_vs": null,
-                  "flavor": "A scheduled task ensures access survives reboots.",
+                  "flavor": "From the compromised EC2 host you grab short-lived STS creds off the metadata service.",
                   "strong_flavor": "",
                   "weak_flavor": ""
                 },
                 {
-                  "id": "control_c2",
-                  "name": "C2 Beacon",
-                  "kicker": "C2",
+                  "id": "escalate_assume_role",
+                  "name": "AssumeRole Pivot",
+                  "kicker": "STS",
                   "phase": 4,
-                  "phase_label": "Establish Control",
-                  "tagline": "Encrypted call-home channel.",
+                  "phase_label": "Escalate Privileges",
+                  "tagline": "Chain sts:AssumeRole into account-admin.",
                   "accuracy": 1.0,
                   "strong_vs": null,
-                  "weak_vs": "patching",
-                  "flavor": "An encrypted beacon phones home every 60 seconds.",
+                  "weak_vs": "rotating",
+                  "flavor": "You call sts:AssumeRole on the OrganizationAccountAdmin role and assume admin.",
                   "strong_flavor": "",
-                  "weak_flavor": "His patch cycle just rolled out new egress filters and choked your tunnel."
+                  "weak_flavor": "His rotation already invalidated the upstream key — the AssumeRole call returns AccessDenied."
                 }
               ],
               "opponent_move": {
-                "id": "patch_phase4",
-                "name": "Emergency Patch Cycle",
-                "kicker": "PATCH",
-                "tagline": "Reseals known holes. +Detection as new logs flow in.",
+                "id": "iam_phase4",
+                "name": "IAM Credential Rotation",
+                "kicker": "ROTATE",
+                "tagline": "CloudTrail flags odd AssumeRole calls. +Detection.",
                 "detection": 10,
-                "flavor": "He rolls out an emergency patch and reseals two of your toeholds. Fresh patch logs feed straight into his SIEM."
+                "flavor": "He cycles long-lived access keys and pipes CloudTrail straight into his SIEM. Your AssumeRole noise lights up the dashboard."
               }
             },
             {

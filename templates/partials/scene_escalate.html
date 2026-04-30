@@ -1,0 +1,86 @@
+<div class="scene scene--escalate" data-scene="escalate"
+     data-victim-user="{{ lesson.body.victim_user }}"
+     data-found-file="{{ lesson.body.found_file }}"
+     data-access-key="{{ lesson.body.leaked_keys.access_key }}"
+     data-secret-key="{{ lesson.body.leaked_keys.secret_key }}"
+     data-key-owner="{{ lesson.body.leaked_keys.owner }}"
+     data-low-role="{{ lesson.body.low_role }}"
+     data-low-role-label="{{ lesson.body.low_role_label }}"
+     data-admin-role="{{ lesson.body.admin_role }}"
+     data-admin-role-label="{{ lesson.body.admin_role_label }}"
+     data-ec2-instance="{{ lesson.body.ec2_instance_id }}">
+  <div class="scene-stage">
+    <div class="escalate-grid">
+
+      <div class="mockup-window mockup-window--terminal">
+        <div class="mockup-titlebar mockup-titlebar--dark">
+          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+          <div class="mockup-url">m.smith@WS47:~$ · meterpreter shell</div>
+        </div>
+        <div class="mockup-body mockup-body--terminal" id="escalateTerminal">
+          <div class="term-line visible term-placeholder">$ <span class="term-caret">_</span></div>
+        </div>
+      </div>
+
+      <div class="mockup-window escalate-iam-window">
+        <div class="mockup-titlebar">
+          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+          <div class="mockup-url"><span class="mockup-lock">&#128274;</span> console.aws.amazon.com/iam</div>
+        </div>
+        <div class="mockup-body mockup-body--escalate-console">
+          <div class="escalate-console-header">
+            <span class="escalate-console-svc">IAM · Identity</span>
+            <span class="escalate-console-region">us-east-1 · {{ lesson.body.ec2_instance_id }}</span>
+          </div>
+
+          <div class="escalate-id-card" id="escalateIdCard" data-state="idle">
+            <div class="escalate-id-portrait" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21a8 8 0 0 1 16 0"/>
+              </svg>
+            </div>
+            <div class="escalate-id-meta">
+              <span class="escalate-id-kicker">CURRENT IDENTITY</span>
+              <span class="escalate-id-name" id="escalateIdName">— no identity —</span>
+              <span class="escalate-id-arn" id="escalateIdArn">awaiting credentials…</span>
+            </div>
+            <div class="escalate-id-badge" id="escalateIdBadge">LOCKED</div>
+          </div>
+
+          <div class="escalate-policies" id="escalatePolicies">
+            <div class="escalate-policies-header">
+              <span>Attached policies</span>
+              <span id="escalatePoliciesCount">0</span>
+            </div>
+            <div class="escalate-policies-list" id="escalatePoliciesList">
+              <div class="escalate-policy-empty">Run a step to populate identity context.</div>
+            </div>
+          </div>
+
+          <div class="escalate-arrow" aria-hidden="true">
+            <span class="escalate-arrow-low">jenkins-deployer</span>
+            <span class="escalate-arrow-shaft"><span class="escalate-arrow-fill" id="escalateArrowFill"></span></span>
+            <span class="escalate-arrow-high">OrgAccountAdmin</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="scene-actions" data-scene-actions="escalate">
+    <button class="scene-action-btn primary" data-action="search" type="button">
+      <span class="scene-action-num">1</span> Search Files
+    </button>
+    <button class="scene-action-btn" data-action="read" type="button" disabled>
+      <span class="scene-action-num">2</span> Read Credentials
+    </button>
+    <button class="scene-action-btn" data-action="assume" type="button" disabled>
+      <span class="scene-action-num">3</span> Assume Admin Role
+    </button>
+    <button class="scene-action-btn scene-action-btn--ghost" data-action="reset" type="button" disabled>
+      &#8635; Reset
+    </button>
+    <span class="scene-hint" data-scene-hint>Hunt the disk for <strong>~/.aws/credentials</strong> — devs leave plaintext keys behind ALL the time.</span>
+  </div>
+</div>

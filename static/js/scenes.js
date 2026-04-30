@@ -373,86 +373,38 @@
   }
 
   /* ============================================================
-     EXPLOIT · Enable Content click
+     INITIAL COMPROMISE · Enable Content → persistence → C2 → send commands
+     A chained flow: the macro click fires the foothold, then unlocks
+     the persistence + beacon + send-commands chain that used to be
+     its own lesson. Reuses the .exploit-* + .control-* CSS chassis.
      ============================================================ */
-  function initExploitScene() {
-    var scene = document.querySelector('[data-scene="exploit"]');
+  function initCompromiseScene() {
+    var scene = document.querySelector('[data-scene="compromise"]');
     if (!scene) return;
 
+    // ---- Stage 1 (macro detonation) DOM ----
     var doc = scene.querySelector('#exploitDoc');
     var banner = scene.querySelector('#docBanner');
     var overlay = scene.querySelector('#exploitOverlay');
-    var terminal = scene.querySelector('#exploitTerminal');
+    var exploitTerminal = scene.querySelector('#exploitTerminal');
     var enableBtn = scene.querySelector('#docEnableBtn');
-    var played = false;
+    var enabled = false;
 
-    function setupPulse() { enableBtn.style.animation = 'pulse-btn 1.6s ease-in-out infinite'; }
-    function stopPulse() { enableBtn.style.animation = 'none'; }
-
-    async function onEnable() {
-      if (played) return;
-      played = true;
-      log('exploit_enable_content');
-      stopPulse();
-      banner.classList.add('clicked');
-      enableBtn.textContent = 'Enabled';
-      await delay(450);
-      doc.classList.add('blurred');
-      overlay.classList.add('visible');
-      setHint(scene, '<strong>Too late.</strong> A reverse shell is already running, invisible to the user.', 'success');
-
-      var lines = [
-        { text: 'C:\\> powershell -ep bypass -nop -w hidden', delay: 220 },
-        { text: 'Downloading payload from 185.47.xx.xx...', delay: 400 },
-        { text: '████████████████████████ 100%', delay: 450 },
-        { text: 'Executing in memory...', delay: 280 },
-        { text: '[+] Meterpreter session 1 opened', delay: 380 },
-        { text: '[+] Privilege: ACME\\m.smith', delay: 260 },
-        { text: '[+] Target: DESKTOP-ACME-47', delay: 200 }
-      ];
-      for (var i = 0; i < lines.length; i++) {
-        var div = document.createElement('div');
-        div.className = 'term-line';
-        div.textContent = lines[i].text;
-        terminal.appendChild(div);
-        await delay(60);
-        div.classList.add('visible');
-        await delay(lines[i].delay);
-      }
-      btns.reset.disabled = false;
-      log('exploit_complete');
-    }
-
-    function reset() {
-      played = false;
-      banner.classList.remove('clicked');
-      enableBtn.textContent = 'Enable Content';
-      doc.classList.remove('blurred');
-      overlay.classList.remove('visible');
-      terminal.innerHTML = '';
-      setupPulse();
-      btns.reset.disabled = true;
-      setHint(scene, 'Click the glowing <strong>Enable Content</strong> button to see what really happens.');
-      log('scene_reset', { scene: 'exploit' });
-    }
-
-    enableBtn.addEventListener('click', onEnable);
-    var btns = wireActions(scene, { reset: reset });
-    setupPulse();
-  }
-
-  /* ============================================================
-     CONTROL · install persistence, open C2, send commands
-     ============================================================ */
-  function initControlScene() {
-    var scene = document.querySelector('[data-scene="control"]');
-    if (!scene) return;
-
+    // ---- Stage 2 (persistence + C2) DOM ----
     var log_ = scene.querySelector('#controlLog');
     var tree = scene.querySelector('#controlTree');
     var packets = scene.querySelector('#controlPackets');
-    var terminal = scene.querySelector('#controlTerminal');
+    var c2Terminal = scene.querySelector('#controlTerminal');
 
+    var exploitLines = [
+      { text: 'C:\\> powershell -ep bypass -nop -w hidden', delay: 220 },
+      { text: 'Downloading payload from 185.47.xx.xx...', delay: 400 },
+      { text: '████████████████████████ 100%', delay: 450 },
+      { text: 'Executing in memory...', delay: 280 },
+      { text: '[+] Meterpreter session 1 opened', delay: 380 },
+      { text: '[+] Privilege: ACME\\m.smith', delay: 260 },
+      { text: '[+] Target: DESKTOP-ACME-47', delay: 200 }
+    ];
     var entries = [
       { time: '14:32:01', type: 'write', cls: 'install-log-type--write', msg: 'svchost_update.exe dropped to C:\\Windows\\Temp\\' },
       { time: '14:32:02', type: 'write', cls: 'install-log-type--write', msg: 'mshelper.dll created in AppData\\Local\\' },
@@ -481,8 +433,10 @@
 
     var packetInterval = null;
 
-    function clearTerminalPlaceholder() {
-      var ph = terminal.querySelector('.term-placeholder');
+    function setupPulse() { enableBtn.style.animation = 'pulse-btn 1.6s ease-in-out infinite'; }
+    function stopPulse() { enableBtn.style.animation = 'none'; }
+    function clearC2TerminalPlaceholder() {
+      var ph = c2Terminal.querySelector('.term-placeholder');
       if (ph) ph.remove();
     }
     function clearLogEmpty() {
@@ -490,9 +444,38 @@
       if (e) e.remove();
     }
 
+    async function onEnableClick() {
+      if (enabled) return;
+      enabled = true;
+      log('compromise_enable_content');
+      stopPulse();
+      btns.enable.disabled = true;
+      btns.enable.classList.add('done');
+      btns.enable.innerHTML = '<span class="scene-action-num">1</span> Macro Fired';
+      banner.classList.add('clicked');
+      enableBtn.textContent = 'Enabled';
+      await delay(450);
+      doc.classList.add('blurred');
+      overlay.classList.add('visible');
+      setHint(scene, '<strong>Reverse shell live.</strong> Now lock it in — install persistence so the foothold survives a reboot.');
+
+      for (var i = 0; i < exploitLines.length; i++) {
+        var line = document.createElement('div');
+        line.className = 'term-line';
+        line.textContent = exploitLines[i].text;
+        exploitTerminal.appendChild(line);
+        await delay(60);
+        line.classList.add('visible');
+        await delay(exploitLines[i].delay);
+      }
+      btns.install.disabled = false;
+      btns.reset.disabled = false;
+      log('compromise_foothold');
+    }
+
     async function install(btn) {
       btn.disabled = true;
-      log('control_install');
+      log('compromise_install_persistence');
       clearLogEmpty();
       var fsIdx = 0;
       for (var i = 0; i < entries.length; i++) {
@@ -514,16 +497,15 @@
         await delay(300);
       }
       btn.classList.add('done');
-      btn.innerHTML = '<span class="scene-action-num">1</span> Persistence Installed';
+      btn.innerHTML = '<span class="scene-action-num">2</span> Persistence Installed';
       btns.beacon.disabled = false;
-      btns.reset.disabled = false;
       setHint(scene, 'Backdoor planted. Now open an encrypted tunnel back to the attacker.');
     }
 
     function startBeacon(btn) {
       if (packetInterval) return;
       btn.disabled = true;
-      log('control_beacon');
+      log('compromise_beacon');
       var packetId = 0;
       packetInterval = setInterval(function () {
         var pkt = document.createElement('div');
@@ -534,48 +516,227 @@
         setTimeout(function () { pkt.remove(); }, 2000);
       }, 380);
       btn.classList.add('done');
-      btn.innerHTML = '<span class="scene-action-num">2</span> Beacon Live';
+      btn.innerHTML = '<span class="scene-action-num">3</span> Beacon Live';
       btns.execute.disabled = false;
-      setHint(scene, 'C2 channel is live. The attacker can now issue commands remotely.');
+      setHint(scene, 'C2 channel is live. Send commands to confirm full remote control.');
     }
 
     async function execute(btn) {
       btn.disabled = true;
-      log('control_execute');
-      clearTerminalPlaceholder();
+      log('compromise_execute_commands');
+      clearC2TerminalPlaceholder();
       for (var i = 0; i < commands.length; i++) {
-        addTermLine(terminal, commands[i].html);
-        terminal.scrollTop = terminal.scrollHeight;
+        addTermLine(c2Terminal, commands[i].html);
+        c2Terminal.scrollTop = c2Terminal.scrollHeight;
         await delay(commands[i].delay);
       }
       btn.classList.add('done');
-      btn.innerHTML = '<span class="scene-action-num">3</span> Commands Sent';
-      setHint(scene, '<strong>Full remote control achieved.</strong> Credentials dumped, files enumerated.', 'success');
-      log('control_complete');
+      btn.innerHTML = '<span class="scene-action-num">4</span> Commands Sent';
+      setHint(scene, '<strong>Full remote control achieved.</strong> Foothold + persistence + C2 are all live.', 'success');
+      log('compromise_complete');
     }
 
     function reset() {
+      enabled = false;
+      banner.classList.remove('clicked');
+      enableBtn.textContent = 'Enable Content';
+      doc.classList.remove('blurred');
+      overlay.classList.remove('visible');
+      exploitTerminal.innerHTML = '';
+      setupPulse();
+
       if (packetInterval) { clearInterval(packetInterval); packetInterval = null; }
       packets.innerHTML = '';
       log_.innerHTML = '<div class="install-empty">Waiting for attacker activity…</div>';
       tree.innerHTML = '';
-      terminal.innerHTML = '<div class="term-line visible term-placeholder">meterpreter&gt; <span class="term-caret">_</span></div>';
+      c2Terminal.innerHTML = '<div class="term-line visible term-placeholder">meterpreter&gt; <span class="term-caret">_</span></div>';
 
-      btns.install.disabled = false;
+      btns.enable.disabled = false;
+      btns.enable.classList.remove('done');
+      btns.enable.innerHTML = '<span class="scene-action-num">1</span> Enable Content';
+      btns.install.disabled = true;
       btns.install.classList.remove('done');
-      btns.install.innerHTML = '<span class="scene-action-num">1</span> Install Persistence';
+      btns.install.innerHTML = '<span class="scene-action-num">2</span> Install Persistence';
       btns.beacon.disabled = true;
       btns.beacon.classList.remove('done');
-      btns.beacon.innerHTML = '<span class="scene-action-num">2</span> Open C2 Channel';
+      btns.beacon.innerHTML = '<span class="scene-action-num">3</span> Open C2 Channel';
       btns.execute.disabled = true;
       btns.execute.classList.remove('done');
-      btns.execute.innerHTML = '<span class="scene-action-num">3</span> Send Commands';
+      btns.execute.innerHTML = '<span class="scene-action-num">4</span> Send Commands';
       btns.reset.disabled = true;
-      setHint(scene, 'Run each step to watch persistence get planted and the backdoor come alive.');
-      log('scene_reset', { scene: 'control' });
+      setHint(scene, 'Click the glowing <strong>Enable Content</strong> button to detonate the macro and earn a foothold.');
+      log('scene_reset', { scene: 'compromise' });
     }
 
-    var btns = wireActions(scene, { install: install, beacon: startBeacon, execute: execute, reset: reset });
+    enableBtn.addEventListener('click', onEnableClick);
+    var btns = wireActions(scene, {
+      enable: onEnableClick,
+      install: install,
+      beacon: startBeacon,
+      execute: execute,
+      reset: reset
+    });
+    setupPulse();
+  }
+
+  /* ============================================================
+     ESCALATE PRIVILEGES · AWS credential hunt + AssumeRole pivot
+     Three-step: search filesystem → read keys → assume admin role.
+     ============================================================ */
+  function initEscalateScene() {
+    var scene = document.querySelector('[data-scene="escalate"]');
+    if (!scene) return;
+
+    var terminal = scene.querySelector('#escalateTerminal');
+    var idCard = scene.querySelector('#escalateIdCard');
+    var idName = scene.querySelector('#escalateIdName');
+    var idArn = scene.querySelector('#escalateIdArn');
+    var idBadge = scene.querySelector('#escalateIdBadge');
+    var policiesList = scene.querySelector('#escalatePoliciesList');
+    var policiesCount = scene.querySelector('#escalatePoliciesCount');
+    var arrowFill = scene.querySelector('#escalateArrowFill');
+
+    var foundFile = scene.dataset.foundFile || '~/.aws/credentials';
+    var accessKey = scene.dataset.accessKey || '';
+    var secretKey = scene.dataset.secretKey || '';
+    var keyOwner = scene.dataset.keyOwner || 'jenkins-deployer';
+    var lowRole = scene.dataset.lowRole || '';
+    var lowRoleLabel = scene.dataset.lowRoleLabel || 'low-priv';
+    var adminRole = scene.dataset.adminRole || '';
+    var adminRoleLabel = scene.dataset.adminRoleLabel || 'admin';
+
+    var searchLines = [
+      { html: '<span class="term-prompt">$ </span><span class="term-cmd">grep -r "aws_access_key" /home /Users 2&gt;/dev/null</span>', delay: 280 },
+      { html: '<span class="term-warn">[*] scanning 41,287 files…</span>', delay: 360 },
+      { html: '<span class="term-output">[*] skipping /Users/m.smith/Library (binary)</span>', delay: 220 },
+      { html: '<span class="term-success">[+] match: ' + escapeHtml(foundFile) + '</span>', delay: 320 }
+    ];
+    var readLines = [
+      { html: '<span class="term-prompt">$ </span><span class="term-cmd">cat ' + escapeHtml(foundFile) + '</span>', delay: 240 },
+      { html: '<span class="term-output">[default]</span>', delay: 140 },
+      { html: '<span class="term-danger">aws_access_key_id     = ' + escapeHtml(accessKey) + '</span>', delay: 200 },
+      { html: '<span class="term-danger">aws_secret_access_key = ' + escapeHtml(secretKey) + '</span>', delay: 220 },
+      { html: '<span class="term-output">region                = us-east-1</span>', delay: 180 },
+      { html: '<span class="term-prompt">$ </span><span class="term-cmd">aws sts get-caller-identity</span>', delay: 320 },
+      { html: '<span class="term-success">{"Arn": "' + escapeHtml(lowRole) + '"}</span>', delay: 280 }
+    ];
+    var assumeLines = [
+      { html: '<span class="term-prompt">$ </span><span class="term-cmd">aws sts assume-role \\</span>', delay: 240 },
+      { html: '<span class="term-cmd">    --role-arn ' + escapeHtml(adminRole) + ' \\</span>', delay: 180 },
+      { html: '<span class="term-cmd">    --role-session-name red-team-pivot</span>', delay: 220 },
+      { html: '<span class="term-warn">[*] requesting STS credentials…</span>', delay: 320 },
+      { html: '<span class="term-success">[+] Credentials.AccessKeyId  = ASIA42…</span>', delay: 240 },
+      { html: '<span class="term-success">[+] Credentials.SessionToken = FwoGZXIvYXdzEC…</span>', delay: 240 },
+      { html: '<span class="term-danger">[!] Now operating as OrganizationAccountAdmin</span>', delay: 320 }
+    ];
+
+    function clearPlaceholder() {
+      var ph = terminal.querySelector('.term-placeholder');
+      if (ph) ph.remove();
+    }
+
+    function setIdState(state, name, arn, badgeText) {
+      idCard.dataset.state = state;
+      if (name)      idName.textContent = name;
+      if (arn)       idArn.textContent = arn;
+      if (badgeText) idBadge.textContent = badgeText;
+    }
+
+    function renderPolicies(list) {
+      policiesList.innerHTML = '';
+      if (!list.length) {
+        var empty = document.createElement('div');
+        empty.className = 'escalate-policy-empty';
+        empty.textContent = 'No policies attached.';
+        policiesList.appendChild(empty);
+      } else {
+        list.forEach(function (p) {
+          var row = document.createElement('div');
+          row.className = 'escalate-policy-row' + (p.danger ? ' is-danger' : '');
+          row.innerHTML =
+            '<span class="escalate-policy-name">' + escapeHtml(p.name) + '</span>' +
+            '<span class="escalate-policy-tag">' + escapeHtml(p.tag) + '</span>';
+          policiesList.appendChild(row);
+        });
+      }
+      policiesCount.textContent = list.length;
+    }
+
+    async function runTerminalLines(lines) {
+      clearPlaceholder();
+      for (var i = 0; i < lines.length; i++) {
+        addTermLine(terminal, lines[i].html);
+        terminal.scrollTop = terminal.scrollHeight;
+        await delay(lines[i].delay);
+      }
+    }
+
+    async function search(btn) {
+      btn.disabled = true;
+      log('escalate_search', { target: foundFile });
+      await runTerminalLines(searchLines);
+      btn.classList.add('done');
+      btn.innerHTML = '<span class="scene-action-num">1</span> File Found';
+      btns.read.disabled = false;
+      btns.reset.disabled = false;
+      arrowFill.style.width = '20%';
+      setHint(scene, 'Found <strong>' + escapeHtml(foundFile) + '</strong>. Now read the keys to confirm what they unlock.');
+    }
+
+    async function read(btn) {
+      btn.disabled = true;
+      log('escalate_read_creds', { owner: keyOwner });
+      await runTerminalLines(readLines);
+      setIdState('user', keyOwner, lowRole, 'EC2 ReadOnly');
+      renderPolicies([
+        { name: 'AmazonEC2ReadOnlyAccess', tag: 'AWS managed' },
+        { name: 'jenkins-deploy-policy',   tag: 'inline' }
+      ]);
+      arrowFill.style.width = '55%';
+      btn.classList.add('done');
+      btn.innerHTML = '<span class="scene-action-num">2</span> Keys Identified';
+      btns.assume.disabled = false;
+      setHint(scene, 'Keys belong to <strong>' + escapeHtml(keyOwner) + '</strong>. They can call <code>sts:AssumeRole</code> on the org-admin role.');
+    }
+
+    async function assume(btn) {
+      btn.disabled = true;
+      log('escalate_assume_role', { role: adminRole });
+      await runTerminalLines(assumeLines);
+      setIdState('admin', 'OrganizationAccountAdmin', adminRole, 'ALL ACCESS');
+      renderPolicies([
+        { name: 'AdministratorAccess',         tag: 'AWS managed', danger: true },
+        { name: 'AssumeRole · all accounts',   tag: 'inline',      danger: true }
+      ]);
+      arrowFill.style.width = '100%';
+      btn.classList.add('done');
+      btn.innerHTML = '<span class="scene-action-num">3</span> Admin Assumed';
+      setHint(scene, '<strong>Privilege escalated.</strong> A regular dev key just turned into account-admin.', 'success');
+      log('escalate_complete');
+    }
+
+    function reset() {
+      terminal.innerHTML = '<div class="term-line visible term-placeholder">$ <span class="term-caret">_</span></div>';
+      setIdState('idle', '— no identity —', 'awaiting credentials…', 'LOCKED');
+      policiesList.innerHTML = '<div class="escalate-policy-empty">Run a step to populate identity context.</div>';
+      policiesCount.textContent = '0';
+      arrowFill.style.width = '0%';
+
+      btns.search.disabled = false;
+      btns.search.classList.remove('done');
+      btns.search.innerHTML = '<span class="scene-action-num">1</span> Search Files';
+      btns.read.disabled = true;
+      btns.read.classList.remove('done');
+      btns.read.innerHTML = '<span class="scene-action-num">2</span> Read Credentials';
+      btns.assume.disabled = true;
+      btns.assume.classList.remove('done');
+      btns.assume.innerHTML = '<span class="scene-action-num">3</span> Assume Admin Role';
+      btns.reset.disabled = true;
+      setHint(scene, 'Hunt the disk for <strong>~/.aws/credentials</strong> — devs leave plaintext keys behind ALL the time.');
+      log('scene_reset', { scene: 'escalate' });
+    }
+
+    var btns = wireActions(scene, { search: search, read: read, assume: assume, reset: reset });
   }
 
   /* ============================================================
@@ -608,11 +769,17 @@
         var div = document.createElement('div');
         div.className = 'exfil-file interactive';
         div.dataset.index = i;
+        var serviceTag = f.service
+          ? '<span class="exfil-file-service">' + escapeHtml(f.service) + '</span>'
+          : '';
         div.innerHTML =
           '<span class="exfil-file-icon">' + f.icon + '</span>' +
           '<div class="exfil-file-info">' +
           '<span class="exfil-file-name">' + escapeHtml(f.name) + '</span>' +
-          '<span class="exfil-file-size">' + escapeHtml(f.size) + '</span>' +
+          '<span class="exfil-file-meta">' +
+            serviceTag +
+            '<span class="exfil-file-size">' + escapeHtml(f.size) + '</span>' +
+          '</span>' +
           '</div>';
         div.addEventListener('click', function () { stealFile(div, f); });
         filesContainer.appendChild(div);
@@ -624,7 +791,7 @@
       if (stealing || div.classList.contains('stolen')) return;
       stealing = true;
 
-      log('exfil_steal_file', { file: f.name, size: f.size });
+      log('exfil_steal_file', { file: f.name, size: f.size, service: f.service });
 
       div.classList.add('stealing');
       label.textContent = 'Exfiltrating ' + f.name + '…';
@@ -650,12 +817,16 @@
         label.textContent = 'Exfiltration Complete';
         fill.style.width = '100%';
         bytesEl.textContent = totalLabel + ' / ' + totalLabel;
-        setHint(scene, '<strong>Mission complete.</strong> ' + totalLabel + ' of sensitive data is now on the attacker\'s server.', 'success');
+        var bucket = scene.dataset.attackerBucket || 'the attacker bucket';
+        setHint(scene,
+          '<strong>Mission complete.</strong> ' + totalLabel +
+          ' of AWS data copied to <code>' + escapeHtml(bucket) + '</code> via the OrgAdmin session.',
+          'success');
         btns.stealAll.disabled = true;
         btns.stealAll.classList.add('done');
         log('exfil_complete', { total_mb: Math.round(totalMB) });
       } else {
-        setHint(scene, 'Stolen <strong>' + stolenCount + '/' + files.length + '</strong> files (' + formatMB(transferred) + '). Keep going.');
+        setHint(scene, 'Stolen <strong>' + stolenCount + '/' + files.length + '</strong> resources (' + formatMB(transferred) + '). Keep going.');
       }
     }
 
@@ -685,7 +856,7 @@
       btns.stealAll.disabled = false;
       btns.stealAll.classList.remove('done');
       btns.reset.disabled = true;
-      setHint(scene, 'Click any file to exfiltrate it one at a time, or run a full smash-and-grab.');
+      setHint(scene, 'Click any AWS resource to siphon it with the <strong>OrgAdmin</strong> session, or run a full smash-and-grab.');
       log('scene_reset', { scene: 'exfil' });
     }
 
@@ -701,8 +872,8 @@
     initFramework();
     initReconScene();
     initArmDeliverScene();
-    initExploitScene();
-    initControlScene();
+    initCompromiseScene();
+    initEscalateScene();
     initExfilScene();
   }
 

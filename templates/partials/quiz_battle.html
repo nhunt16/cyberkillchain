@@ -31,7 +31,7 @@
           <div class="battle-combatant-floats" aria-hidden="true"></div>
         </div>
         <header class="battle-combatant-head">
-          <span class="battle-combatant-kicker">RED TEAM · OBJECTIVE</span>
+          <span class="battle-combatant-kicker">RED TEAM</span>
           <h4 class="battle-combatant-name" id="battlePlayerName">{{ active_avatar.name }}</h4>
         </header>
 
@@ -65,7 +65,7 @@
           <div class="battle-combatant-floats" aria-hidden="true"></div>
         </div>
         <header class="battle-combatant-head">
-          <span class="battle-combatant-kicker">BLUE TEAM · BOSS</span>
+          <span class="battle-combatant-kicker">BLUE TEAM</span>
           <h4 class="battle-combatant-name">{{ opp.name }}</h4>
         </header>
 
@@ -86,11 +86,29 @@
 
         <div class="battle-posture" id="battlePosture">
           <span class="battle-posture-label">CURRENT POSTURE</span>
-          <div class="battle-posture-tile" id="battlePostureTile">
+          <div class="battle-posture-tile"
+               id="battlePostureTile"
+               tabindex="0"
+               aria-describedby="battlePostureTooltip"
+               aria-label="Current posture. Hover or focus for tactic details.">
             <span class="battle-posture-kicker" id="battlePostureKicker">—</span>
-            <span class="battle-posture-name" id="battlePostureName">awaiting first move</span>
+            <span class="battle-posture-name-row">
+              <span class="battle-posture-name" id="battlePostureName">awaiting first move</span>
+              <svg class="battle-posture-info"
+                   viewBox="0 0 16 16"
+                   width="13" height="13"
+                   aria-hidden="true"
+                   focusable="false">
+                <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                <circle cx="8" cy="4.6" r="0.95" fill="currentColor"/>
+                <path d="M8 7.2v5.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <div class="battle-posture-tooltip" id="battlePostureTooltip" role="tooltip">
+              <p class="battle-posture-blurb" id="battlePostureBlurb">{{ opp.name }} steps onto the field. Pick your opening move.</p>
+              <p class="battle-posture-hint-line" id="battleMovesHint">Match {{ opp.name }}'s posture for a Critical Insight bonus.</p>
+            </div>
           </div>
-          <p class="battle-posture-blurb" id="battlePostureBlurb">{{ opp.name }} steps onto the field. Pick your opening move.</p>
         </div>
       </article>
 
@@ -99,7 +117,6 @@
     <div class="battle-moves-wrap">
       <div class="battle-moves-head">
         <span class="battle-moves-kicker">CHOOSE YOUR ATTACK</span>
-        <span class="battle-moves-hint" id="battleMovesHint">Match {{ opp.name }}'s posture for a Critical Insight bonus.</span>
       </div>
       <div class="battle-moves" id="battleMoves" role="group" aria-label="Available attack moves"></div>
     </div>
@@ -163,52 +180,62 @@
         {# =================== RED TEAM ====================== #}
 
         <div class="battle-move-scene" data-scene-id="recon_linkedin" hidden>
-          <div class="scene-ui scene-ui--in">
-            <div class="scene-window-bar scene-window-bar--in">
-              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="scene-window-title">in · People at ACME Corp</span>
-            </div>
-            <div class="scene-li-search">
-              <span class="scene-li-search-icon" aria-hidden="true">⌕</span>
-              <span class="scene-li-search-text mono">"ACME Corp"</span>
-              <span class="scene-li-caret" aria-hidden="true"></span>
-            </div>
-            <div class="scene-li-rows">
-              <div class="scene-li-row">
-                <span class="scene-avatar" data-c="0">JD</span>
-                <span class="scene-li-meta">
-                  <span class="scene-li-name">Jane Doe</span>
-                  <span class="scene-li-role">CFO · ACME Corp</span>
+          <div class="scene-ui scene-ui--in scene-ui--li">
+            <div class="scene-li-topbar">
+              <span class="scene-li-logo" aria-hidden="true">in</span>
+              <div class="scene-li-search">
+                <span class="scene-li-search-icon" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <circle cx="7" cy="7" r="4.5"/><path d="m11 11 3.5 3.5" stroke-linecap="round"/>
+                  </svg>
                 </span>
-                <span class="scene-li-email mono">j.doe@acme-corp.com</span>
+                <span class="scene-li-search-text">"ACME Corp" employees<span class="scene-li-caret" aria-hidden="true"></span></span>
               </div>
-              <div class="scene-li-row">
-                <span class="scene-avatar" data-c="1">MS</span>
-                <span class="scene-li-meta">
-                  <span class="scene-li-name">Mike Smith</span>
-                  <span class="scene-li-role">IT Administrator</span>
-                </span>
-                <span class="scene-li-email mono">m.smith@acme-corp.com</span>
-              </div>
-              <div class="scene-li-row">
-                <span class="scene-avatar" data-c="2">AK</span>
-                <span class="scene-li-meta">
-                  <span class="scene-li-name">Alice Kim</span>
-                  <span class="scene-li-role">HR Manager</span>
-                </span>
-                <span class="scene-li-email mono">a.kim@acme-corp.com</span>
-              </div>
+              <span class="scene-li-navicon" aria-hidden="true" title="My Network">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><circle cx="5" cy="6" r="2.4"/><circle cx="11" cy="6" r="2.4"/><path d="M.5 13c0-2.2 2-3.6 4.5-3.6S9.5 10.8 9.5 13Zm6 0c0-2.2 2-3.6 4.5-3.6S15.5 10.8 15.5 13Z"/></svg>
+              </span>
+              <span class="scene-li-navicon" aria-hidden="true" title="Messaging">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="3" width="13" height="9" rx="1"/><path d="m1.5 4 6.5 5 6.5-5"/></svg>
+              </span>
+              <span class="scene-li-navicon scene-li-navicon--bell" aria-hidden="true" title="Notifications">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a3.5 3.5 0 0 0-3.5 3.5V8L3 10.5h10L11.5 8V4.5A3.5 3.5 0 0 0 8 1Zm-1.5 11a1.5 1.5 0 0 0 3 0Z"/></svg>
+                <span class="scene-li-bell-dot" aria-hidden="true"></span>
+              </span>
             </div>
-            <div class="scene-li-graph" aria-hidden="true">
-              <span class="scene-li-node scene-li-node--1"></span>
-              <span class="scene-li-node scene-li-node--2"></span>
-              <span class="scene-li-node scene-li-node--3"></span>
-              <span class="scene-li-node scene-li-node--4"></span>
-              <span class="scene-li-edge scene-li-edge--a"></span>
-              <span class="scene-li-edge scene-li-edge--b"></span>
-              <span class="scene-li-edge scene-li-edge--c"></span>
+            <div class="scene-li-filters">
+              <span class="scene-li-filter scene-li-filter--active">People</span>
+              <span class="scene-li-filter">Companies</span>
+              <span class="scene-li-filter">Jobs</span>
+              <span class="scene-li-filter">Posts</span>
+              <span class="scene-li-filter">Schools</span>
             </div>
-            <div class="scene-li-banner mono">3 targets captured · org chart pinned</div>
+              <div class="scene-li-rows">
+                <div class="scene-li-row">
+                  <span class="scene-avatar" data-c="0">JD</span>
+                  <span class="scene-li-meta">
+                    <span class="scene-li-name">Jane Doe <span class="scene-li-degree">&middot; 3rd</span></span>
+                    <span class="scene-li-role">CFO at ACME Corp</span>
+                  </span>
+                  <span class="scene-li-connect">+ Connect</span>
+                </div>
+                <div class="scene-li-row">
+                  <span class="scene-avatar" data-c="1">MS</span>
+                  <span class="scene-li-meta">
+                    <span class="scene-li-name">Mike Smith <span class="scene-li-degree">&middot; 3rd</span></span>
+                    <span class="scene-li-role">IT Administrator at ACME Corp</span>
+                  </span>
+                  <span class="scene-li-connect">+ Connect</span>
+                </div>
+                <div class="scene-li-row">
+                  <span class="scene-avatar" data-c="2">AK</span>
+                  <span class="scene-li-meta">
+                    <span class="scene-li-name">Alice Kim <span class="scene-li-degree">&middot; 3rd</span></span>
+                    <span class="scene-li-role">HR Manager at ACME Corp</span>
+                  </span>
+                  <span class="scene-li-connect">+ Connect</span>
+                </div>
+              </div>
+            <div class="scene-li-banner mono">3 targets captured &middot; org chart pinned</div>
           </div>
         </div>
 
@@ -260,26 +287,53 @@
         </div>
 
         <div class="battle-move-scene" data-scene-id="deliver_phish" hidden>
-          <div class="scene-ui scene-ui--mail">
-            <div class="scene-window-bar">
-              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="scene-window-title">Compose · New message</span>
+          <div class="scene-ui scene-ui--mail scene-ui--outlook">
+            <div class="scene-outlook-titlebar">
+              <span class="scene-outlook-titleicon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M0 3.5 7 1l9 2.5v9L7 15 0 12.5Zm7-1.2v11.4l8-2V4.3Z"/><circle cx="4" cy="8" r="1.7" fill="#fff"/></svg>
+              </span>
+              <span class="scene-outlook-title">Q3 Invoice &middot; Action required &mdash; Message (HTML)</span>
+              <span class="scene-outlook-titlebtns" aria-hidden="true">
+                <span class="scene-outlook-titlebtn">&minus;</span>
+                <span class="scene-outlook-titlebtn">&#9744;</span>
+                <span class="scene-outlook-titlebtn scene-outlook-titlebtn--close">&times;</span>
+              </span>
+            </div>
+            <div class="scene-outlook-ribbon">
+              <span class="scene-outlook-tab scene-outlook-tab--active">Message</span>
+              <span class="scene-outlook-tab">Insert</span>
+              <span class="scene-outlook-tab">Options</span>
+              <span class="scene-outlook-tab">Format</span>
+              <span class="scene-outlook-tab">Review</span>
+            </div>
+            <div class="scene-outlook-actionbar">
+              <span class="scene-mail-send-btn">
+                <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" aria-hidden="true"><path d="M.7 8 15 1.5 9 14.7l-1.6-5.5Z"/></svg>
+                Send
+              </span>
+              <span class="scene-outlook-icon" aria-hidden="true" title="Attach">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M11 4.5 5.5 10a2.5 2.5 0 0 0 3.5 3.5L14 8.5"/><path d="M9 6.5 4.5 11A1.8 1.8 0 0 0 7 13.5L11 9.5"/></svg>
+              </span>
+              <span class="scene-outlook-icon" aria-hidden="true" title="High importance">!</span>
             </div>
             <div class="scene-mail-fields">
-              <div class="scene-mail-line"><span class="scene-mail-k">To</span><span class="mono">m.smith@acme-corp.com</span></div>
-              <div class="scene-mail-line"><span class="scene-mail-k">From</span><span class="mono">accounts@acmecorp-billing.io</span></div>
-              <div class="scene-mail-line"><span class="scene-mail-k">Subject</span><span class="scene-mail-typed">Q3 Invoice · Action required<span class="scene-mail-caret" aria-hidden="true"></span></span></div>
+              <div class="scene-mail-line scene-mail-line--from"><span class="scene-mail-k">From</span><span class="mono">accounts@acmecorp-billing.io</span></div>
+              <div class="scene-mail-line scene-mail-line--to"><span class="scene-mail-k">To</span><span class="scene-mail-recipient mono">m.smith@acme-corp.com</span></div>
+              <div class="scene-mail-line"><span class="scene-mail-k">Cc</span><span class="scene-mail-empty">&nbsp;</span></div>
+              <div class="scene-mail-line scene-mail-line--subject"><span class="scene-mail-k">Subject</span><span class="scene-mail-typed">Q3 Invoice &middot; Action required<span class="scene-mail-caret" aria-hidden="true"></span></span></div>
               <div class="scene-mail-body">
                 Hi Mike,<br>
                 Please review the attached invoice and confirm wire details before EOD.
-                <div class="scene-mail-attach mono">📎 Invoice_Q3.xlsm · 84 KB</div>
+                <div class="scene-mail-attach mono">
+                  <span class="scene-mail-attach-icon" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M11 4.5 5.5 10a2.5 2.5 0 0 0 3.5 3.5L14 8.5"/><path d="M9 6.5 4.5 11A1.8 1.8 0 0 0 7 13.5L11 9.5"/></svg>
+                  </span>
+                  Invoice_Q3.xlsm &middot; 84 KB
+                </div>
               </div>
             </div>
-            <div class="scene-mail-actions">
-              <span class="scene-mail-send-btn mono">Send</span>
-            </div>
-            <div class="scene-mail-envelope" aria-hidden="true">✉</div>
-            <div class="scene-mail-sent mono">DELIVERED · sender bypassed SPF</div>
+            <div class="scene-mail-envelope" aria-hidden="true">&#9993;</div>
+            <div class="scene-mail-sent mono">DELIVERED &middot; sender bypassed SPF</div>
           </div>
         </div>
 
@@ -327,96 +381,75 @@
           </div>
         </div>
 
-        <div class="battle-move-scene" data-scene-id="exploit_zeroday" hidden>
-          <div class="scene-ui scene-ui--fw">
-            <div class="scene-fw-grid" aria-hidden="true"></div>
-            <div class="scene-fw-wall" aria-hidden="true">
-              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
-              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
-              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
+        <div class="battle-move-scene" data-scene-id="compromise_macro" hidden>
+          <div class="scene-ui scene-ui--doc scene-ui--word">
+            <div class="scene-word-titlebar">
+              <span class="scene-word-icon" aria-hidden="true">W</span>
+              <span class="scene-word-title">Invoice_Q3 [Protected View] &mdash; Word</span>
+              <span class="scene-word-titlebtns" aria-hidden="true">
+                <span class="scene-word-titlebtn">&minus;</span>
+                <span class="scene-word-titlebtn">&#9744;</span>
+                <span class="scene-word-titlebtn scene-word-titlebtn--close">&times;</span>
+              </span>
             </div>
-            <div class="scene-fw-label mono">PERIMETER · stateful FW · acme-edge-01</div>
-            <div class="scene-fw-packet mono">CVE-????-????</div>
-            <div class="scene-fw-shock" aria-hidden="true"></div>
-            <div class="scene-fw-breach">PERIMETER&nbsp;BREACHED</div>
-          </div>
-        </div>
-
-        <div class="battle-move-scene" data-scene-id="exploit_macro" hidden>
-          <div class="scene-ui scene-ui--doc">
-            <div class="scene-window-bar">
-              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="scene-window-title">Microsoft Word · Protected View</span>
+            <div class="scene-word-ribbon">
+              <span class="scene-word-tab">File</span>
+              <span class="scene-word-tab scene-word-tab--active">Home</span>
+              <span class="scene-word-tab">Insert</span>
+              <span class="scene-word-tab">Layout</span>
+              <span class="scene-word-tab">References</span>
+              <span class="scene-word-tab">Review</span>
+              <span class="scene-word-tab">View</span>
             </div>
-            <div class="scene-doc-ribbon-bar">
-              <span class="scene-doc-warn">⚠ PROTECTED VIEW · Macros have been disabled.</span>
+            <div class="scene-doc-ribbon-bar scene-word-warning">
+              <span class="scene-word-warning-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M8 1 1 14h14Zm-.7 4.5h1.4v5h-1.4Zm0 6h1.4V13H7.3Z"/></svg>
+              </span>
+              <span class="scene-doc-warn"><strong>SECURITY WARNING</strong> Macros have been disabled.</span>
               <span class="scene-doc-ribbon-btn">Enable Content</span>
-              <span class="scene-doc-cursor" aria-hidden="true">▲</span>
+              <span class="scene-doc-cursor" aria-hidden="true">&#9650;</span>
             </div>
-            <div class="scene-doc-body">
+            <div class="scene-word-page">
+              <div class="scene-word-page-head mono">ACME Corp &middot; Q3 Invoice</div>
               <div class="scene-doc-line"></div>
               <div class="scene-doc-line"></div>
               <div class="scene-doc-line scene-doc-line--short"></div>
               <div class="scene-doc-line"></div>
             </div>
             <div class="scene-doc-shell mono">
-              <div class="scene-doc-shell-line">Auto_Open() → cmd /c</div>
-              <div class="scene-doc-shell-line">powershell.exe -enc SQBuAH…</div>
-              <div class="scene-doc-shell-line">→ stager.exe staged · pid 4128</div>
+              <div class="scene-doc-shell-line">Auto_Open() &rarr; cmd /c</div>
+              <div class="scene-doc-shell-line">powershell.exe -enc SQBuAH&hellip;</div>
+              <div class="scene-doc-shell-line">&rarr; stager.exe staged &middot; pid 4128</div>
             </div>
           </div>
         </div>
 
-        <div class="battle-move-scene" data-scene-id="exploit_browser" hidden>
-          <div class="scene-ui scene-ui--browser">
-            <div class="scene-window-bar">
-              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="scene-window-title mono">Chromium</span>
+        <div class="battle-move-scene" data-scene-id="compromise_zeroday" hidden>
+          <div class="scene-ui scene-ui--fw">
+            <div class="scene-fw-grid" aria-hidden="true"></div>
+            <span class="scene-fw-side scene-fw-side--in mono">INTERNET</span>
+            <span class="scene-fw-side scene-fw-side--out mono">INTRANET</span>
+            <div class="scene-fw-wall" aria-hidden="true">
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick scene-fw-brick--target"></span><span class="scene-fw-brick scene-fw-brick--target"></span><span class="scene-fw-brick"></span>
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
             </div>
-            <div class="scene-browser-bar">
-              <span class="scene-lock" aria-hidden="true">🔒</span>
-              <span class="mono scene-browser-url">https://ads.cdn-promo.io/track?id=8af2…</span>
+            <div class="scene-fw-label mono">PERIMETER &middot; stateful FW &middot; acme-edge-01</div>
+            <div class="scene-fw-packet">
+              <span class="scene-fw-trail" aria-hidden="true"></span>
+              <span class="scene-fw-packet-tag mono">0DAY</span>
+              <span class="scene-fw-packet-cve mono">CVE-2024-30040</span>
             </div>
-            <div class="scene-driveby-body">
-              <div class="scene-driveby-stack mono">
-                <div class="scene-driveby-line">[v8] heap spray · 0x4141 × 4096</div>
-                <div class="scene-driveby-line">[v8] type confusion @ jit_array</div>
-                <div class="scene-driveby-line">[rce] shellcode → \\Device\\Tcp</div>
-              </div>
-              <div class="scene-driveby-bar"><span class="scene-bar-fill"></span></div>
-              <div class="scene-driveby-banner mono">RCE · session attached</div>
+            <div class="scene-fw-impact" aria-hidden="true"></div>
+            <div class="scene-fw-sparks" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
             </div>
+            <div class="scene-fw-stage2 mono">&#9655; shell @ 10.0.0.47</div>
+            <div class="scene-fw-breach">PERIMETER&nbsp;BREACHED</div>
           </div>
         </div>
 
-        <div class="battle-move-scene" data-scene-id="control_lateral" hidden>
-          <div class="scene-ui scene-ui--net">
-            <div class="scene-window-bar">
-              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="scene-window-title mono">INTERNAL · 10.0.0.0/16</span>
-            </div>
-            <div class="scene-net">
-              <span class="scene-net-node scene-net-node--a">
-                <span class="scene-net-icon" aria-hidden="true">🖥</span>
-                <span class="scene-net-label mono">DC01</span>
-              </span>
-              <span class="scene-net-node scene-net-node--b">
-                <span class="scene-net-icon" aria-hidden="true">💻</span>
-                <span class="scene-net-label mono">WS47</span>
-              </span>
-              <span class="scene-net-node scene-net-node--c">
-                <span class="scene-net-icon" aria-hidden="true">🗄</span>
-                <span class="scene-net-label mono">FILE01</span>
-              </span>
-              <span class="scene-net-edge scene-net-edge--ab"></span>
-              <span class="scene-net-edge scene-net-edge--bc"></span>
-              <span class="scene-net-packet" aria-hidden="true"></span>
-            </div>
-            <div class="scene-net-caption mono">PsExec · stolen NTLM hash · token impersonation</div>
-          </div>
-        </div>
-
-        <div class="battle-move-scene" data-scene-id="control_persist" hidden>
+        <div class="battle-move-scene" data-scene-id="compromise_persist" hidden>
           <div class="scene-ui scene-ui--sched">
             <div class="scene-window-bar">
               <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -436,30 +469,63 @@
           </div>
         </div>
 
-        <div class="battle-move-scene" data-scene-id="control_c2" hidden>
-          <div class="scene-ui scene-ui--c2">
+        <div class="battle-move-scene" data-scene-id="escalate_cred_hunt" hidden>
+          <div class="scene-ui scene-ui--term">
+            <div class="scene-window-bar scene-window-bar--term">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">m.smith@WS47:~$</span>
+            </div>
+            <div class="scene-term-body">
+              <div class="scene-term-line mono">$ grep -r "aws_access_key" /home /Users 2&gt;/dev/null</div>
+              <div class="scene-term-line mono">[*] scanning 41,287 files…</div>
+              <div class="scene-term-line scene-term-found mono">[+] /home/m.smith/.aws/credentials</div>
+              <div class="scene-term-line mono">$ cat ~/.aws/credentials</div>
+              <div class="scene-term-line mono">[default]</div>
+              <div class="scene-term-line scene-term-found mono">aws_access_key_id     = AKIA5XACMEBUILDER42</div>
+              <div class="scene-term-line scene-term-found mono">aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY</div>
+              <div class="scene-term-line mono">region                = us-east-1</div>
+              <div class="scene-term-line scene-term-cursor mono">$ <span class="scene-term-caret" aria-hidden="true"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="escalate_imds" hidden>
+          <div class="scene-ui scene-ui--term">
+            <div class="scene-window-bar scene-window-bar--term">
+              <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="scene-window-title mono">root@i-0a7b3c91acme0042:~#</span>
+            </div>
+            <div class="scene-term-body">
+              <div class="scene-term-line mono">$ TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" \</div>
+              <div class="scene-term-line mono">    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")</div>
+              <div class="scene-term-line mono">$ curl -H "X-aws-ec2-metadata-token: $TOKEN" \</div>
+              <div class="scene-term-line mono">    http://169.254.169.254/latest/meta-data/iam/security-credentials/</div>
+              <div class="scene-term-line scene-term-found mono">acme-build-runner</div>
+              <div class="scene-term-line mono">$ curl …/security-credentials/acme-build-runner</div>
+              <div class="scene-term-line scene-term-found mono">{"AccessKeyId":"ASIA…","Token":"FwoGZXIv…","Expiration":"2026-04-29T22:11Z"}</div>
+              <div class="scene-term-line scene-term-cursor mono">$ <span class="scene-term-caret" aria-hidden="true"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="battle-move-scene" data-scene-id="escalate_assume_role" hidden>
+          <div class="scene-ui scene-ui--browser">
             <div class="scene-window-bar">
               <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="scene-window-title mono">Beacon · TLS 1.3 · 60s jitter</span>
+              <span class="scene-window-title mono">console.aws.amazon.com/iam</span>
             </div>
-            <div class="scene-c2-map" aria-hidden="true">
-              <span class="scene-c2-map-internal mono">internal · WS47</span>
-              <span class="scene-c2-map-arrow"></span>
-              <span class="scene-c2-map-external mono">185.47.xx.xx:443</span>
-              <span class="scene-c2-map-pulse"></span>
+            <div class="scene-browser-bar">
+              <span class="scene-lock" aria-hidden="true">🔒</span>
+              <span class="mono">aws sts assume-role --role-arn arn:aws:iam::448291:role/OrganizationAccountAdmin</span>
             </div>
-            <div class="scene-c2-timeline" aria-hidden="true">
-              <span class="scene-c2-tick"></span>
-              <span class="scene-c2-tick"></span>
-              <span class="scene-c2-tick"></span>
-              <span class="scene-c2-tick"></span>
-              <span class="scene-c2-tick"></span>
-              <span class="scene-c2-tick"></span>
-            </div>
-            <div class="scene-c2-lines mono">
-              <div class="scene-c2-line">→ POST /beacon · 204</div>
-              <div class="scene-c2-line">← GET  /tasks  · 200 · run</div>
-              <div class="scene-c2-line">→ POST /result · 204</div>
+            <div class="scene-driveby-body">
+              <div class="scene-driveby-stack mono">
+                <div class="scene-driveby-line">→ POST /sts.amazonaws.com  Action=AssumeRole</div>
+                <div class="scene-driveby-line">← 200 · Credentials.AccessKeyId=ASIA42…</div>
+                <div class="scene-driveby-line">[+] role: OrganizationAccountAdmin · ALL ACCESS</div>
+              </div>
+              <div class="scene-driveby-bar"><span class="scene-bar-fill"></span></div>
+              <div class="scene-driveby-banner mono">ROLE ASSUMED · org-admin session attached</div>
             </div>
           </div>
         </div>
@@ -599,26 +665,26 @@
           </div>
         </div>
 
-        <div class="battle-move-scene" data-scene-id="patch_phase4" hidden>
+        <div class="battle-move-scene" data-scene-id="iam_phase4" hidden>
           <div class="scene-ui scene-ui--patch">
             <div class="scene-window-bar scene-window-bar--blue">
               <span class="scene-window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="scene-window-title mono">SCCM · Emergency Patch Cycle</span>
+              <span class="scene-window-title mono">CloudTrail · IAM credential rotation</span>
             </div>
             <div class="scene-patch-pipeline" aria-hidden="true">
-              <div class="scene-patch-stage" data-stage="stage"><span class="scene-patch-stage-num">1</span><span class="scene-patch-stage-label mono">stage</span></div>
+              <div class="scene-patch-stage" data-stage="stage"><span class="scene-patch-stage-num">1</span><span class="scene-patch-stage-label mono">flag</span></div>
               <div class="scene-patch-link"></div>
-              <div class="scene-patch-stage" data-stage="test"><span class="scene-patch-stage-num">2</span><span class="scene-patch-stage-label mono">test</span></div>
+              <div class="scene-patch-stage" data-stage="test"><span class="scene-patch-stage-num">2</span><span class="scene-patch-stage-label mono">disable</span></div>
               <div class="scene-patch-link"></div>
-              <div class="scene-patch-stage" data-stage="deploy"><span class="scene-patch-stage-num">3</span><span class="scene-patch-stage-label mono">deploy</span></div>
-              <span class="scene-patch-package mono">📦 KB5037425</span>
+              <div class="scene-patch-stage" data-stage="deploy"><span class="scene-patch-stage-num">3</span><span class="scene-patch-stage-label mono">rotate</span></div>
+              <span class="scene-patch-package mono">📦 IAM:RotateKeys</span>
             </div>
             <div class="scene-patch-list mono">
-              <div class="scene-patch-row">acme-edge-01 · CVE-2024-3199 · <span class="scene-patch-status">queued</span></div>
-              <div class="scene-patch-row">acme-edge-02 · CVE-2024-3199 · <span class="scene-patch-status">queued</span></div>
-              <div class="scene-patch-row">acme-vpn-01  · CVE-2024-2961 · <span class="scene-patch-status">queued</span></div>
+              <div class="scene-patch-row">user/jenkins-deployer · AKIA5XACME… · <span class="scene-patch-status">flagged</span></div>
+              <div class="scene-patch-row">role/OrgAccountAdmin  · AssumeRole · <span class="scene-patch-status">monitored</span></div>
+              <div class="scene-patch-row">i-0a7b3c91acme0042   · IMDSv2 only · <span class="scene-patch-status">queued</span></div>
             </div>
-            <div class="scene-patch-banner mono">2 footholds resealed · SIEM ingest spike</div>
+            <div class="scene-patch-banner mono">CloudTrail spike · 3 access keys cycling</div>
           </div>
         </div>
 

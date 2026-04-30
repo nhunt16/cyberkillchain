@@ -1,56 +1,265 @@
 {
-  "started_at": 1777503094.850145,
-  "started_at_iso": "2026-04-29T22:51:34.850210Z",
+  "started_at": 1777579175.697346,
+  "started_at_iso": "2026-04-30T19:59:35.697361Z",
   "events": [
     {
       "type": "session_start",
-      "time": 1777503094.8502212,
-      "time_iso": "2026-04-29T22:51:34.850223Z"
+      "time": 1777579175.6973782,
+      "time_iso": "2026-04-30T19:59:35.697381Z"
     },
     {
       "type": "lesson_enter",
-      "time": 1777503094.8551638,
-      "time_iso": "2026-04-29T22:51:34.855170Z",
+      "time": 1777579175.704522,
+      "time_iso": "2026-04-30T19:59:35.704556Z",
       "lesson": 1,
       "lesson_id": "framework"
     },
     {
       "type": "battle",
-      "time": 1777503097.759776,
-      "time_iso": "2026-04-29T22:51:37.759788Z",
+      "time": 1777579183.925101,
+      "time_iso": "2026-04-30T19:59:43.925111Z",
       "challenge_num": 1,
       "challenge_id": "battle"
-    },
-    {
-      "type": "lesson_enter",
-      "time": 1777503219.336829,
-      "time_iso": "2026-04-29T22:53:39.336843Z",
-      "lesson": 1,
-      "lesson_id": "framework"
-    },
-    {
-      "type": "lesson_enter",
-      "time": 1777503224.273063,
-      "time_iso": "2026-04-29T22:53:44.273076Z",
-      "lesson": 1,
-      "lesson_id": "framework"
     },
     {
       "type": "battle",
-      "time": 1777503224.8585868,
-      "time_iso": "2026-04-29T22:53:44.858601Z",
+      "time": 1777579264.852895,
+      "time_iso": "2026-04-30T20:01:04.852907Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777579362.12072,
+      "time_iso": "2026-04-30T20:02:42.120728Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777579399.137857,
+      "time_iso": "2026-04-30T20:03:19.137866Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777579874.573348,
+      "time_iso": "2026-04-30T20:11:14.573363Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777579874.783467,
+      "time_iso": "2026-04-30T20:11:14.783468Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777580125.9012191,
+      "time_iso": "2026-04-30T20:15:25.901222Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777580285.2940109,
+      "time_iso": "2026-04-30T20:18:05.294021Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777580403.5224588,
+      "time_iso": "2026-04-30T20:20:03.522467Z",
       "challenge_num": 1,
       "challenge_id": "battle"
     },
     {
       "type": "lesson_enter",
-      "time": 1777503235.682882,
-      "time_iso": "2026-04-29T22:53:55.682894Z",
+      "time": 1777581927.3354151,
+      "time_iso": "2026-04-30T20:45:27.335421Z",
       "lesson": 1,
       "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777581931.4307709,
+      "time_iso": "2026-04-30T20:45:31.430776Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 4,
+        "name": "Escalate Privileges"
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777581933.6553652,
+      "time_iso": "2026-04-30T20:45:33.655373Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 5,
+        "name": "Exfiltration"
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777581934.763581,
+      "time_iso": "2026-04-30T20:45:34.763584Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 1,
+        "name": "Reconnaissance"
+      }
+    },
+    {
+      "type": "battle",
+      "time": 1777581943.9788532,
+      "time_iso": "2026-04-30T20:45:43.978857Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "battle",
+      "time": 1777582064.0027251,
+      "time_iso": "2026-04-30T20:47:44.002730Z",
+      "challenge_num": 1,
+      "challenge_id": "battle",
+      "correct": 5,
+      "total": 5,
+      "victory": true
+    },
+    {
+      "type": "quiz_complete",
+      "time": 1777582064.0090292,
+      "time_iso": "2026-04-30T20:47:44.009034Z",
+      "score": 100,
+      "correct": 5,
+      "total": 5,
+      "victory": true
+    },
+    {
+      "type": "battle",
+      "time": 1777582080.599809,
+      "time_iso": "2026-04-30T20:48:00.599814Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777582247.031702,
+      "time_iso": "2026-04-30T20:50:47.031716Z",
+      "lesson": 7,
+      "lesson_id": "casestudy"
+    },
+    {
+      "type": "battle",
+      "time": 1777582248.480642,
+      "time_iso": "2026-04-30T20:50:48.480658Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
     }
   ],
-  "quiz_answers": {},
-  "quiz_score": null,
-  "quiz_completed_at": null
+  "quiz_answers": {
+    "1": {
+      "challenge_id": "battle",
+      "type": "battle",
+      "submission": {
+        "victory": true,
+        "turns": [
+          {
+            "turn": 1,
+            "move_id": "recon_linkedin",
+            "move_name": "LinkedIn Harvest",
+            "posture": "honeypotting",
+            "posture_name": "Honeypotting",
+            "verdict": "strong",
+            "progress_added": 100,
+            "detection_added": 5,
+            "phase_cleared": true,
+            "phase_idx_before": 0,
+            "hit": true,
+            "objective": null
+          },
+          {
+            "turn": 2,
+            "move_id": "deliver_phish",
+            "move_name": "Spear-Phish Email",
+            "posture": "hunting",
+            "posture_name": "Hunting",
+            "verdict": "strong",
+            "progress_added": 100,
+            "detection_added": 5,
+            "phase_cleared": true,
+            "phase_idx_before": 1,
+            "hit": true,
+            "objective": null
+          },
+          {
+            "turn": 3,
+            "move_id": "compromise_macro",
+            "move_name": "Macro Trigger",
+            "posture": "hardening",
+            "posture_name": "Hardening",
+            "verdict": "strong",
+            "progress_added": 100,
+            "detection_added": 5,
+            "phase_cleared": true,
+            "phase_idx_before": 2,
+            "hit": true,
+            "objective": null
+          },
+          {
+            "turn": 4,
+            "move_id": "escalate_cred_hunt",
+            "move_name": "AWS Cred Hunt",
+            "posture": "rotating",
+            "posture_name": "Key Rotation",
+            "verdict": "strong",
+            "progress_added": 100,
+            "detection_added": 5,
+            "phase_cleared": true,
+            "phase_idx_before": 3,
+            "hit": true,
+            "objective": null
+          },
+          {
+            "turn": 5,
+            "move_id": "exfil_data",
+            "move_name": "Data Exfiltration",
+            "posture": "triaging",
+            "posture_name": "Triaging",
+            "verdict": "strong",
+            "progress_added": 100,
+            "detection_added": 5,
+            "phase_cleared": true,
+            "phase_idx_before": 4,
+            "hit": true,
+            "objective": "exfil"
+          }
+        ],
+        "phases_cleared": 5,
+        "phases_total": 5,
+        "detection_final": 55,
+        "detection_max": 100,
+        "turns_used": 5,
+        "max_turns": 12,
+        "victory_mode": "exfil",
+        "defeat_mode": null
+      },
+      "correct": 5,
+      "total": 5,
+      "victory": true
+    }
+  },
+  "quiz_score": 100,
+  "quiz_completed_at": "2026-04-30T20:47:44.008988Z"
 }
