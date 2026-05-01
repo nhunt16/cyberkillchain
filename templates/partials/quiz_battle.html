@@ -361,23 +361,28 @@
           </div>
         </div>
 
-        <div class="battle-move-scene" data-scene-id="deliver_usb" hidden>
-          <div class="scene-ui scene-ui--usb">
-            <div class="scene-usb-floor"></div>
-            <div class="scene-usb-laptop" aria-hidden="true">
-              <div class="scene-usb-screen"></div>
-              <div class="scene-usb-keyboard"></div>
-              <div class="scene-usb-port"></div>
+        <div class="battle-move-scene" data-scene-id="deliver_zeroday" hidden>
+          <div class="scene-ui scene-ui--fw">
+            <div class="scene-fw-grid" aria-hidden="true"></div>
+            <span class="scene-fw-side scene-fw-side--in mono">INTERNET</span>
+            <span class="scene-fw-side scene-fw-side--out mono">INTRANET</span>
+            <div class="scene-fw-wall" aria-hidden="true">
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick scene-fw-brick--target"></span><span class="scene-fw-brick scene-fw-brick--target"></span><span class="scene-fw-brick"></span>
+              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
             </div>
-            <div class="scene-usb-stick" aria-hidden="true">
-              <span class="scene-usb-cap"></span>
-              <span class="scene-usb-body"></span>
-              <span class="scene-usb-label mono">PAYROLL</span>
+            <div class="scene-fw-label mono">PERIMETER &middot; stateful FW &middot; acme-edge-01</div>
+            <div class="scene-fw-packet">
+              <span class="scene-fw-trail" aria-hidden="true"></span>
+              <span class="scene-fw-packet-tag mono">0DAY</span>
+              <span class="scene-fw-packet-cve mono">CVE-2024-30040</span>
             </div>
-            <div class="scene-usb-toast mono">
-              <span class="scene-usb-toast-title">⚠ Removable Disk (E:)</span>
-              <span class="scene-usb-toast-text">Autorun.inf · launching setup.exe</span>
+            <div class="scene-fw-impact" aria-hidden="true"></div>
+            <div class="scene-fw-sparks" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
             </div>
+            <div class="scene-fw-stage2 mono">&#9655; shell @ 10.0.0.47</div>
+            <div class="scene-fw-breach">PERIMETER&nbsp;BREACHED</div>
           </div>
         </div>
 
@@ -424,28 +429,34 @@
           </div>
         </div>
 
-        <div class="battle-move-scene" data-scene-id="compromise_zeroday" hidden>
-          <div class="scene-ui scene-ui--fw">
-            <div class="scene-fw-grid" aria-hidden="true"></div>
-            <span class="scene-fw-side scene-fw-side--in mono">INTERNET</span>
-            <span class="scene-fw-side scene-fw-side--out mono">INTRANET</span>
-            <div class="scene-fw-wall" aria-hidden="true">
-              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
-              <span class="scene-fw-brick"></span><span class="scene-fw-brick scene-fw-brick--target"></span><span class="scene-fw-brick scene-fw-brick--target"></span><span class="scene-fw-brick"></span>
-              <span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span><span class="scene-fw-brick"></span>
+        <div class="battle-move-scene" data-scene-id="compromise_creds" hidden>
+          <div class="scene-ui scene-ui--creds">
+            <div class="scene-creds-card" aria-hidden="true">
+              <div class="scene-creds-brand">
+                <span class="scene-creds-logo">A</span>
+                <span class="scene-creds-org">ACME&nbsp;Corp · VPN</span>
+              </div>
+              <div class="scene-creds-tagline mono">Single Sign-On · acme-vpn.acme-corp.com</div>
+              <div class="scene-creds-form">
+                <label class="scene-creds-row">
+                  <span class="scene-creds-k">Username</span>
+                  <span class="scene-creds-input mono"><span class="scene-creds-typed" data-typed="username">m.smith@acme-corp.com</span><span class="scene-creds-caret" data-caret="username"></span></span>
+                </label>
+                <label class="scene-creds-row">
+                  <span class="scene-creds-k">Password</span>
+                  <span class="scene-creds-input mono"><span class="scene-creds-typed" data-typed="password">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</span><span class="scene-creds-caret" data-caret="password"></span></span>
+                </label>
+                <span class="scene-creds-submit">Sign in</span>
+              </div>
+              <div class="scene-creds-hibp mono">
+                <span class="scene-creds-hibp-icon" aria-hidden="true">!</span>
+                creds sourced from haveibeenpwned · LinkedIn 2023 dump
+              </div>
             </div>
-            <div class="scene-fw-label mono">PERIMETER &middot; stateful FW &middot; acme-edge-01</div>
-            <div class="scene-fw-packet">
-              <span class="scene-fw-trail" aria-hidden="true"></span>
-              <span class="scene-fw-packet-tag mono">0DAY</span>
-              <span class="scene-fw-packet-cve mono">CVE-2024-30040</span>
+            <div class="scene-creds-banner mono">
+              <span class="scene-creds-banner-dot" aria-hidden="true"></span>
+              SESSION GRANTED · WS47 · m.smith
             </div>
-            <div class="scene-fw-impact" aria-hidden="true"></div>
-            <div class="scene-fw-sparks" aria-hidden="true">
-              <i></i><i></i><i></i><i></i><i></i><i></i>
-            </div>
-            <div class="scene-fw-stage2 mono">&#9655; shell @ 10.0.0.47</div>
-            <div class="scene-fw-breach">PERIMETER&nbsp;BREACHED</div>
           </div>
         </div>
 

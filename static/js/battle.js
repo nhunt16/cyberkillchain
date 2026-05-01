@@ -444,6 +444,37 @@
       var strength = moveStrengthVsCurrentPosture(move);
       var accuracy = (move.accuracy == null) ? 1 : move.accuracy;
       var hit = Math.random() < accuracy;
+
+      // ==== Zero-Day Critical Jump roll ====
+      // Some moves declare a `critical_jump` block. On a hit, we roll
+      // independently against `chance` to fire a phase-skip super-crit,
+      // teleporting the player into a later phase with partial progress
+      // already filled in. Mechanic represents "0-day RCE chained into
+      // privileged access via leaked creds in user-data".
+      var criticalJump = null;
+      if (hit && move.critical_jump &&
+          typeof move.critical_jump.chance === 'number' &&
+          typeof move.critical_jump.to_phase === 'number') {
+        if (Math.random() < move.critical_jump.chance) {
+          var targetIdx = clamp(move.critical_jump.to_phase - 1, 0, phaseCount - 1);
+          criticalJump = {
+            chance: move.critical_jump.chance,
+            fromPhase: state.phaseIdx + 1,
+            toPhaseIdx: targetIdx,
+            toPhaseLabel: 'P' + (targetIdx + 1),
+            toProgress: clamp(move.critical_jump.to_progress || 0, 0, 100),
+            // 1-based list of phases skipped over (between fromPhase and toPhaseIdx)
+            skippedPhases: []
+          };
+          for (var p = state.phaseIdx + 1; p < targetIdx; p++) {
+            criticalJump.skippedPhases.push({
+              num: p + 1,
+              label: (phases[p] && (phases[p].short_label || phases[p].label)) || ('P' + (p + 1))
+            });
+          }
+        }
+      }
+
       var outcome = resolveOutcome(move, hit, strength);
       var beforePhase = state.phaseIdx;
       var newProg = clamp(state.phaseProgress + outcome.progress, 0, 100);
@@ -456,6 +487,19 @@
           escapeHtml(move.flavor || 'no progress.') +
           ' <em>+' + outcome.detection + ' detection.</em>';
         logMain.kind = 'miss';
+      } else if (criticalJump) {
+        var skippedTxt = criticalJump.skippedPhases.length
+          ? criticalJump.skippedPhases.map(function (sp) {
+              return 'P' + sp.num + ' ' + sp.label;
+            }).join(' &amp; ')
+          : '';
+        logMain.html =
+          '<strong>ZERO-DAY CRITICAL! You ▸ ' + escapeHtml(move.name) + '</strong> · ' +
+          (skippedTxt ? '<em>skipped ' + skippedTxt + ',</em> ' : '') +
+          '<em>landed at ' + escapeHtml(criticalJump.toPhaseLabel) +
+          ' with ' + criticalJump.toProgress + '% phase fill.</em> ' +
+          escapeHtml(move.crit_jump_flavor || move.flavor || '');
+        logMain.kind = 'crit';
       } else if (strength === 'strong') {
         logMain.html =
           '<strong>Critical Insight! You ▸ ' + escapeHtml(move.name) + '</strong> · ' +
@@ -499,13 +543,18 @@
         move_name: move.name,
         posture: posture,
         posture_name: postureName,
-        verdict: outcome.verdict,
+        verdict: criticalJump ? 'zero_day' : outcome.verdict,
         progress_added: outcome.progress,
         detection_added: outcome.detection,
         phase_cleared: phaseClearedNow,
         phase_idx_before: beforePhase,
         hit: hit,
-        objective: move.objective || null
+        objective: move.objective || null,
+        critical_jump: criticalJump ? {
+          to_phase: criticalJump.toPhaseIdx + 1,
+          to_progress: criticalJump.toProgress,
+          skipped_phases: criticalJump.skippedPhases.map(function (s) { return s.num; })
+        } : null
       };
 
       return {
@@ -518,6 +567,7 @@
         outcome: outcome,
         beforePhase: beforePhase,
         phaseClearedNow: phaseClearedNow,
+        criticalJump: criticalJump,
         logMain: logMain,
         revealLog: revealLog,
         revealNextPostureId: revealNextPostureId,
@@ -527,6 +577,7 @@
 
     function verdictPillClass(plan) {
       if (!plan.hit || plan.outcome.verdict === 'miss') return 'is-miss';
+      if (plan.criticalJump) return 'is-crit';
       if (plan.strength === 'strong') return 'is-crit';
       if (plan.strength === 'weak') return 'is-weak';
       return 'is-neutral';
@@ -534,6 +585,7 @@
 
     function verdictPillText(plan) {
       if (!plan.hit || plan.outcome.verdict === 'miss') return 'Missed';
+      if (plan.criticalJump) return 'Zero-Day Critical';
       if (plan.strength === 'strong') return 'Critical Insight';
       if (plan.strength === 'weak') return 'Weak pick';
       return 'Neutral';
@@ -548,6 +600,9 @@
       }
       if (!plan.hit || plan.outcome.verdict === 'miss') {
         return { tone: 'miss', label: 'MISSED' };
+      }
+      if (plan.criticalJump) {
+        return { tone: 'zero_day', label: "ZERO-DAY CRITICAL!" };
       }
       if (plan.phaseClearedNow) {
         return { tone: 'crit', label: 'PHASE CLEARED!' };
@@ -565,18 +620,34 @@
       if (!showcaseResult) return;
       var eff = effectivenessFor(plan);
       var stats = '';
+      var jumpLine = '';
       if (plan.side === 'opponent') {
         var detAdd = plan.detectionAdd || 0;
         stats =
           '<span class="battle-showcase-stat is-bad mono">+' + detAdd + ' detection on you</span>';
-      } else {
-        var pc = plan.outcome.progress;
+      } else if (plan.criticalJump) {
         var det = plan.outcome.detection;
-        var progressClass = pc > 0 ? 'is-good' : 'is-muted';
         var detClass = det > 0 ? 'is-bad' : 'is-muted';
+        var skipped = (plan.criticalJump.skippedPhases || []).map(function (sp) {
+          return 'P' + sp.num + ' ' + sp.label;
+        }).join(' &amp; ');
         stats =
-          '<span class="battle-showcase-stat ' + progressClass + ' mono">+' + pc + '% phase</span>' +
+          '<span class="battle-showcase-stat is-good mono">→ ' + escapeHtml(plan.criticalJump.toPhaseLabel) + ' &middot; ' + plan.criticalJump.toProgress + '% pre-filled</span>' +
           '<span class="battle-showcase-stat ' + detClass + ' mono">+' + det + ' detection</span>';
+        jumpLine =
+          '<div class="battle-showcase-jump-line">' +
+            '<strong>' + Math.round((plan.criticalJump.chance || 0) * 100) + '% crit landed.</strong> ' +
+            (skipped ? 'Skipped ' + skipped + ' &middot; ' : '') +
+            'You are now at <strong>' + escapeHtml(plan.criticalJump.toPhaseLabel) + '</strong> with <strong>' + plan.criticalJump.toProgress + '%</strong> phase fill.' +
+          '</div>';
+      } else {
+        var pcN = plan.outcome.progress;
+        var detN = plan.outcome.detection;
+        var progressClass = pcN > 0 ? 'is-good' : 'is-muted';
+        var detClassN = detN > 0 ? 'is-bad' : 'is-muted';
+        stats =
+          '<span class="battle-showcase-stat ' + progressClass + ' mono">+' + pcN + '% phase</span>' +
+          '<span class="battle-showcase-stat ' + detClassN + ' mono">+' + detN + ' detection</span>';
       }
       showcaseResult.innerHTML =
         '<div class="battle-showcase-result-inner">' +
@@ -584,6 +655,7 @@
             '<span class="battle-showcase-effect-label">' + escapeHtml(eff.label) + '</span>' +
           '</div>' +
           '<div class="battle-showcase-stats">' + stats + '</div>' +
+          jumpLine +
         '</div>';
     }
 
@@ -636,6 +708,8 @@
       showcaseRoot.dataset.battleSide = plan.side === 'opponent' ? 'opponent' : 'player';
       if (plan.side === 'opponent') {
         showcaseRoot.dataset.battleVerdict = plan.isIr ? 'ir' : 'defense';
+      } else if (plan.criticalJump) {
+        showcaseRoot.dataset.battleVerdict = 'zero_day';
       } else {
         showcaseRoot.dataset.battleVerdict = plan.hit ? plan.strength : 'miss';
       }
@@ -649,6 +723,7 @@
         var actorPose = 'happy';
         if (plan.side === 'player') {
           if (!plan.hit || plan.outcome.verdict === 'miss') actorPose = 'worried';
+          else if (plan.criticalJump) actorPose = 'excited';
           else if (plan.strength === 'strong') actorPose = 'excited';
           else if (plan.strength === 'weak') actorPose = 'worried';
           else actorPose = 'teaching';
@@ -711,16 +786,39 @@
       var strength = plan.strength;
       var beforePhase = plan.beforePhase;
       var phaseClearedNow = plan.phaseClearedNow;
+      var critJump = plan.criticalJump;
 
-      state.phaseProgress = clamp(state.phaseProgress + outcome.progress, 0, 100);
+      // Detection still applies normally on a crit-jump (delivery still
+      // fires the blue team's hunt phase). Phase progress gets fully
+      // overwritten by the jump target instead of additive.
       state.detection = clamp(state.detection + outcome.detection, 0, detectionCap);
 
-      if (phaseClearedNow) {
-        state.phasesCleared = Math.min(state.phasesCleared + 1, phaseCount);
+      if (critJump) {
+        // Mark every phase up to (but excluding) the target as cleared,
+        // then teleport into the target with pre-filled progress.
+        state.phasesCleared = Math.max(state.phasesCleared, critJump.toPhaseIdx);
+        state.phaseIdx = critJump.toPhaseIdx;
+        state.phaseProgress = critJump.toProgress;
+        if (state.phaseProgress >= 100 && state.phasesCleared < phaseCount) {
+          state.phasesCleared = Math.min(state.phasesCleared + 1, phaseCount);
+          state.phaseIdx = Math.min(state.phaseIdx + 1, phaseCount);
+          state.phaseProgress = 0;
+        }
+      } else {
+        state.phaseProgress = clamp(state.phaseProgress + outcome.progress, 0, 100);
+        if (phaseClearedNow) {
+          state.phasesCleared = Math.min(state.phasesCleared + 1, phaseCount);
+        }
       }
 
-      setPose(playerImg, strength === 'strong' ? 'excited' : (strength === 'weak' ? 'worried' : 'teaching'), 'player');
-      if (hit && outcome.progress > 0) {
+      setPose(playerImg,
+        critJump ? 'excited' :
+          (strength === 'strong' ? 'excited' : (strength === 'weak' ? 'worried' : 'teaching')),
+        'player');
+      if (critJump) {
+        floatNumber(playerFloats, '0-DAY CRIT!', 'crit');
+        floatNumber(playerFloats, '→ ' + critJump.toPhaseLabel + ' (' + critJump.toProgress + '%)', 'progress');
+      } else if (hit && outcome.progress > 0) {
         floatNumber(playerFloats, '+' + outcome.progress + '% phase', strength === 'strong' ? 'crit' : 'progress');
       } else if (!hit) {
         floatNumber(playerFloats, 'MISS', 'miss');
@@ -739,7 +837,7 @@
 
       state.turns.push(plan.turnEntry);
 
-      if (phaseClearedNow) {
+      if (!critJump && phaseClearedNow) {
         state.phaseIdx = Math.min(state.phaseIdx + 1, phaseCount);
         state.phaseProgress = 0;
       }

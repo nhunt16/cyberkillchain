@@ -91,12 +91,12 @@
       "label": "Phase 3 · Initial Compromise",
       "phase_num": 3,
       "title": "Phase 3 · Initial Compromise",
-      "aka": "Foothold + Backdoor",
+      "aka": "Foothold + C2",
       "scene": "compromise",
       "mascot_script": [
         {"text": "Phase 3 · Initial Compromise. Mike opens what LOOKS like an invoice. He sees a warning. Just one careless click…", "expr": "alert"},
         {"text": "Click the glowing Enable Content button to fire the macro and watch the reverse shell fly back to the attacker.", "expr": "teaching"},
-        {"text": "Once the foothold is live, run each step in order to plant persistence and bring the encrypted C2 tunnel up.", "expr": "thinking"}
+        {"text": "Once the foothold is live, open the encrypted C2 tunnel and run commands straight from the attacker's console.", "expr": "thinking"}
       ],
       "body": {
         "victim_ip": "10.0.0.47",
@@ -370,18 +370,24 @@
                   "weak_flavor": ""
                 },
                 {
-                  "id": "deliver_usb",
-                  "name": "USB Drop",
-                  "kicker": "USB",
+                  "id": "deliver_zeroday",
+                  "name": "Zero-Day Exploit",
+                  "kicker": "0-DAY",
                   "phase": 2,
                   "phase_label": "Arm & Deliver",
-                  "tagline": "Physical-layer drop. Loud network signature.",
+                  "tagline": "Detonate a CVE on his edge. 20% crit: skip straight to P4.",
                   "accuracy": 1.0,
                   "strong_vs": null,
-                  "weak_vs": "hunting",
-                  "flavor": "A 'lost' USB stick gets plugged in by a curious intern.",
+                  "weak_vs": null,
+                  "critical_jump": {
+                    "chance": 0.2,
+                    "to_phase": 4,
+                    "to_progress": 50
+                  },
+                  "flavor": "An unpublished CVE detonates against ACME's perimeter and drops a session.",
                   "strong_flavor": "",
-                  "weak_flavor": "His threat-hunt sweep catches the autorun trying to phone home."
+                  "weak_flavor": "",
+                  "crit_jump_flavor": "Zero-day chained! The exploit dropped a session AND lifted IAM creds out of the user-data — Compromise skipped, half of Escalate already done."
                 }
               ],
               "opponent_move": {
@@ -416,16 +422,16 @@
                   "weak_flavor": ""
                 },
                 {
-                  "id": "compromise_zeroday",
-                  "name": "Zero-Day Exploit",
-                  "kicker": "0-DAY",
+                  "id": "compromise_creds",
+                  "name": "Stolen VPN Creds",
+                  "kicker": "VPN",
                   "phase": 3,
                   "phase_label": "Initial Compromise",
-                  "tagline": "Cracks any firewall. 80% hit chance.",
-                  "accuracy": 0.8,
+                  "tagline": "Sign in with credentials from a 3rd-party breach.",
+                  "accuracy": 1.0,
                   "strong_vs": null,
                   "weak_vs": null,
-                  "flavor": "An unpublished CVE detonates against his perimeter and drops a session.",
+                  "flavor": "A credential pair from last quarter's HaveIBeenPwned dump signs straight into ACME's VPN.",
                   "strong_flavor": "",
                   "weak_flavor": ""
                 },
@@ -542,13 +548,13 @@
                   "kicker": "RANSOM",
                   "phase": 5,
                   "phase_label": "Exfiltration",
-                  "tagline": "Lock & ransom. Loud, but lucrative.",
+                  "tagline": "Lock & ransom. As effective as exfil — different objective.",
                   "accuracy": 1.0,
-                  "strong_vs": null,
+                  "strong_vs": "triaging",
                   "weak_vs": null,
                   "objective": "ransom",
                   "flavor": "BlackCat encrypts thousands of ESXi hosts.",
-                  "strong_flavor": "",
+                  "strong_flavor": "Critical insight! He's still triaging the breach while BlackCat finishes encrypting the cluster.",
                   "weak_flavor": ""
                 },
                 {

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body { background: #06060b; display: flex; flex-wrap: wrap; gap: 32px; padding: 40px; align-items: flex-start; }
+.box {
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #00c8ff 0%, #7c5cfc 100%);
+  border-radius: 8px; overflow: hidden;
+}
+.label { color: #aaa; font: 12px monospace; margin-top: 6px; text-align: center; }
+.cell { display: flex; flex-direction: column; align-items: center; }
+</style>
+</head>
+<body>
+<!--
+  v3 — fixes vs v2:
+  • Back ear tip moved from y=1 → y=3.5 (clearly shorter than main ear at y=0)
+  • Forehead pushed further left (Q 3,8 → Q 2,9) for a more concave face profile
+  • Hair bottom extended with a slight curve so hair "flows" below the chin level
+  • Hair right side given a more pronounced outward bulge at mid-height
+-->
+
+<!-- Actual nav size: 28x32 -->
+<div class="cell">
+  <div class="box" style="width:28px;height:32px">
+    <svg width="22" height="28" viewBox="0 0 18 24" fill="none">
+      <path fill="white" d="
+        M 11,0 L 7,7
+        Q 4,8 3,12
+        Q 2.5,16 5,20
+        Q 7,22.5 10,23
+        Q 13,23.5 16,24.5
+        Q 18,20 17,13
+        Q 16,9 14,7
+        L 15,3.5
+        L 13,6
+        L 13,7
+        Q 12,3 11,0 Z
+      "/>
+    </svg>
+  </div>
+  <div class="label">28×32</div>
+</div>
+
+<!-- 2× -->
+<div class="cell">
+  <div class="box" style="width:56px;height:64px">
+    <svg width="44" height="56" viewBox="0 0 18 24" fill="none">
+      <path fill="white" d="M 11,0 L 7,7 Q 4,8 3,12 Q 2.5,16 5,20 Q 7,22.5 10,23 Q 13,23.5 16,24.5 Q 18,20 17,13 Q 16,9 14,7 L 15,3.5 L 13,6 L 13,7 Q 12,3 11,0 Z"/>
+    </svg>
+  </div>
+  <div class="label">2×</div>
+</div>
+
+<!-- 4× -->
+<div class="cell">
+  <div class="box" style="width:112px;height:128px">
+    <svg width="88" height="112" viewBox="0 0 18 24" fill="none">
+      <path fill="white" d="M 11,0 L 7,7 Q 4,8 3,12 Q 2.5,16 5,20 Q 7,22.5 10,23 Q 13,23.5 16,24.5 Q 18,20 17,13 Q 16,9 14,7 L 15,3.5 L 13,6 L 13,7 Q 12,3 11,0 Z"/>
+    </svg>
+  </div>
+  <div class="label">4×</div>
+</div>
+
+<!-- 8× -->
+<div class="cell">
+  <div class="box" style="width:224px;height:256px">
+    <svg width="176" height="224" viewBox="0 0 18 24" fill="none">
+      <path fill="white" d="M 11,0 L 7,7 Q 4,8 3,12 Q 2.5,16 5,20 Q 7,22.5 10,23 Q 13,23.5 16,24.5 Q 18,20 17,13 Q 16,9 14,7 L 15,3.5 L 13,6 L 13,7 Q 12,3 11,0 Z"/>
+    </svg>
+  </div>
+  <div class="label">8×</div>
+</div>
+</body>
+</html>

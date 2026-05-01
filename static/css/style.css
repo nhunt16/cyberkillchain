@@ -144,12 +144,16 @@ img, svg {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   background: var(--accent-gradient);
-  border-radius: 6px;
-  font-size: 10px;
-  color: #000;
+  border-radius: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.10) inset;
+}
+.nav-logo-icon svg {
+  display: block;
+  overflow: visible;
 }
 
 .nav-links {
@@ -1061,193 +1065,556 @@ img, svg {
 
 .mockup-body { padding: 0; min-height: 340px; position: relative; font-size: 13px; }
 
-/* --- RECON SCENE: LinkedIn browser --- */
-.mockup-body--recon {
-  display: grid;
-  grid-template-columns: 160px 1fr 200px;
-  min-height: 380px;
-}
-.recon-sidebar {
-  background: var(--bg-card);
-  border-right: 1px solid var(--border);
-  padding: 20px 16px;
-}
-.recon-logo {
-  font-weight: 800;
-  font-size: 18px;
-  margin-bottom: 20px;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.recon-nav-item {
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 4px;
-  cursor: default;
-}
-.recon-nav-item.active {
-  background: var(--accent-dim);
-  color: var(--accent);
-  font-weight: 600;
-}
-.recon-main { padding: 20px; overflow: hidden; }
-.recon-search-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 13px;
-  color: var(--text-tertiary);
-}
-.recon-search-icon { font-size: 14px; }
-.recon-search-text { color: var(--text-secondary); }
-.recon-search-text.recon-search-placeholder { color: var(--text-tertiary); font-style: italic; }
-.recon-search-caret {
-  display: inline-block;
-  width: 1px;
-  height: 13px;
-  background: var(--accent);
-  margin-left: 1px;
-  vertical-align: middle;
-  animation: caret-blink 1s steps(1) infinite;
-  opacity: 0;
-}
-.recon-search-caret.active { opacity: 1; }
-
+/* ============================================================
+   RECON SCENE — LinkedIn-themed people search
+   Layout: a Chrome browser window (containing LinkedIn) on the left,
+   a separate terminal window (the attacker's scraper) on the right.
+   Profile rows are non-interactive — clicking "Harvest Emails" runs
+   theHarvester in the terminal which streams addresses into target_emails.txt.
+   ============================================================ */
 @keyframes caret-blink {
   50% { opacity: 0; }
 }
 
-.recon-profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  margin-bottom: 4px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.4s ease, transform 0.4s ease, background 0.25s ease, border-color 0.25s ease;
-  border: 1px solid transparent;
-  position: relative;
-}
-.recon-profile.visible { opacity: 1; transform: translateY(0); }
-.recon-profile.highlighted { background: rgba(255, 71, 87, 0.08); }
-
-.recon-profile.interactive {
-  cursor: pointer;
-}
-.recon-profile.interactive:not(.harvested)::after {
-  content: '+ Harvest';
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%) translateX(6px);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: var(--accent-dim);
-  padding: 3px 8px;
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  pointer-events: none;
-}
-.recon-profile.interactive:hover:not(.harvested) {
-  background: rgba(0, 200, 255, 0.05);
-  border-color: var(--accent-dim);
-}
-.recon-profile.interactive:hover:not(.harvested)::after {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
-}
-.recon-profile.harvested {
-  opacity: 0.5;
-  cursor: default;
-}
-.recon-profile.harvested .recon-avatar {
-  background: rgba(0, 230, 118, 0.15);
-  color: var(--success);
-}
-.recon-profile.harvested::after {
-  content: '✓ Harvested';
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--success);
+/* ----- Two-window layout ----- */
+.recon-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
 }
 
-.recon-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--bg-elevated);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  flex-shrink: 0;
-}
-.recon-profile-info { flex: 1; min-width: 0; }
-.recon-profile-name { font-weight: 600; font-size: 13px; display: block; }
-.recon-profile-role { font-size: 11px; color: var(--text-tertiary); display: block; }
-
-.recon-harvest {
-  background: #0a0a10;
-  border-left: 1px solid var(--border);
-  padding: 16px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 11px;
+/* ----- Chrome browser frame (wraps the LinkedIn app) ----- */
+.recon-chrome {
   display: flex;
   flex-direction: column;
+  background: #dee1e6; /* Chrome window chrome color */
+  border: 1px solid #b0b3b8;
+  border-radius: 10px 10px 8px 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
-.harvest-header {
-  color: var(--success);
-  margin-bottom: 12px;
-  font-weight: 600;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
+.recon-chrome-titlebar {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 8px 12px 0;
+  background: #dee1e6;
+}
+.recon-chrome-traffic {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 6px;
+  flex-shrink: 0;
+}
+.recon-chrome-dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.recon-chrome-dot--red { background: #ff5f57; }
+.recon-chrome-dot--yellow { background: #febc2e; }
+.recon-chrome-dot--green { background: #28c840; }
+.recon-chrome-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.recon-chrome-tab {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 7px 10px 8px;
+  border-radius: 8px 8px 0 0;
+  background: #ebeef1;
+  color: #5f6368;
+  font-size: 12px;
+  font-weight: 500;
+  max-width: 240px;
+  min-width: 0;
 }
-.harvest-list {
-  flex: 1;
-  overflow: hidden;
+.recon-chrome-tab--active {
+  background: #fff;
+  color: #202124;
 }
-.harvest-entry {
-  color: var(--text-secondary);
-  padding: 2px 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.recon-chrome-tab-favicon {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+  background: #0a66c2;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.recon-chrome-tab-fav-in {
+  font-style: italic;
+  font-weight: 800;
+  font-size: 9px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+.recon-chrome-tab-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.harvest-entry.visible { opacity: 1; }
-.harvest-count {
-  margin-top: auto;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
-  color: var(--accent);
+.recon-chrome-tab-close {
+  font-size: 14px;
+  line-height: 1;
+  color: #5f6368;
+  padding: 0 2px;
+}
+.recon-chrome-newtab {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #5f6368;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+.recon-chrome-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7ea;
+}
+.recon-chrome-navbtn {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #5f6368;
+  flex-shrink: 0;
+}
+.recon-chrome-navbtn--dim { color: #c4c7c8; }
+.recon-chrome-omnibox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: #f1f3f4;
+  border-radius: 999px;
+  min-width: 0;
+  font-size: 12px;
+  color: #202124;
+}
+.recon-chrome-lock { color: #5f6368; flex-shrink: 0; display: inline-flex; }
+.recon-chrome-url {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.recon-chrome-url-q { color: #1a73e8; font-weight: 500; }
+
+/* ----- LinkedIn app (lives inside the Chrome viewport) ----- */
+.recon-li-app {
+  display: flex;
+  flex-direction: column;
+  background: #f3f2ef; /* LinkedIn off-white page */
+  overflow: hidden;
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #000;
+  flex: 1;
+  min-height: 480px;
+}
+
+/* ----- Topbar ----- */
+.recon-li-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  flex-shrink: 0;
+}
+.recon-li-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: #0a66c2;
+  color: #fff;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: Helvetica, Arial, sans-serif;
+}
+.recon-li-search-bar {
+  flex: 0 1 280px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  background: #edf3f8;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #404040;
+}
+.recon-li-search-bar:focus-within {
+  background: #fff;
+  border-color: #0a66c2;
+  box-shadow: 0 0 0 1px #0a66c2;
+}
+.recon-li-search-icon {
+  display: inline-flex;
+  color: #666;
+  flex-shrink: 0;
+}
+.recon-li-search-bar .recon-search-text {
+  color: #404040;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.recon-li-search-bar .recon-search-text.recon-search-placeholder {
+  color: #767676;
+  font-style: normal;
+}
+.recon-li-search-bar .recon-search-caret {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: #0a66c2;
+  margin-left: 1px;
+  vertical-align: middle;
+  opacity: 0;
+  animation: caret-blink 1s steps(1) infinite;
+}
+.recon-li-search-bar .recon-search-caret.active { opacity: 1; }
+
+.recon-li-navicon {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 4px 10px 2px;
+  color: #666;
+  flex-shrink: 0;
+  cursor: default;
+  border-bottom: 2px solid transparent;
+}
+.recon-li-navicon--active {
+  color: #000;
+  border-bottom-color: #000;
+}
+.recon-li-navlabel {
+  font-size: 10px;
+  letter-spacing: 0;
+}
+.recon-li-bell-dot {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: #cd201f;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 14px;
+  text-align: center;
+  border: 1px solid #fff;
+}
+
+/* ----- Filter pills row ----- */
+.recon-li-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: #fff;
+  border-bottom: 1px solid #e6e6e6;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.recon-li-filter {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid #c2c2c2;
+  background: #fff;
+  color: #404040;
+  font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
+  cursor: default;
+}
+.recon-li-filter--active {
+  background: #01754f;
+  border-color: #01754f;
+  color: #fff;
+}
+.recon-li-filter--more {
+  border: none;
+  color: #404040;
+  background: transparent;
+  text-decoration: underline;
+}
+
+/* ----- Body: people search results (no longer holds the harvest panel) ----- */
+.recon-li-body {
+  padding: 16px;
+  background: #f3f2ef;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.recon-li-main {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+}
+.recon-li-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 12px;
+  color: #666;
+}
+.recon-li-result-count strong { color: #000; font-weight: 600; }
+.recon-li-loc {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #888;
+  text-transform: uppercase;
+}
+
+/* ----- Profile rows ----- */
+.recon-profiles {
+  padding: 4px 0;
+}
+.recon-profile {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #ebebeb;
+  background: #fff;
+  position: relative;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, background 0.18s ease;
+}
+.recon-profile:last-child { border-bottom: none; }
+.recon-profile.visible { opacity: 1; transform: translateY(0); }
+
+/* Profiles are visible-only — no Connect/Harvest interaction. The "scraped"
+   state simply tints the row to indicate it ended up in target_emails.txt. */
+.recon-profile.harvested {
+  background: rgba(216, 240, 224, 0.55);
+}
+
+.recon-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  font-family: Helvetica, Arial, sans-serif;
+}
+.recon-avatar[data-c="0"] { background: linear-gradient(135deg, #0a66c2 0%, #1577d0 100%); }
+.recon-avatar[data-c="1"] { background: linear-gradient(135deg, #5e548e 0%, #7460a8 100%); }
+.recon-avatar[data-c="2"] { background: linear-gradient(135deg, #c43e1c 0%, #e0552e 100%); }
+.recon-avatar[data-c="3"] { background: linear-gradient(135deg, #057642 0%, #0a8a4f 100%); }
+
+.recon-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.recon-profile-name {
+  color: #0a66c2;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+.recon-profile-degree {
+  color: #767676;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.recon-profile-role {
+  color: #000;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.recon-profile-loc {
+  color: #767676;
+  font-size: 11px;
+}
+
+/* ----- Standalone terminal window (right column) ----- */
+.recon-term {
+  display: flex;
+  flex-direction: column;
+  background: #0b0d12;
+  border: 1px solid #1f2230;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+  align-self: start;
+}
+.recon-term-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #1c1f29;
+  border-bottom: 1px solid #2a2e3c;
+  flex-shrink: 0;
+}
+.recon-term-traffic {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.recon-term-title {
+  flex: 1;
+  text-align: center;
+  color: #b8bcc8;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.recon-harvest {
+  background: #0b0d12;
+  padding: 14px 16px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 11.5px;
+  display: flex;
+  flex-direction: column;
+  color: #c9d1d9;
+  /* Shrink to fit content but never collapse below this */
+  min-height: 320px;
+}
+.harvest-header {
+  color: #7ee787;
+  margin-bottom: 10px;
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #1f2230;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.harvest-status {
+  margin-left: auto;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6e7681;
+  background: #1f2230;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #2a2e3c;
+}
+.harvest-status.is-running {
+  color: #f0e35e;
+  border-color: rgba(240, 227, 94, 0.4);
+  background: rgba(240, 227, 94, 0.08);
+  animation: harvest-status-pulse 1.4s ease-in-out infinite;
+}
+.harvest-status.is-done {
+  color: #7ee787;
+  border-color: rgba(126, 231, 135, 0.45);
+  background: rgba(126, 231, 135, 0.10);
+}
+@keyframes harvest-status-pulse {
+  50% { opacity: 0.55; }
+}
+
+.harvest-list {
+  /* Grow to fit script + email lines without scrolling. */
+  min-height: 240px;
+  overflow: hidden;
+  padding-right: 4px;
+}
+.harvest-list > * + * { margin-top: 2px; }
+.harvest-empty { color: #6e7681; }
+.harvest-blink {
+  display: inline-block;
+  width: 8px;
+  background: #7ee787;
+  color: transparent;
+  margin-left: 2px;
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+.harvest-line {
+  color: #c9d1d9;
+  white-space: pre;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .harvest-line {
+    animation: harvest-line-in 0.22s ease;
+  }
+  @keyframes harvest-line-in {
+    from { opacity: 0; transform: translateX(-3px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+}
+.harvest-line.is-info { color: #79c0ff; }
+.harvest-line.is-good { color: #7ee787; }
+.harvest-line.is-good strong { color: #d2a8ff; font-weight: 700; }
+.harvest-line .harvest-role {
+  color: #6e7681;
+  font-style: italic;
+}
+
+.harvest-count {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #1f2230;
+  color: #79c0ff;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Mobile: stack the chrome and terminal vertically */
+@media (max-width: 880px) {
+  .recon-split { grid-template-columns: 1fr; }
+  .recon-term { min-height: 360px; }
+  .recon-li-search-bar { flex: 1 1 auto; }
+  .recon-li-navicon { padding: 4px 6px 2px; }
+  .recon-li-navlabel { display: none; }
 }
 
 /* --- WEAPON SCENE: Terminal payload builder --- */
@@ -1440,7 +1807,12 @@ img, svg {
   font-size: 20px;
 }
 
-/* --- EXPLOIT SCENE: Document + hidden terminal --- */
+/* ============================================================
+   COMPROMISE · Word-themed document window
+   The exploit-doc-window doubles as a Microsoft Word frame so the
+   user instantly recognizes the malicious .docm and the iconic yellow
+   "SECURITY WARNING — Macros disabled" Protected View bar.
+   ============================================================ */
 .exploit-desktop {
   position: relative;
   min-height: 420px;
@@ -1455,6 +1827,184 @@ img, svg {
 }
 .exploit-doc-window.blurred { filter: brightness(0.5) blur(1px); }
 
+/* Word frame (overrides the dark mockup defaults when .word-app is present) */
+.exploit-doc-window.word-app {
+  background: #fafafa;
+  border-color: #d6d6d6;
+  font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif;
+}
+.word-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #2b579a;
+  color: #fff;
+  font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif;
+}
+.word-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  background: #fff;
+  color: #2b579a;
+  font-weight: 800;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.word-title {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.word-titlebtns {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.9);
+  flex-shrink: 0;
+}
+.word-titlebtn {
+  width: 18px; height: 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+
+.word-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 10px;
+  background: #f3f2f1;
+  border-bottom: 1px solid #e1dfdd;
+  flex-wrap: wrap;
+}
+.word-tab {
+  padding: 7px 11px;
+  font-size: 11px;
+  color: #323130;
+  border-bottom: 2px solid transparent;
+  cursor: default;
+}
+.word-tab--active {
+  color: #2b579a;
+  font-weight: 600;
+  border-bottom-color: #2b579a;
+  background: #fff;
+}
+
+.exploit-doc-window.word-app .mockup-body--doc {
+  padding: 0;
+  min-height: 320px;
+  background: #f3f2f1;
+}
+.exploit-doc-window.word-app .doc-content {
+  padding: 0;
+}
+
+/* Yellow Word "SECURITY WARNING" bar */
+.doc-banner.word-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  margin: 0;
+  background: #fff4ce;
+  border: none;
+  border-bottom: 1px solid #f4c33d;
+  border-radius: 0;
+  color: #5c4515;
+  font-size: 12.5px;
+  font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif;
+}
+.doc-banner.word-warning.clicked {
+  background: #fde7e9;
+  border-bottom-color: #c43e1c;
+  color: #c43e1c;
+}
+.word-warning-icon {
+  display: inline-flex;
+  color: #d83b01;
+  flex-shrink: 0;
+}
+.doc-banner.word-warning.clicked .word-warning-icon { color: #c43e1c; }
+.doc-banner.word-warning .doc-warn {
+  flex: 1;
+  font-size: 12.5px;
+  color: inherit;
+}
+.doc-banner.word-warning .doc-warn strong {
+  color: #d83b01;
+  font-weight: 700;
+  margin-right: 6px;
+}
+.doc-banner.word-warning.clicked .doc-warn strong { color: #c43e1c; }
+.doc-banner.word-warning .doc-enable-btn {
+  margin-left: auto;
+  padding: 5px 14px;
+  background: #fff;
+  color: #323130;
+  border: 1px solid #c8c6c4;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+}
+.doc-banner.word-warning .doc-enable-btn:hover:not(:disabled) {
+  background: #f3f2f1;
+  border-color: #a19f9d;
+}
+.doc-banner.word-warning.clicked .doc-enable-btn {
+  background: #c43e1c;
+  border-color: #a32a0d;
+  color: #fff;
+}
+
+/* The "page" inside Word — white sheet with header and faux text lines */
+.word-page {
+  margin: 18px auto 0;
+  padding: 22px 32px 60px;
+  max-width: 92%;
+  background: #fff;
+  border: 1px solid #e1dfdd;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif;
+}
+.word-page-head {
+  font-size: 11px;
+  color: #2b579a;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.word-page .doc-text { padding: 0; }
+.word-page .doc-line {
+  height: 7px;
+  background: #ebebeb;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+.word-page .doc-line--title {
+  height: 14px;
+  width: 60%;
+  margin-bottom: 16px;
+  background: #d2d2d2;
+}
+
+/* Legacy doc styles (used when scenes reuse mockup-body--doc without .word-app) */
 .mockup-body--doc { padding: 0; min-height: 300px; }
 .doc-content { padding: 20px; }
 .doc-banner {
@@ -2463,12 +3013,254 @@ img, svg {
   white-space: nowrap;
 }
 
-/* Compact email layout for Arm & Deliver panel */
+/* ============================================================
+   ARM & DELIVER · Outlook-themed inbox panel
+   The right-side panel mimics the Outlook desktop client (title bar,
+   ribbon, action bar, folder pane, message list) so users instantly
+   recognize the email client receiving the phish.
+   ============================================================ */
+.outlook-app {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif;
+  color: #323130;
+  min-height: 380px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+.outlook-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #0078d4;
+  color: #fff;
+  flex-shrink: 0;
+}
+.outlook-titleicon { display: inline-flex; color: #fff; flex-shrink: 0; }
+.outlook-title {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.outlook-titlebtns {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.9);
+  flex-shrink: 0;
+}
+.outlook-titlebtn {
+  width: 18px; height: 18px;
+  display: inline-flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+
+.outlook-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 10px;
+  background: #f3f2f1;
+  border-bottom: 1px solid #e1dfdd;
+  flex-shrink: 0;
+}
+.outlook-tab {
+  padding: 7px 12px;
+  font-size: 11px;
+  color: #323130;
+  border-bottom: 2px solid transparent;
+  cursor: default;
+}
+.outlook-tab--active {
+  color: #0078d4;
+  font-weight: 600;
+  border-bottom-color: #0078d4;
+  background: #fff;
+}
+
+.outlook-actionbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #faf9f8;
+  border-bottom: 1px solid #e1dfdd;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.outlook-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 2px;
+  background: transparent;
+  color: #323130;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: default;
+}
+.outlook-iconbtn svg { color: #0078d4; flex-shrink: 0; }
+.outlook-iconbtn--danger svg { color: #c43e1c; }
+
+.outlook-body {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  flex: 1;
+  min-height: 220px;
+}
+.outlook-folders {
+  background: #faf9f8;
+  border-right: 1px solid #e1dfdd;
+  padding: 10px 4px;
+  overflow: hidden;
+}
+.outlook-folder-account {
+  font-size: 10px;
+  font-weight: 700;
+  color: #605e5c;
+  letter-spacing: 0.04em;
+  padding: 4px 10px 8px;
+  text-transform: uppercase;
+}
+.outlook-folder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #323130;
+  border-radius: 2px;
+  cursor: default;
+}
+.outlook-folder--active {
+  background: #ebebeb;
+  font-weight: 600;
+  color: #0078d4;
+}
+.outlook-folder-icon {
+  width: 14px; height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #605e5c;
+}
+.outlook-folder--active .outlook-folder-icon { color: #0078d4; }
+.outlook-folder-badge {
+  margin-left: auto;
+  background: #0078d4;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  min-width: 18px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.outlook-folder-badge.visible { opacity: 1; }
+
+/* Message pane (where the spoofed email appears) */
+.outlook-messagepane {
+  padding: 14px 16px;
+  background: #fff;
+  overflow: hidden;
+}
+.outlook-messagepane .email-empty {
+  padding: 60px 0;
+  color: #767676;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* Re-skin the email message inside Outlook to read like a real Outlook reading pane */
+.outlook-messagepane .email-message {
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  font-family: 'Segoe UI', -apple-system, Helvetica, Arial, sans-serif;
+}
+.outlook-messagepane .email-msg-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e1dfdd;
+  background: #faf9f8;
+}
+.outlook-messagepane .email-msg-from {
+  color: #323130;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.outlook-messagepane .email-msg-from .email-spoof {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #c43e1c;
+  background: #fde7e9;
+  border: 1px solid #f1bbbe;
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+.outlook-messagepane .email-msg-to,
+.outlook-messagepane .email-msg-subject {
+  color: #605e5c;
+  font-size: 11px;
+  margin-top: 3px;
+}
+.outlook-messagepane .email-msg-subject {
+  color: #323130;
+  font-weight: 700;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.outlook-messagepane .email-msg-body {
+  padding: 12px 14px;
+  background: #fff;
+  color: #323130;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.outlook-messagepane .email-urgency {
+  color: #c43e1c;
+  background: #fde7e9;
+  font-weight: 600;
+  padding: 0 4px;
+  border-radius: 2px;
+}
+.outlook-messagepane .email-attachment {
+  margin: 0 14px 12px;
+  padding: 8px 12px;
+  background: #faf9f8;
+  border: 1px solid #e1dfdd;
+  border-radius: 2px;
+  font-size: 12px;
+  color: #323130;
+}
+.outlook-messagepane .email-attachment-icon {
+  font-size: 16px;
+  color: #c43e1c;
+}
+
+/* Backwards-compat: keep these so other emailish surfaces don't break,
+   but they are no longer used in scene_armdeliver.html. */
 .mockup-body--email-compact {
   padding: 0;
   min-height: 300px;
 }
-
 .email-inbox-label {
   display: flex;
   align-items: center;
@@ -2480,11 +3272,9 @@ img, svg {
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
 }
-
 .email-main-compact {
   padding: 16px;
 }
-
 .email-main-compact .email-message {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -2493,10 +3283,16 @@ img, svg {
   transform: translateY(10px);
   transition: opacity 0.5s ease, transform 0.5s var(--ease-out);
 }
-
 .email-main-compact .email-message.visible {
   opacity: 1;
   transform: translateY(0);
+}
+/* When the message lives inside Outlook, override the dark email-msg-* base
+   styles since the parent has its own product-themed rules above. */
+.outlook-messagepane.email-main-compact { padding: 14px 16px; }
+.outlook-messagepane.email-main-compact .email-message {
+  border-color: #e1dfdd;
+  border-radius: 4px;
 }
 
 /* --- Control Scene: C2 wrap below install log --- */
@@ -2775,9 +3571,6 @@ img, svg {
   .chain-node-label { font-size: 10px; }
   .chain-detail-inner { flex-direction: column; padding: 24px; }
 
-  .mockup-body--recon { grid-template-columns: 1fr; }
-  .recon-sidebar { display: none; }
-  .recon-harvest { border-left: none; border-top: 1px solid var(--border); }
   .mockup-body--install { grid-template-columns: 1fr; }
   .install-fs { border-left: none; border-top: 1px solid var(--border); }
   .exfil-layout { grid-template-columns: 1fr; }
@@ -4989,6 +5782,38 @@ body.app-body {
   --effect-color: #ff8a80;
   --effect-bg: rgba(255, 60, 60, 0.16);
 }
+.battle-showcase-effect[data-tone="zero_day"] {
+  --effect-color: #ffd166;
+  --effect-bg: rgba(255, 209, 102, 0.16);
+  border-width: 2px;
+  box-shadow:
+    0 0 0 4px rgba(255, 209, 102, 0.10),
+    0 0 22px rgba(255, 209, 102, 0.45);
+  animation:
+    bms_effect_pop 380ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    bms_zeroday_glow 1.4s ease-in-out 380ms infinite alternate;
+}
+@keyframes bms_zeroday_glow {
+  0%   { box-shadow: 0 0 0 4px rgba(255, 209, 102, 0.10), 0 0 22px rgba(255, 209, 102, 0.45); }
+  100% { box-shadow: 0 0 0 6px rgba(255, 209, 102, 0.16), 0 0 30px rgba(255, 209, 102, 0.65); }
+}
+.battle-showcase-jump-line {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #ffe4a1;
+  background: rgba(255, 209, 102, 0.10);
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  border-radius: 6px;
+  padding: 8px 12px;
+  max-width: 360px;
+  text-align: center;
+  line-height: 1.5;
+}
+.battle-showcase-jump-line strong {
+  color: #ffd166;
+  font-weight: 800;
+}
 @keyframes bms_effect_pop {
   0%   { transform: scale(0.6); opacity: 0; }
   60%  { transform: scale(1.08); opacity: 1; }
@@ -5221,34 +6046,156 @@ body.app-body {
   opacity: 0.4;
 }
 
-.scene-ui--usb {
+/* VPN credential sign-in scene (compromise_creds) */
+.scene-ui--creds {
+  position: relative;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+}
+.scene-creds-card {
   position: relative;
-}
-.scene-usb-icon { font-size: 42px; transform: translateX(-120px); }
-.scene-usb-slot {
-  width: 56px;
-  height: 14px;
-  border-radius: 3px;
-  background: #222;
-  border: 2px solid #444;
-  box-shadow: inset 0 2px 6px #000;
-}
-.scene-usb-toast {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translate(-50%, 20px);
-  opacity: 0;
-  font-size: 10px;
-  padding: 6px 10px;
+  background: #ffffff;
+  color: #1a1a1a;
   border-radius: 6px;
-  background: rgba(255, 193, 7, 0.15);
-  border: 1px solid rgba(255, 193, 7, 0.35);
-  color: #ffc857;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
+  padding: 12px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.scene-creds-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scene-creds-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: #b30000;
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.scene-creds-org {
+  font-weight: 700;
+  font-size: 13px;
+  color: #1a1a1a;
+}
+.scene-creds-tagline {
+  font-size: 9px;
+  color: #6b7280;
+  letter-spacing: 0.04em;
+}
+.scene-creds-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+.scene-creds-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.scene-creds-k {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+.scene-creds-input {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  background: #f8fafc;
+  min-height: 22px;
+  color: #111827;
+  overflow: hidden;
+}
+.scene-creds-typed {
   white-space: nowrap;
+  overflow: hidden;
+}
+.scene-creds-caret {
+  display: inline-block;
+  width: 1px;
+  height: 12px;
+  background: #1f2937;
+  margin-left: 1px;
+  opacity: 0;
+}
+.scene-creds-submit {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 5px 14px;
+  border-radius: 3px;
+  background: #b30000;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: default;
+  user-select: none;
+}
+.scene-creds-hibp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: rgba(255, 184, 77, 0.18);
+  border: 1px solid rgba(255, 159, 67, 0.45);
+  color: #8a4a00;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+}
+.scene-creds-hibp-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #f59e0b;
+  color: #fff;
+  font-weight: 800;
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.scene-creds-banner {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  background: rgba(43, 187, 110, 0.18);
+  border: 1px solid rgba(43, 187, 110, 0.5);
+  color: #6ddc9d;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+}
+.scene-creds-banner-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2bbb6e;
+  box-shadow: 0 0 6px #2bbb6e;
 }
 
 .scene-ui--fw {
@@ -5507,15 +6454,37 @@ body.app-body {
   45%, 55% { opacity: 1; color: #ff5d5d; }
   60%, 100% { opacity: 0.85; }
 }
-@keyframes bms_usb_slide {
-  0% { transform: translateX(-120px); }
-  35% { transform: translateX(0); }
-  100% { transform: translateX(0); }
+@keyframes bms_creds_type_user {
+  0%   { clip-path: inset(0 100% 0 0); }
+  20%  { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 0); }
 }
-@keyframes bms_usb_toast {
-  0%, 40% { opacity: 0; transform: translate(-50%, 18px); }
-  55% { opacity: 1; transform: translate(-50%, 0); }
-  100% { opacity: 1; transform: translate(-50%, 0); }
+@keyframes bms_creds_type_pass {
+  0%, 22% { clip-path: inset(0 100% 0 0); }
+  44%     { clip-path: inset(0 0 0 0); }
+  100%    { clip-path: inset(0 0 0 0); }
+}
+@keyframes bms_creds_caret_user {
+  0%       { opacity: 0.85; transform: translateX(-2px); }
+  20%      { opacity: 0; }
+  100%     { opacity: 0; }
+}
+@keyframes bms_creds_caret_pass {
+  0%, 22%  { opacity: 0; }
+  24%, 42% { opacity: 0.85; }
+  44%      { opacity: 0; }
+  100%     { opacity: 0; }
+}
+@keyframes bms_creds_submit {
+  0%, 48%   { transform: scale(1); box-shadow: none; filter: brightness(1); }
+  52%, 60%  { transform: scale(0.96); filter: brightness(0.9); }
+  62%       { transform: scale(1.04); box-shadow: 0 0 0 4px rgba(43,187,110,.18); filter: brightness(1.05); }
+  72%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(43,187,110,0); filter: brightness(1); }
+}
+@keyframes bms_creds_banner {
+  0%, 70%  { opacity: 0; transform: translateY(8px) scale(0.96); }
+  80%      { opacity: 1; transform: translateY(0) scale(1.02); }
+  100%     { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes bms_fw_packet {
   0%   { opacity: 0; transform: translateX(0)    scale(0.85); filter: brightness(1); }
@@ -5685,35 +6654,47 @@ body.app-body {
   animation: bms_script_blink 5s linear both;
 }
 
-.battle-move-scene.is-playing[data-scene-id="deliver_usb"] .scene-usb-icon {
-  animation: bms_usb_slide 5s linear both;
+.battle-move-scene.is-playing[data-scene-id="compromise_creds"] .scene-creds-typed[data-typed="username"] {
+  animation: bms_creds_type_user 5s linear both;
 }
-.battle-move-scene.is-playing[data-scene-id="deliver_usb"] .scene-usb-toast {
-  animation: bms_usb_toast 5s linear both;
+.battle-move-scene.is-playing[data-scene-id="compromise_creds"] .scene-creds-typed[data-typed="password"] {
+  animation: bms_creds_type_pass 5s linear both;
+}
+.battle-move-scene.is-playing[data-scene-id="compromise_creds"] .scene-creds-caret[data-caret="username"] {
+  animation: bms_creds_caret_user 5s linear both;
+}
+.battle-move-scene.is-playing[data-scene-id="compromise_creds"] .scene-creds-caret[data-caret="password"] {
+  animation: bms_creds_caret_pass 5s linear both;
+}
+.battle-move-scene.is-playing[data-scene-id="compromise_creds"] .scene-creds-submit {
+  animation: bms_creds_submit 5s ease-out both;
+}
+.battle-move-scene.is-playing[data-scene-id="compromise_creds"] .scene-creds-banner {
+  animation: bms_creds_banner 5s ease-out both;
 }
 
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-packet {
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-packet {
   animation: bms_fw_packet 5s cubic-bezier(0.5, 0, 0.5, 1) both;
 }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-impact {
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-impact {
   animation: bms_fw_impact 5s ease-out both;
 }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-brick--target:nth-of-type(odd) {
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-brick--target:nth-of-type(odd) {
   animation: bms_fw_brick_break 5s ease-out both;
 }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-brick--target:nth-of-type(even) {
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-brick--target:nth-of-type(even) {
   animation: bms_fw_brick_break_alt 5s ease-out both;
 }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-sparks i:nth-child(1) { animation: bms_fw_spark_a 5s ease-out both; }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-sparks i:nth-child(2) { animation: bms_fw_spark_b 5s ease-out both; }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-sparks i:nth-child(3) { animation: bms_fw_spark_c 5s ease-out both; }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-sparks i:nth-child(4) { animation: bms_fw_spark_d 5s ease-out both; }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-sparks i:nth-child(5) { animation: bms_fw_spark_e 5s ease-out both; }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-sparks i:nth-child(6) { animation: bms_fw_spark_f 5s ease-out both; }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-stage2 {
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-sparks i:nth-child(1) { animation: bms_fw_spark_a 5s ease-out both; }
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-sparks i:nth-child(2) { animation: bms_fw_spark_b 5s ease-out both; }
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-sparks i:nth-child(3) { animation: bms_fw_spark_c 5s ease-out both; }
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-sparks i:nth-child(4) { animation: bms_fw_spark_d 5s ease-out both; }
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-sparks i:nth-child(5) { animation: bms_fw_spark_e 5s ease-out both; }
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-sparks i:nth-child(6) { animation: bms_fw_spark_f 5s ease-out both; }
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-stage2 {
   animation: bms_fw_stage2 5s ease-out both;
 }
-.battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-breach {
+.battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-breach {
   animation: bms_fw_breach 5s ease-out both;
 }
 
@@ -5772,8 +6753,8 @@ body.app-body {
   .battle-move-scene.is-playing .scene-li-row,
   .battle-move-scene.is-playing .scene-li-graph,
   .battle-move-scene.is-playing .scene-mail-sent,
-  .battle-move-scene.is-playing .scene-usb-icon,
-  .battle-move-scene.is-playing .scene-usb-toast,
+  .battle-move-scene.is-playing .scene-creds-banner,
+  .battle-move-scene.is-playing .scene-creds-submit,
   .battle-move-scene.is-playing .scene-fw-packet,
   .battle-move-scene.is-playing .scene-fw-breach,
   .battle-move-scene.is-playing .scene-fw-stage2,
@@ -5784,9 +6765,9 @@ body.app-body {
     transform: none !important;
     filter: none !important;
   }
-  .battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-impact,
-  .battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-sparks i,
-  .battle-move-scene.is-playing[data-scene-id="compromise_zeroday"] .scene-fw-brick--target {
+  .battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-impact,
+  .battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-sparks i,
+  .battle-move-scene.is-playing[data-scene-id="deliver_zeroday"] .scene-fw-brick--target {
     opacity: 0 !important;
   }
   .battle-move-scene.is-playing .scene-job-card {
@@ -6487,43 +7468,14 @@ body.app-body {
 .battle-move-showcase .scene-wh-line { height: 6px; border-radius: 999px; background: rgba(255,255,255,.1); }
 .battle-move-showcase .scene-wh-line--short { width: 65%; }
 
-.battle-move-showcase .scene-ui--usb { justify-content: center; align-items: center; }
-.battle-move-showcase .scene-usb-floor {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 52px;
-  background: linear-gradient(180deg, transparent, rgba(0,0,0,.55));
+.battle-move-showcase .scene-ui--creds {
+  padding: 24px;
+  background: linear-gradient(180deg, #142136 0%, #0e1623 100%);
 }
-.battle-move-showcase .scene-usb-laptop {
-  position: absolute;
-  width: 220px; height: 120px;
-  right: 16%; top: 28%;
+.battle-move-showcase .scene-creds-card {
+  width: 88%;
+  max-width: 360px;
 }
-.battle-move-showcase .scene-usb-screen {
-  height: 74px; border-radius: 8px 8px 4px 4px;
-  border: 1px solid #4d5a70; background: #132033;
-}
-.battle-move-showcase .scene-usb-keyboard {
-  height: 20px; margin-top: 4px; border-radius: 3px;
-  background: #252f3f;
-}
-.battle-move-showcase .scene-usb-port {
-  position: absolute; right: 0; bottom: 26px; width: 28px; height: 8px;
-  border-radius: 2px; background: #111;
-}
-.battle-move-showcase .scene-usb-stick {
-  position: absolute; left: 8%; top: 42%;
-  display: flex; align-items: center; gap: 0;
-}
-.battle-move-showcase .scene-usb-cap { width: 16px; height: 18px; background: #909cae; border-radius: 2px 0 0 2px; }
-.battle-move-showcase .scene-usb-body {
-  width: 62px; height: 22px; border-radius: 0 3px 3px 0;
-  background: linear-gradient(90deg,#ff5d8f,#ff9f43);
-}
-.battle-move-showcase .scene-usb-label {
-  position: absolute; left: 22px; top: 5px; font-size: 8px; color: #fff;
-}
-.battle-move-showcase .scene-usb-toast { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
-.battle-move-showcase .scene-usb-toast-title { color: #ffd166; }
-.battle-move-showcase .scene-usb-toast-text { color: #ffefc2; }
 
 .battle-move-showcase .scene-fw-grid {
   position: absolute; inset: 0;
@@ -7443,20 +8395,36 @@ body.app-body {
   margin-left: auto;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  gap: 8px;
+  padding: 10px 18px;
   border-radius: 999px;
-  background: var(--text-primary);
-  color: var(--bg-primary);
-  font-size: 12px;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  transition: transform 160ms var(--ease-out), opacity 160ms var(--ease-out);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 6px 18px rgba(0, 200, 255, 0.28),
+    0 0 0 1px rgba(124, 92, 252, 0.35) inset;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out), filter 160ms var(--ease-out);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
-.result-battle-banner-cta:hover {
+.result-battle-banner-cta svg {
+  display: block;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+.result-battle-banner-cta:hover,
+.result-battle-banner-cta:focus-visible {
   transform: translateY(-1px);
-  opacity: 0.9;
+  filter: brightness(1.08);
+  box-shadow:
+    0 8px 22px rgba(0, 200, 255, 0.40),
+    0 0 0 1px rgba(124, 92, 252, 0.45) inset;
+  outline: none;
 }
 
 .result-battle-list {

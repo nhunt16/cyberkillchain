@@ -55,7 +55,16 @@
           <h4 class="result-battle-banner-title">Cyber Inu has joined your roster.</h4>
           <p class="result-battle-banner-sub">Equip him on the Avatars page — he'll narrate every page you visit.</p>
         </div>
-        <a class="result-battle-banner-cta" href="{{ url_for('avatars_page') }}">View in Avatars →</a>
+        <a class="result-battle-banner-cta" href="{{ url_for('avatars_page') }}">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="6" r="2.6" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M3 13c.7-2.4 2.7-3.6 5-3.6S12.3 10.6 13 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span>Equip on Avatars</span>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     {% endif %}
 

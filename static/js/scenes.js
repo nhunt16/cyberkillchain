@@ -59,6 +59,21 @@
     if (tone === 'success') hint.classList.add('success');
   }
 
+  // Highlight whichever non-ghost, enabled, not-yet-completed button is the
+  // next logical step in the lesson — so the user always knows where to click.
+  function promoteNextPrimary(toolbar) {
+    var allBtns = $$('.scene-action-btn', toolbar);
+    allBtns.forEach(function (b) { b.classList.remove('primary'); });
+    for (var i = 0; i < allBtns.length; i++) {
+      var b = allBtns[i];
+      if (b.disabled) continue;
+      if (b.classList.contains('done')) continue;
+      if (b.classList.contains('scene-action-btn--ghost')) continue;
+      b.classList.add('primary');
+      break;
+    }
+  }
+
   function wireActions(sceneEl, handlers) {
     var toolbar = sceneEl.querySelector('.scene-actions');
     if (!toolbar) return {};
@@ -75,9 +90,11 @@
           await handler(btn, btns);
         } finally {
           btn.classList.remove('running');
+          promoteNextPrimary(toolbar);
         }
       });
     });
+    promoteNextPrimary(toolbar);
     return btns;
   }
 
@@ -143,32 +160,30 @@
     var profilesContainer = scene.querySelector('#reconProfiles');
     var harvestList = scene.querySelector('#harvestList');
     var countEl = scene.querySelector('#harvestCount');
+    var statusEl = scene.querySelector('#harvestStatus');
     var searchText = scene.querySelector('.recon-search-text');
     var searchCaret = scene.querySelector('.recon-search-caret');
+    var company = scene.dataset.company || 'ACME Corp';
+    var domain = company.toLowerCase().replace(/\s+/g, '-') + '.com';
     var harvested = new Set();
+    var emptyHarvestHTML = '<div class="harvest-empty mono">$ <span class="harvest-blink">_</span></div>';
 
-    function harvestProfile(div, p) {
-      if (harvested.has(p.email)) return;
-      harvested.add(p.email);
-      div.classList.add('harvested');
+    function setStatus(text, kind) {
+      if (!statusEl) return;
+      statusEl.textContent = text;
+      statusEl.classList.remove('is-running', 'is-done');
+      if (kind) statusEl.classList.add(kind);
+    }
 
-      var entry = document.createElement('div');
-      entry.className = 'harvest-entry';
-      entry.textContent = p.email;
-      harvestList.appendChild(entry);
-      requestAnimationFrame(function () { entry.classList.add('visible'); });
-      countEl.textContent = harvested.size;
-
-      log('recon_harvest', { email: p.email, role: p.role, harvested_count: harvested.size });
-
-      if (harvested.size === profiles.length) {
-        setHint(scene, '<strong>All targets harvested.</strong> The attacker now has every IT staffer\'s email address.', 'success');
-        btns.harvestAll.disabled = true;
-        btns.harvestAll.classList.add('done');
-        log('recon_complete', { total: profiles.length });
-      } else {
-        setHint(scene, 'Harvested <strong>' + harvested.size + '/' + profiles.length + '</strong>. Keep going, or click <strong>Harvest All</strong>.');
-      }
+    function termLine(html, cls) {
+      // First time we add real output, drop the placeholder cursor line.
+      var empty = harvestList.querySelector('.harvest-empty');
+      if (empty) empty.remove();
+      var div = document.createElement('div');
+      div.className = 'harvest-line mono ' + (cls || '');
+      div.innerHTML = html;
+      harvestList.appendChild(div);
+      return div;
     }
 
     async function runScan(btn) {
@@ -186,46 +201,79 @@
         div.className = 'recon-profile';
         div.dataset.email = p.email;
         div.innerHTML =
-          '<div class="recon-avatar">' + escapeHtml(p.initials) + '</div>' +
+          '<div class="recon-avatar" data-c="' + (i % 4) + '">' + escapeHtml(p.initials) + '</div>' +
           '<div class="recon-profile-info">' +
-          '<span class="recon-profile-name">' + escapeHtml(p.name) + '</span>' +
-          '<span class="recon-profile-role">' + escapeHtml(p.role) + '</span>' +
+            '<span class="recon-profile-name">' + escapeHtml(p.name) +
+              ' <span class="recon-profile-degree">&middot; 3rd</span></span>' +
+            '<span class="recon-profile-role">' + escapeHtml(p.role) + ' at ' + escapeHtml(company) + '</span>' +
+            '<span class="recon-profile-loc">Greater New York Area</span>' +
           '</div>';
         profilesContainer.appendChild(div);
         await delay(70);
         div.classList.add('visible');
       }
 
-      $$('.recon-profile', profilesContainer).forEach(function (div) {
-        var p = profiles.find(function (pp) { return pp.email === div.dataset.email; });
-        div.classList.add('interactive');
-        div.addEventListener('click', function () { harvestProfile(div, p); });
-      });
-
       btn.classList.add('done');
       btn.innerHTML = '<span class="scene-action-icon">&#10003;</span> Scan Complete';
       btns.harvestAll.disabled = false;
       btns.reset.disabled = false;
-      setHint(scene, 'Click any profile to harvest their email, or <strong>Harvest All</strong>.');
+      setHint(scene, '<strong>Profiles loaded.</strong> Now run <strong>Harvest Emails</strong> to scrape addresses with theHarvester.');
     }
 
     async function harvestAll(btn) {
       btn.disabled = true;
       log('recon_harvest_all');
-      var remaining = $$('.recon-profile:not(.harvested)', profilesContainer);
-      for (var i = 0; i < remaining.length; i++) {
-        var div = remaining[i];
-        var p = profiles.find(function (pp) { return pp.email === div.dataset.email; });
-        harvestProfile(div, p);
-        await delay(140);
+      setStatus('running...', 'is-running');
+      setHint(scene, 'Running <strong>theHarvester</strong> against linkedin + acme-corp.com domain...');
+
+      // ----- Stage 1: type the scraper command, show realistic OSINT output
+      termLine('$ theHarvester -d ' + escapeHtml(domain) + ' -l 100 -b linkedin');
+      await delay(420);
+      termLine('[*] Target: ' + escapeHtml(domain), 'is-info');
+      await delay(180);
+      termLine('[*] Searching LinkedIn for "' + escapeHtml(company) + '" employees...', 'is-info');
+      await delay(380);
+      termLine('[*] ' + profiles.length + ' profiles in viewport &middot; building first.last patterns', 'is-info');
+      await delay(320);
+      termLine('[*] Cross-checking hunter.io · crt.sh · github commits', 'is-info');
+      await delay(450);
+      termLine('[+] verified format: {first}.{last}@' + escapeHtml(domain), 'is-good');
+      await delay(280);
+      termLine('&nbsp;', '');
+      await delay(120);
+
+      // ----- Stage 2: stream each harvested address into the file
+      for (var i = 0; i < profiles.length; i++) {
+        var p = profiles[i];
+        if (harvested.has(p.email)) continue;
+        harvested.add(p.email);
+
+        termLine('[+] ' + escapeHtml(p.email), 'is-good');
+        countEl.textContent = harvested.size;
+
+        // mark the corresponding LinkedIn row as "scraped"
+        var row = profilesContainer.querySelector('.recon-profile[data-email="' + (window.CSS && CSS.escape ? CSS.escape(p.email) : p.email) + '"]');
+        if (row) row.classList.add('harvested');
+
+        log('recon_harvest', { email: p.email, role: p.role, harvested_count: harvested.size });
+        await delay(220);
       }
+
+      await delay(220);
+      termLine('&nbsp;', '');
+      termLine('[+] ' + harvested.size + ' unique emails extracted &rarr; <strong>target_emails.txt</strong>', 'is-good');
+      setStatus('complete', 'is-done');
+
       btn.classList.add('done');
+      setHint(scene, '<strong>All targets harvested.</strong> The attacker now has every IT staffer\'s email address.', 'success');
+      log('recon_complete', { total: profiles.length });
     }
 
     function reset() {
       profilesContainer.innerHTML = '';
-      harvestList.innerHTML = '';
+      harvestList.innerHTML = emptyHarvestHTML;
       countEl.textContent = '0';
+      setStatus('idle');
       searchText.textContent = 'Search employees...';
       searchText.classList.add('recon-search-placeholder');
       searchCaret.classList.remove('active');
@@ -237,7 +285,7 @@
       btns.harvestAll.disabled = true;
       btns.harvestAll.classList.remove('done');
       btns.reset.disabled = true;
-      setHint(scene, 'Click <strong>Start Scan</strong> to begin searching for employee data.');
+      setHint(scene, 'Click <strong>Start Scan</strong> to load the LinkedIn search.');
       log('scene_reset', { scene: 'recon' });
     }
 
@@ -390,9 +438,7 @@
     var enableBtn = scene.querySelector('#docEnableBtn');
     var enabled = false;
 
-    // ---- Stage 2 (persistence + C2) DOM ----
-    var log_ = scene.querySelector('#controlLog');
-    var tree = scene.querySelector('#controlTree');
+    // ---- C2 channel + console DOM ----
     var packets = scene.querySelector('#controlPackets');
     var c2Terminal = scene.querySelector('#controlTerminal');
 
@@ -404,21 +450,6 @@
       { text: '[+] Meterpreter session 1 opened', delay: 380 },
       { text: '[+] Privilege: ACME\\m.smith', delay: 260 },
       { text: '[+] Target: DESKTOP-ACME-47', delay: 200 }
-    ];
-    var entries = [
-      { time: '14:32:01', type: 'write', cls: 'install-log-type--write', msg: 'svchost_update.exe dropped to C:\\Windows\\Temp\\' },
-      { time: '14:32:02', type: 'write', cls: 'install-log-type--write', msg: 'mshelper.dll created in AppData\\Local\\' },
-      { time: '14:32:03', type: 'reg',   cls: 'install-log-type--reg',   msg: 'HKCU\\...\\Run → "WindowsHelper" = svchost_update.exe' },
-      { time: '14:32:04', type: 'exec',  cls: 'install-log-type--exec',  msg: 'schtasks /create /tn "SystemUpdate" /sc onlogon' },
-      { time: '14:32:05', type: 'net',   cls: 'install-log-type--net',   msg: 'Outbound → 185.47.xx.xx:4443 (ESTABLISHED)' }
-    ];
-    var fsItems = [
-      { text: 'C:\\Windows\\Temp\\',            cls: 'install-fs-folder' },
-      { text: '  svchost_update.exe',           cls: 'install-fs-item new-file' },
-      { text: 'C:\\Users\\m.smith\\AppData\\',  cls: 'install-fs-folder' },
-      { text: '  Local\\mshelper.dll',          cls: 'install-fs-item new-file' },
-      { text: 'Registry:',                       cls: 'install-fs-folder' },
-      { text: '  Run → WindowsHelper',          cls: 'install-fs-item new-file' }
     ];
     var commands = [
       { html: '<span class="term-success">[+] Beacon: 10.0.0.47 → 185.47.xx.xx</span>', delay: 400 },
@@ -439,10 +470,6 @@
       var ph = c2Terminal.querySelector('.term-placeholder');
       if (ph) ph.remove();
     }
-    function clearLogEmpty() {
-      var e = log_.querySelector('.install-empty');
-      if (e) e.remove();
-    }
 
     async function onEnableClick() {
       if (enabled) return;
@@ -457,7 +484,7 @@
       await delay(450);
       doc.classList.add('blurred');
       overlay.classList.add('visible');
-      setHint(scene, '<strong>Reverse shell live.</strong> Now lock it in — install persistence so the foothold survives a reboot.');
+      setHint(scene, '<strong>Reverse shell live.</strong> Now open an encrypted C2 tunnel back to the attacker.');
 
       for (var i = 0; i < exploitLines.length; i++) {
         var line = document.createElement('div');
@@ -468,38 +495,9 @@
         line.classList.add('visible');
         await delay(exploitLines[i].delay);
       }
-      btns.install.disabled = false;
+      btns.beacon.disabled = false;
       btns.reset.disabled = false;
       log('compromise_foothold');
-    }
-
-    async function install(btn) {
-      btn.disabled = true;
-      log('compromise_install_persistence');
-      clearLogEmpty();
-      var fsIdx = 0;
-      for (var i = 0; i < entries.length; i++) {
-        var e = entries[i];
-        var row = document.createElement('div');
-        row.className = 'install-log-entry';
-        row.innerHTML =
-          '<span class="install-log-time">' + e.time + '</span>' +
-          '<span class="install-log-type ' + e.cls + '">' + e.type + '</span>' +
-          '<span class="install-log-msg">' + escapeHtml(e.msg) + '</span>';
-        log_.appendChild(row);
-        await delay(60);
-        row.classList.add('visible');
-        if (fsIdx < fsItems.length) {
-          addFsItem(tree, fsItems[fsIdx++]);
-          await delay(100);
-          if (fsIdx < fsItems.length) addFsItem(tree, fsItems[fsIdx++]);
-        }
-        await delay(300);
-      }
-      btn.classList.add('done');
-      btn.innerHTML = '<span class="scene-action-num">2</span> Persistence Installed';
-      btns.beacon.disabled = false;
-      setHint(scene, 'Backdoor planted. Now open an encrypted tunnel back to the attacker.');
     }
 
     function startBeacon(btn) {
@@ -516,7 +514,7 @@
         setTimeout(function () { pkt.remove(); }, 2000);
       }, 380);
       btn.classList.add('done');
-      btn.innerHTML = '<span class="scene-action-num">3</span> Beacon Live';
+      btn.innerHTML = '<span class="scene-action-num">2</span> Beacon Live';
       btns.execute.disabled = false;
       setHint(scene, 'C2 channel is live. Send commands to confirm full remote control.');
     }
@@ -531,8 +529,8 @@
         await delay(commands[i].delay);
       }
       btn.classList.add('done');
-      btn.innerHTML = '<span class="scene-action-num">4</span> Commands Sent';
-      setHint(scene, '<strong>Full remote control achieved.</strong> Foothold + persistence + C2 are all live.', 'success');
+      btn.innerHTML = '<span class="scene-action-num">3</span> Commands Sent';
+      setHint(scene, '<strong>Full remote control achieved.</strong> Foothold + C2 are live.', 'success');
       log('compromise_complete');
     }
 
@@ -547,22 +545,17 @@
 
       if (packetInterval) { clearInterval(packetInterval); packetInterval = null; }
       packets.innerHTML = '';
-      log_.innerHTML = '<div class="install-empty">Waiting for attacker activity…</div>';
-      tree.innerHTML = '';
       c2Terminal.innerHTML = '<div class="term-line visible term-placeholder">meterpreter&gt; <span class="term-caret">_</span></div>';
 
       btns.enable.disabled = false;
       btns.enable.classList.remove('done');
       btns.enable.innerHTML = '<span class="scene-action-num">1</span> Enable Content';
-      btns.install.disabled = true;
-      btns.install.classList.remove('done');
-      btns.install.innerHTML = '<span class="scene-action-num">2</span> Install Persistence';
       btns.beacon.disabled = true;
       btns.beacon.classList.remove('done');
-      btns.beacon.innerHTML = '<span class="scene-action-num">3</span> Open C2 Channel';
+      btns.beacon.innerHTML = '<span class="scene-action-num">2</span> Open C2 Channel';
       btns.execute.disabled = true;
       btns.execute.classList.remove('done');
-      btns.execute.innerHTML = '<span class="scene-action-num">4</span> Send Commands';
+      btns.execute.innerHTML = '<span class="scene-action-num">3</span> Send Commands';
       btns.reset.disabled = true;
       setHint(scene, 'Click the glowing <strong>Enable Content</strong> button to detonate the macro and earn a foothold.');
       log('scene_reset', { scene: 'compromise' });
@@ -571,7 +564,6 @@
     enableBtn.addEventListener('click', onEnableClick);
     var btns = wireActions(scene, {
       enable: onEnableClick,
-      install: install,
       beacon: startBeacon,
       execute: execute,
       reset: reset

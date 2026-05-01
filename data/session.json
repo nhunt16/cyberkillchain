@@ -1,93 +1,59 @@
 {
-  "started_at": 1777579175.697346,
-  "started_at_iso": "2026-04-30T19:59:35.697361Z",
+  "started_at": 1777598525.771032,
+  "started_at_iso": "2026-05-01T01:22:05.771039Z",
   "events": [
     {
       "type": "session_start",
-      "time": 1777579175.6973782,
-      "time_iso": "2026-04-30T19:59:35.697381Z"
+      "time": 1777598525.771049,
+      "time_iso": "2026-05-01T01:22:05.771056Z"
     },
     {
       "type": "lesson_enter",
-      "time": 1777579175.704522,
-      "time_iso": "2026-04-30T19:59:35.704556Z",
-      "lesson": 1,
-      "lesson_id": "framework"
-    },
-    {
-      "type": "battle",
-      "time": 1777579183.925101,
-      "time_iso": "2026-04-30T19:59:43.925111Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777579264.852895,
-      "time_iso": "2026-04-30T20:01:04.852907Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777579362.12072,
-      "time_iso": "2026-04-30T20:02:42.120728Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777579399.137857,
-      "time_iso": "2026-04-30T20:03:19.137866Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777579874.573348,
-      "time_iso": "2026-04-30T20:11:14.573363Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777579874.783467,
-      "time_iso": "2026-04-30T20:11:14.783468Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777580125.9012191,
-      "time_iso": "2026-04-30T20:15:25.901222Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777580285.2940109,
-      "time_iso": "2026-04-30T20:18:05.294021Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "battle",
-      "time": 1777580403.5224588,
-      "time_iso": "2026-04-30T20:20:03.522467Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
-    },
-    {
-      "type": "lesson_enter",
-      "time": 1777581927.3354151,
-      "time_iso": "2026-04-30T20:45:27.335421Z",
+      "time": 1777598525.7763982,
+      "time_iso": "2026-05-01T01:22:05.776406Z",
       "lesson": 1,
       "lesson_id": "framework"
     },
     {
       "type": "lesson_event",
-      "time": 1777581931.4307709,
-      "time_iso": "2026-04-30T20:45:31.430776Z",
+      "time": 1777598527.545353,
+      "time_iso": "2026-05-01T01:22:07.545359Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 1,
+        "name": "Reconnaissance"
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598528.4524002,
+      "time_iso": "2026-05-01T01:22:08.452404Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 2,
+        "name": "Arm & Deliver"
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598529.285196,
+      "time_iso": "2026-05-01T01:22:09.285199Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 3,
+        "name": "Initial Compromise"
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598529.910223,
+      "time_iso": "2026-05-01T01:22:09.910226Z",
       "lesson": 1,
       "lesson_id": "framework",
       "action": "chain_node_click",
@@ -98,8 +64,8 @@
     },
     {
       "type": "lesson_event",
-      "time": 1777581933.6553652,
-      "time_iso": "2026-04-30T20:45:33.655373Z",
+      "time": 1777598530.843576,
+      "time_iso": "2026-05-01T01:22:10.843582Z",
       "lesson": 1,
       "lesson_id": "framework",
       "action": "chain_node_click",
@@ -110,8 +76,8 @@
     },
     {
       "type": "lesson_event",
-      "time": 1777581934.763581,
-      "time_iso": "2026-04-30T20:45:34.763584Z",
+      "time": 1777598532.6108851,
+      "time_iso": "2026-05-01T01:22:12.610889Z",
       "lesson": 1,
       "lesson_id": "framework",
       "action": "chain_node_click",
@@ -121,145 +87,1893 @@
       }
     },
     {
-      "type": "battle",
-      "time": 1777581943.9788532,
-      "time_iso": "2026-04-30T20:45:43.978857Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
+      "type": "lesson_event",
+      "time": 1777598533.310657,
+      "time_iso": "2026-05-01T01:22:13.310661Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 2,
+        "name": "Arm & Deliver"
+      }
     },
     {
-      "type": "battle",
-      "time": 1777582064.0027251,
-      "time_iso": "2026-04-30T20:47:44.002730Z",
-      "challenge_num": 1,
-      "challenge_id": "battle",
-      "correct": 5,
-      "total": 5,
-      "victory": true
-    },
-    {
-      "type": "quiz_complete",
-      "time": 1777582064.0090292,
-      "time_iso": "2026-04-30T20:47:44.009034Z",
-      "score": 100,
-      "correct": 5,
-      "total": 5,
-      "victory": true
-    },
-    {
-      "type": "battle",
-      "time": 1777582080.599809,
-      "time_iso": "2026-04-30T20:48:00.599814Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
+      "type": "lesson_event",
+      "time": 1777598539.844193,
+      "time_iso": "2026-05-01T01:22:19.844196Z",
+      "lesson": 1,
+      "lesson_id": "framework",
+      "action": "chain_node_click",
+      "detail": {
+        "phase": 1,
+        "name": "Reconnaissance"
+      }
     },
     {
       "type": "lesson_enter",
-      "time": 1777582247.031702,
-      "time_iso": "2026-04-30T20:50:47.031716Z",
-      "lesson": 7,
-      "lesson_id": "casestudy"
+      "time": 1777598541.946059,
+      "time_iso": "2026-05-01T01:22:21.946066Z",
+      "lesson": 1,
+      "lesson_id": "framework"
     },
     {
-      "type": "battle",
-      "time": 1777582248.480642,
-      "time_iso": "2026-04-30T20:50:48.480658Z",
-      "challenge_num": 1,
-      "challenge_id": "battle"
+      "type": "avatar_select",
+      "time": 1777598544.37732,
+      "time_iso": "2026-05-01T01:22:24.377325Z",
+      "avatar_id": "inu",
+      "accepted": true
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777598545.529757,
+      "time_iso": "2026-05-01T01:22:25.529764Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777598546.529897,
+      "time_iso": "2026-05-01T01:22:26.529903Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598557.6944692,
+      "time_iso": "2026-05-01T01:22:37.694474Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598566.5689468,
+      "time_iso": "2026-05-01T01:22:46.568953Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598567.685222,
+      "time_iso": "2026-05-01T01:22:47.685227Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598568.310194,
+      "time_iso": "2026-05-01T01:22:48.310199Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598569.210388,
+      "time_iso": "2026-05-01T01:22:49.210392Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598570.344118,
+      "time_iso": "2026-05-01T01:22:50.344120Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598570.4920168,
+      "time_iso": "2026-05-01T01:22:50.492019Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777598724.9283352,
+      "time_iso": "2026-05-01T01:25:24.928342Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777598726.34144,
+      "time_iso": "2026-05-01T01:25:26.341445Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777598728.355299,
+      "time_iso": "2026-05-01T01:25:28.355305Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777599146.218982,
+      "time_iso": "2026-05-01T01:32:26.218989Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777599197.657506,
+      "time_iso": "2026-05-01T01:33:17.657515Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599237.361739,
+      "time_iso": "2026-05-01T01:33:57.361754Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599283.357174,
+      "time_iso": "2026-05-01T01:34:43.357187Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599287.9052181,
+      "time_iso": "2026-05-01T01:34:47.905224Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599288.127906,
+      "time_iso": "2026-05-01T01:34:48.127915Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599288.346886,
+      "time_iso": "2026-05-01T01:34:48.346891Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599288.568874,
+      "time_iso": "2026-05-01T01:34:48.568884Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599288.789644,
+      "time_iso": "2026-05-01T01:34:48.789648Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599289.0124831,
+      "time_iso": "2026-05-01T01:34:49.012488Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599289.4546402,
+      "time_iso": "2026-05-01T01:34:49.454648Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599341.781014,
+      "time_iso": "2026-05-01T01:35:41.781022Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "scene_reset",
+      "detail": {
+        "scene": "recon"
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599344.993012,
+      "time_iso": "2026-05-01T01:35:44.993015Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599436.563765,
+      "time_iso": "2026-05-01T01:37:16.563771Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599440.354594,
+      "time_iso": "2026-05-01T01:37:20.354608Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599441.356467,
+      "time_iso": "2026-05-01T01:37:21.356485Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599442.357377,
+      "time_iso": "2026-05-01T01:37:22.357393Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599443.357794,
+      "time_iso": "2026-05-01T01:37:23.357810Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599444.3568158,
+      "time_iso": "2026-05-01T01:37:24.356831Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599445.355954,
+      "time_iso": "2026-05-01T01:37:25.355968Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599447.357043,
+      "time_iso": "2026-05-01T01:37:27.357055Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777599634.051042,
+      "time_iso": "2026-05-01T01:40:34.051048Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599647.3605492,
+      "time_iso": "2026-05-01T01:40:47.360567Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777599701.8558478,
+      "time_iso": "2026-05-01T01:41:41.855858Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599714.376265,
+      "time_iso": "2026-05-01T01:41:54.376273Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599774.362348,
+      "time_iso": "2026-05-01T01:42:54.362360Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599781.356451,
+      "time_iso": "2026-05-01T01:43:01.356459Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599782.3575099,
+      "time_iso": "2026-05-01T01:43:02.357525Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599783.355724,
+      "time_iso": "2026-05-01T01:43:03.355737Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599784.357101,
+      "time_iso": "2026-05-01T01:43:04.357112Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599785.353338,
+      "time_iso": "2026-05-01T01:43:05.353350Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599786.377192,
+      "time_iso": "2026-05-01T01:43:06.377201Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599788.3616152,
+      "time_iso": "2026-05-01T01:43:08.361628Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777599867.779538,
+      "time_iso": "2026-05-01T01:44:27.779544Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599881.9781709,
+      "time_iso": "2026-05-01T01:44:41.978183Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599897.044678,
+      "time_iso": "2026-05-01T01:44:57.044683Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599899.205239,
+      "time_iso": "2026-05-01T01:44:59.205247Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599899.427399,
+      "time_iso": "2026-05-01T01:44:59.427407Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599899.648282,
+      "time_iso": "2026-05-01T01:44:59.648288Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599899.870202,
+      "time_iso": "2026-05-01T01:44:59.870207Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599900.092275,
+      "time_iso": "2026-05-01T01:45:00.092279Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599900.313389,
+      "time_iso": "2026-05-01T01:45:00.313392Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777599900.757893,
+      "time_iso": "2026-05-01T01:45:00.757899Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777600033.127052,
+      "time_iso": "2026-05-01T01:47:13.127059Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600050.358644,
+      "time_iso": "2026-05-01T01:47:30.358654Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600177.3627021,
+      "time_iso": "2026-05-01T01:49:37.362715Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600184.3535092,
+      "time_iso": "2026-05-01T01:49:44.353518Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600185.355872,
+      "time_iso": "2026-05-01T01:49:45.355886Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600186.354151,
+      "time_iso": "2026-05-01T01:49:46.354158Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600187.353763,
+      "time_iso": "2026-05-01T01:49:47.353768Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600188.359102,
+      "time_iso": "2026-05-01T01:49:48.359116Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600189.3582232,
+      "time_iso": "2026-05-01T01:49:49.358236Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600191.3349829,
+      "time_iso": "2026-05-01T01:49:51.334989Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777600225.462412,
+      "time_iso": "2026-05-01T01:50:25.462418Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600240.3588,
+      "time_iso": "2026-05-01T01:50:40.358815Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600283.361759,
+      "time_iso": "2026-05-01T01:51:23.361775Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600290.353438,
+      "time_iso": "2026-05-01T01:51:30.353445Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600291.3547578,
+      "time_iso": "2026-05-01T01:51:31.354770Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600292.355795,
+      "time_iso": "2026-05-01T01:51:32.355811Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600293.353,
+      "time_iso": "2026-05-01T01:51:33.353011Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600294.362251,
+      "time_iso": "2026-05-01T01:51:34.362268Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600295.353259,
+      "time_iso": "2026-05-01T01:51:35.353270Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600297.3758879,
+      "time_iso": "2026-05-01T01:51:37.375901Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777600447.62943,
+      "time_iso": "2026-05-01T01:54:07.629437Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600462.361674,
+      "time_iso": "2026-05-01T01:54:22.361686Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600506.358895,
+      "time_iso": "2026-05-01T01:55:06.358904Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600526.3560529,
+      "time_iso": "2026-05-01T01:55:26.356067Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600527.354472,
+      "time_iso": "2026-05-01T01:55:27.354486Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600528.356245,
+      "time_iso": "2026-05-01T01:55:28.356263Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600529.355604,
+      "time_iso": "2026-05-01T01:55:29.355619Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600530.356317,
+      "time_iso": "2026-05-01T01:55:30.356338Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600531.352779,
+      "time_iso": "2026-05-01T01:55:31.352787Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600533.3561869,
+      "time_iso": "2026-05-01T01:55:33.356195Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777600726.9404511,
+      "time_iso": "2026-05-01T01:58:46.940458Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600760.361556,
+      "time_iso": "2026-05-01T01:59:20.361571Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600803.360779,
+      "time_iso": "2026-05-01T02:00:03.360793Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600810.35531,
+      "time_iso": "2026-05-01T02:00:10.355325Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600811.354958,
+      "time_iso": "2026-05-01T02:00:11.354970Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600812.352052,
+      "time_iso": "2026-05-01T02:00:12.352061Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600813.354443,
+      "time_iso": "2026-05-01T02:00:13.354455Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600814.355702,
+      "time_iso": "2026-05-01T02:00:14.355717Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600815.357376,
+      "time_iso": "2026-05-01T02:00:15.357391Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600817.35501,
+      "time_iso": "2026-05-01T02:00:17.355023Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777600938.36325,
+      "time_iso": "2026-05-01T02:02:18.363262Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "scene_reset",
+      "detail": {
+        "scene": "recon"
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777600999.58998,
+      "time_iso": "2026-05-01T02:03:19.589993Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601017.041367,
+      "time_iso": "2026-05-01T02:03:37.041371Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601024.9946702,
+      "time_iso": "2026-05-01T02:03:44.994675Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601027.154098,
+      "time_iso": "2026-05-01T02:03:47.154108Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601027.3751092,
+      "time_iso": "2026-05-01T02:03:47.375115Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601027.5965922,
+      "time_iso": "2026-05-01T02:03:47.596597Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601027.817944,
+      "time_iso": "2026-05-01T02:03:47.817950Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601028.038302,
+      "time_iso": "2026-05-01T02:03:48.038307Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601028.259884,
+      "time_iso": "2026-05-01T02:03:48.259891Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601028.702354,
+      "time_iso": "2026-05-01T02:03:48.702359Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601041.407073,
+      "time_iso": "2026-05-01T02:04:01.407082Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601043.830121,
+      "time_iso": "2026-05-01T02:04:03.830127Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601053.803334,
+      "time_iso": "2026-05-01T02:04:13.803340Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601066.171288,
+      "time_iso": "2026-05-01T02:04:26.171294Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601068.328331,
+      "time_iso": "2026-05-01T02:04:28.328335Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601068.549294,
+      "time_iso": "2026-05-01T02:04:28.549299Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601068.772196,
+      "time_iso": "2026-05-01T02:04:28.772200Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601068.993663,
+      "time_iso": "2026-05-01T02:04:28.993666Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601069.216052,
+      "time_iso": "2026-05-01T02:04:29.216056Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601069.437943,
+      "time_iso": "2026-05-01T02:04:29.437947Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601069.880814,
+      "time_iso": "2026-05-01T02:04:29.880818Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601117.396163,
+      "time_iso": "2026-05-01T02:05:17.396171Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601119.043328,
+      "time_iso": "2026-05-01T02:05:19.043334Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601123.486018,
+      "time_iso": "2026-05-01T02:05:23.486025Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601125.160979,
+      "time_iso": "2026-05-01T02:05:25.160983Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601129.689384,
+      "time_iso": "2026-05-01T02:05:29.689389Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601130.819245,
+      "time_iso": "2026-05-01T02:05:30.819249Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_build",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601155.987948,
+      "time_iso": "2026-05-01T02:05:55.987957Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601157.337663,
+      "time_iso": "2026-05-01T02:05:57.337667Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601173.144167,
+      "time_iso": "2026-05-01T02:06:13.144170Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_build",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601205.6932101,
+      "time_iso": "2026-05-01T02:06:45.693216Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_weaponize",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601208.643372,
+      "time_iso": "2026-05-01T02:06:48.643376Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_send",
+      "detail": {
+        "target": "m.smith@acme-corp.com"
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601209.537955,
+      "time_iso": "2026-05-01T02:06:49.537962Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601216.8102,
+      "time_iso": "2026-05-01T02:06:56.810209Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_build",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601222.712874,
+      "time_iso": "2026-05-01T02:07:02.712886Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601383.005234,
+      "time_iso": "2026-05-01T02:09:43.005239Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601404.360138,
+      "time_iso": "2026-05-01T02:10:04.360155Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601544.392931,
+      "time_iso": "2026-05-01T02:12:24.392935Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777601592.811939,
+      "time_iso": "2026-05-01T02:13:12.811943Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777601640.363322,
+      "time_iso": "2026-05-01T02:14:00.363341Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_build",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602242.033768,
+      "time_iso": "2026-05-01T02:24:02.033775Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602242.805131,
+      "time_iso": "2026-05-01T02:24:02.805136Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602243.936645,
+      "time_iso": "2026-05-01T02:24:03.936660Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602245.363512,
+      "time_iso": "2026-05-01T02:24:05.363517Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602251.395859,
+      "time_iso": "2026-05-01T02:24:11.395866Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_build",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602254.1283321,
+      "time_iso": "2026-05-01T02:24:14.128346Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_weaponize",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602256.92192,
+      "time_iso": "2026-05-01T02:24:16.921925Z",
+      "lesson": 2,
+      "lesson_id": "recon"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602258.664352,
+      "time_iso": "2026-05-01T02:24:18.664359Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_scan_start",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602268.32034,
+      "time_iso": "2026-05-01T02:24:28.320345Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest_all",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602270.4801102,
+      "time_iso": "2026-05-01T02:24:30.480115Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "j.doe@acme-corp.com",
+        "role": "CFO",
+        "harvested_count": 1
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602270.7016242,
+      "time_iso": "2026-05-01T02:24:30.701628Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "m.smith@acme-corp.com",
+        "role": "IT Administrator",
+        "harvested_count": 2
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602270.9219708,
+      "time_iso": "2026-05-01T02:24:30.921979Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "a.kim@acme-corp.com",
+        "role": "HR Director",
+        "harvested_count": 3
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602271.144338,
+      "time_iso": "2026-05-01T02:24:31.144348Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "b.johnson@acme-corp.com",
+        "role": "Software Engineer",
+        "harvested_count": 4
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602271.365427,
+      "time_iso": "2026-05-01T02:24:31.365431Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "c.lee@acme-corp.com",
+        "role": "Security Analyst",
+        "harvested_count": 5
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602271.5869792,
+      "time_iso": "2026-05-01T02:24:31.586989Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_harvest",
+      "detail": {
+        "email": "d.wang@acme-corp.com",
+        "role": "VP Engineering",
+        "harvested_count": 6
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602272.029036,
+      "time_iso": "2026-05-01T02:24:32.029042Z",
+      "lesson": 2,
+      "lesson_id": "recon",
+      "action": "recon_complete",
+      "detail": {
+        "total": 6
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602280.2154062,
+      "time_iso": "2026-05-01T02:24:40.215412Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602393.3191428,
+      "time_iso": "2026-05-01T02:26:33.319149Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602400.344738,
+      "time_iso": "2026-05-01T02:26:40.344750Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_build",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602404.40179,
+      "time_iso": "2026-05-01T02:26:44.401796Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_weaponize",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602407.4523258,
+      "time_iso": "2026-05-01T02:26:47.452334Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_send",
+      "detail": {
+        "target": "m.smith@acme-corp.com"
+      }
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602409.255019,
+      "time_iso": "2026-05-01T02:26:49.255027Z",
+      "lesson": 3,
+      "lesson_id": "armdeliver",
+      "action": "armdeliver_complete",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602422.454001,
+      "time_iso": "2026-05-01T02:27:02.454008Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602442.360375,
+      "time_iso": "2026-05-01T02:27:22.360387Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_enable_content",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777602445.436478,
+      "time_iso": "2026-05-01T02:27:25.436488Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_foothold",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602871.555472,
+      "time_iso": "2026-05-01T02:34:31.555476Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777602872.7371562,
+      "time_iso": "2026-05-01T02:34:32.737161Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603189.572913,
+      "time_iso": "2026-05-01T02:39:49.572919Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603202.177245,
+      "time_iso": "2026-05-01T02:40:02.177250Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603307.079063,
+      "time_iso": "2026-05-01T02:41:47.079067Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603311.984869,
+      "time_iso": "2026-05-01T02:41:51.984874Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603382.109581,
+      "time_iso": "2026-05-01T02:43:02.109585Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777603386.648135,
+      "time_iso": "2026-05-01T02:43:06.648140Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_enable_content",
+      "detail": null
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603435.567213,
+      "time_iso": "2026-05-01T02:43:55.567221Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603436.4956968,
+      "time_iso": "2026-05-01T02:43:56.495707Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603784.364579,
+      "time_iso": "2026-05-01T02:49:44.364583Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777603798.574236,
+      "time_iso": "2026-05-01T02:49:58.574240Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_enable_content",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777603801.6499681,
+      "time_iso": "2026-05-01T02:50:01.649983Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_foothold",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777603823.5395489,
+      "time_iso": "2026-05-01T02:50:23.539553Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_beacon",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777603830.283585,
+      "time_iso": "2026-05-01T02:50:30.283591Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_execute_commands",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777603832.4467468,
+      "time_iso": "2026-05-01T02:50:32.446752Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "compromise_complete",
+      "detail": null
+    },
+    {
+      "type": "lesson_event",
+      "time": 1777603862.625062,
+      "time_iso": "2026-05-01T02:51:02.625070Z",
+      "lesson": 4,
+      "lesson_id": "compromise",
+      "action": "scene_reset",
+      "detail": {
+        "scene": "compromise"
+      }
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1777603882.1617448,
+      "time_iso": "2026-05-01T02:51:22.161752Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "avatar_select",
+      "time": 1777603886.755104,
+      "time_iso": "2026-05-01T02:51:26.755108Z",
+      "avatar_id": "neko",
+      "accepted": true
     }
   ],
-  "quiz_answers": {
-    "1": {
-      "challenge_id": "battle",
-      "type": "battle",
-      "submission": {
-        "victory": true,
-        "turns": [
-          {
-            "turn": 1,
-            "move_id": "recon_linkedin",
-            "move_name": "LinkedIn Harvest",
-            "posture": "honeypotting",
-            "posture_name": "Honeypotting",
-            "verdict": "strong",
-            "progress_added": 100,
-            "detection_added": 5,
-            "phase_cleared": true,
-            "phase_idx_before": 0,
-            "hit": true,
-            "objective": null
-          },
-          {
-            "turn": 2,
-            "move_id": "deliver_phish",
-            "move_name": "Spear-Phish Email",
-            "posture": "hunting",
-            "posture_name": "Hunting",
-            "verdict": "strong",
-            "progress_added": 100,
-            "detection_added": 5,
-            "phase_cleared": true,
-            "phase_idx_before": 1,
-            "hit": true,
-            "objective": null
-          },
-          {
-            "turn": 3,
-            "move_id": "compromise_macro",
-            "move_name": "Macro Trigger",
-            "posture": "hardening",
-            "posture_name": "Hardening",
-            "verdict": "strong",
-            "progress_added": 100,
-            "detection_added": 5,
-            "phase_cleared": true,
-            "phase_idx_before": 2,
-            "hit": true,
-            "objective": null
-          },
-          {
-            "turn": 4,
-            "move_id": "escalate_cred_hunt",
-            "move_name": "AWS Cred Hunt",
-            "posture": "rotating",
-            "posture_name": "Key Rotation",
-            "verdict": "strong",
-            "progress_added": 100,
-            "detection_added": 5,
-            "phase_cleared": true,
-            "phase_idx_before": 3,
-            "hit": true,
-            "objective": null
-          },
-          {
-            "turn": 5,
-            "move_id": "exfil_data",
-            "move_name": "Data Exfiltration",
-            "posture": "triaging",
-            "posture_name": "Triaging",
-            "verdict": "strong",
-            "progress_added": 100,
-            "detection_added": 5,
-            "phase_cleared": true,
-            "phase_idx_before": 4,
-            "hit": true,
-            "objective": "exfil"
-          }
-        ],
-        "phases_cleared": 5,
-        "phases_total": 5,
-        "detection_final": 55,
-        "detection_max": 100,
-        "turns_used": 5,
-        "max_turns": 12,
-        "victory_mode": "exfil",
-        "defeat_mode": null
-      },
-      "correct": 5,
-      "total": 5,
-      "victory": true
-    }
-  },
-  "quiz_score": 100,
-  "quiz_completed_at": "2026-04-30T20:47:44.008988Z"
+  "quiz_answers": {},
+  "quiz_score": null,
+  "quiz_completed_at": null
 }
