@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "The Cyber Kill Chain",
-    "course": "COMS 4170W · Design of User Interfaces",
+    "course": "COMS 4170W · User Interface Design",
     "subtitle": "Cyber Kill Chain Educational Module",
     "credit": "by Nicolas Hunt (nh2905@columbia.edu"
   },
@@ -24,7 +24,7 @@
       "title": "Every cyberattack tells the same story.",
       "scene": "framework",
       "mascot_script": [
-        {"text": "Welcome to lesson 1! The Cyber Kill Chain was developed by Lockheed Martin as a map of how every cyberattack moves forward.", "expr": "teaching"},
+        {"text": "Welcome to lesson 1! The Cyber Kill Chain was originally developed by Lockheed Martin as a map of how every cyberattack moves forward.", "expr": "teaching"},
         {"text": "Every breach, big or small, typically needs to complete each of these 5 phases to succeed.", "expr": "thinking"},
         {"text": "Click any circle below to preview that phase.", "expr": "excited"}
       ],
@@ -37,9 +37,9 @@
         "chain_nodes": [
           {"num": 1, "label": "Recon",              "name": "Reconnaissance",      "desc": "The attacker researches the target, scanning networks, harvesting emails, and mapping out the organization's attack surface."},
           {"num": 2, "label": "Arm & Deliver",      "name": "Arm & Deliver",       "desc": "The attacker crafts a tailored weapon (malware or a malicious document) and delivers it via phishing or compromised channels."},
-          {"num": 3, "label": "Initial Compromise", "name": "Initial Compromise",  "desc": "The weapon detonates: a vulnerability is triggered, code executes, and the attacker locks in persistent access through an encrypted command channel."},
-          {"num": 4, "label": "Escalate Privs",     "name": "Escalate Privileges", "desc": "From a regular user foothold, the attacker hunts for plaintext cloud credentials and chains AWS IAM roles to reach account-admin."},
-          {"num": 5, "label": "Exfiltrate",         "name": "Exfiltration",        "desc": "The endgame: sensitive data is located, compressed, and secretly transferred to the attacker's external servers."}
+          {"num": 3, "label": "Initial Compromise", "name": "Initial Compromise",  "desc": "The weapon detonates: a vulnerability is triggered, code executes, and the attacker locks in persistent access to the compromised machine."},
+          {"num": 4, "label": "Privilege Escalation",     "name": "Privilege Escalation", "desc": "The attacker expands access from the initial foothold, seeking higher permissions through misconfigurations, stolen credentials, or vulnerable services."},
+          {"num": 5, "label": "Exfiltration",         "name": "Exfiltration",        "desc": "The endgame: sensitive data is located, compressed, and secretly transferred to the attacker's external servers. Randsomeware is often deployed for further extortion."}
         ]
       }
     },
@@ -106,13 +106,13 @@
     {
       "id": "escalate",
       "num": 5,
-      "label": "Phase 4 · Escalate Privileges",
+      "label": "Phase 4 · Privilege Escalation",
       "phase_num": 4,
-      "title": "Phase 4 · Escalate Privileges",
+      "title": "Phase 4 · Privilege Escalation",
       "aka": "AWS Credential Hunt",
       "scene": "escalate",
       "mascot_script": [
-        {"text": "Phase 4 · Escalate Privileges. The shell on Mike's box is just a regular user — useless for the crown jewels.", "expr": "thinking"},
+        {"text": "Phase 4 · Privilege Escalation. The shell on Mike's box is just a regular user — useless for the crown jewels.", "expr": "thinking"},
         {"text": "Modern attackers love this trick: grep the disk for ~/.aws/credentials. Devs leave plaintext keys behind ALL the time.", "expr": "teaching"},
         {"text": "Walk the three steps: hunt the file, read the keys, then sts:AssumeRole into the org-admin role. Game over.", "expr": "alert"}
       ],
@@ -141,7 +141,7 @@
       "scene": "exfil",
       "mascot_script": [
         {"text": "Phase 5 · Exfiltration. Remember the OrganizationAccountAdmin role you assumed in Phase 4? It can read every S3 bucket, every RDS snapshot, every Secrets Manager entry in the account.", "expr": "worried"},
-        {"text": "The attacker just runs aws s3 cp and aws secretsmanager get-secret-value with their admin session — the API logs it as a totally normal call.", "expr": "teaching"},
+        {"text": "With admin access, the attacker can copy cloud data while the activity looks like normal AWS usage.", "expr": "teaching"},
         {"text": "Click any AWS resource to siphon it into the attacker's S3 bucket, or smash-and-grab everything at once.", "expr": "alert"}
       ],
       "body": {
@@ -176,7 +176,7 @@
           {"num": 1, "phase": "Recon",              "title": "LinkedIn & Social Profiling",     "desc": "Attackers profiled an MGM IT staffer by scraping LinkedIn and other social media — his role, his colleagues, even his speaking style."},
           {"num": 2, "phase": "Arm & Deliver",      "title": "The 10-Minute Phone Call",        "desc": "They called the IT help desk impersonating the employee and convinced the agent to reset his credentials — no malware needed."},
           {"num": 3, "phase": "Initial Compromise", "title": "Okta Tenant Takeover",            "desc": "With the reset credential, they signed into MGM's Okta tenant, dropped a session cookie, and pivoted into on-prem Active Directory for a durable foothold."},
-          {"num": 4, "phase": "Escalate Privileges","title": "Secondary Identity Provider",     "desc": "They added a second, attacker-controlled identity provider to MGM's federation, minting their own admin tokens at will."},
+          {"num": 4, "phase": "Privilege Escalation","title": "Secondary Identity Provider",     "desc": "They added a second, attacker-controlled identity provider to MGM's federation, minting their own admin tokens at will."},
           {"num": 5, "phase": "Exfiltrate",         "title": "Ransomware & $100M in Losses",    "desc": "BlackCat ransomware was deployed across thousands of ESXi hosts; slot machines, room keys, and reservations went dark for 10 days."}
         ],
         "impact": [
@@ -224,7 +224,7 @@
         "desc": "One challenge to rule them all. Face Cyber Inu, the cybernetic blue-team boss, in a turn-based duel. Pick the right attack against his current defensive posture and win the day.",
         "mascot_script": [
           {"text": "This is it. The Final Battle pits you against Cyber Inu, a security defender.", "expr": "alert"},
-          {"text": "Your objective is to clear all five phases in 12 turns: Recon → Arm/Deliver → Initial Compromise → Escalate → Exfil before his Detection bar maxes out.", "expr": "teaching"},
+          {"text": "Your objective is to clear all five phases in 12 turns: Recon → Arm/Deliver → Initial Compromise → Escalate → Exfiltrate before his Detection bar maxes out.", "expr": "teaching"},
           {"text": "Cyber Inu will deploy defensive measures to counter your attacks.", "expr": "excited"}
         ],
         "commit_label": "Begin Battle",
@@ -461,7 +461,7 @@
             },
             {
               "phase": 4,
-              "label": "Escalate Privileges",
+              "label": "Privilege Escalation",
               "short_label": "Escalate",
               "kicker": "P4 · ESCALATE",
               "posture": "rotating",
@@ -472,7 +472,7 @@
                   "name": "AWS Cred Hunt",
                   "kicker": "GREP",
                   "phase": 4,
-                  "phase_label": "Escalate Privileges",
+                  "phase_label": "Privilege Escalation",
                   "tagline": "Grep the disk for ~/.aws/credentials.",
                   "accuracy": 1.0,
                   "strong_vs": "rotating",
@@ -486,7 +486,7 @@
                   "name": "IMDSv2 Steal",
                   "kicker": "IMDS",
                   "phase": 4,
-                  "phase_label": "Escalate Privileges",
+                  "phase_label": "Privilege Escalation",
                   "tagline": "Pull instance creds from 169.254.169.254.",
                   "accuracy": 1.0,
                   "strong_vs": null,
@@ -500,7 +500,7 @@
                   "name": "AssumeRole Pivot",
                   "kicker": "STS",
                   "phase": 4,
-                  "phase_label": "Escalate Privileges",
+                  "phase_label": "Privilege Escalation",
                   "tagline": "Chain sts:AssumeRole into account-admin.",
                   "accuracy": 1.0,
                   "strong_vs": null,
@@ -522,7 +522,7 @@
             {
               "phase": 5,
               "label": "Exfiltration",
-              "short_label": "Exfil",
+              "short_label": "Exfiltrate",
               "kicker": "P5 · EXFIL",
               "posture": "triaging",
               "intro_line": "You're inside. The crown jewels are reachable. Move them out before forensics catches up.",
@@ -588,12 +588,12 @@
             "exfil": {
               "kicker": "EXFILTRATION COMPLETE",
               "title": "Crown Jewels Stolen",
-              "text": "Customer databases, source code, and signing keys reached your C2 before Cyber Inu's IR team closed the window. Mission complete — Cyber Inu joins your roster."
+              "text": "Customer databases, source code, and signing keys reached your C2 before Cyber Inu's IR team closed the window."
             },
             "ransom": {
               "kicker": "RANSOMWARE DEPLOYED",
               "title": "Network Held Hostage",
-              "text": "BlackCat encryption rolled across thousands of ESXi hosts before the SOC could pull the plug. Mission complete — Cyber Inu joins your roster."
+              "text": "BlackCat encryption rolled across thousands of ESXi hosts before the SOC could pull the plug."
             },
             "wipe": {
               "kicker": "TRACKS WIPED",

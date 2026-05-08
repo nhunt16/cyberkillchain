@@ -3357,7 +3357,7 @@ img, svg {
   color: var(--text-primary);
 }
 
-/* --- Escalate Privileges Scene: terminal + IAM console --- */
+/* --- Escalate Privileges Scene: terminal + AWS Management Console --- */
 .escalate-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -3368,195 +3368,420 @@ img, svg {
   display: flex;
   flex-direction: column;
 }
-.mockup-body--escalate-console {
-  padding: 18px;
+
+/* ---------- AWS Management Console mock-up ---------- */
+.aws-console-window {
+  background: #ffffff;
+  color: #16191f;
+  font-family: 'Amazon Ember', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.mockup-body--aws-console {
+  padding: 0;
+  background: #fafafa;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background: var(--bg-card);
+  min-height: 0;
 }
-.escalate-console-header {
+
+/* Top global navigation (dark navy) */
+.aws-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+  height: 40px;
+  background: #232f3e;
+  color: #ffffff;
+  font-size: 12px;
+  border-bottom: 1px solid #131a22;
+}
+.aws-nav-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.aws-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  padding: 2px 4px 0;
+  user-select: none;
+}
+.aws-logo-text {
+  font-weight: 700;
+  font-size: 15px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  font-family: 'Amazon Ember', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.aws-logo-smile {
+  width: 22px;
+  height: 7px;
+  margin-top: 1px;
+  display: block;
+}
+.aws-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: default;
+  white-space: nowrap;
+}
+.aws-nav-grid {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 3px);
+  grid-template-rows: repeat(3, 3px);
+  gap: 1px;
+}
+.aws-nav-grid span {
+  width: 3px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 1px;
+}
+.aws-nav-search {
+  flex: 1 1 140px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  background: #ffffff;
+  color: #545b64;
+  border-radius: 2px;
+  font-size: 12px;
+  max-width: 220px;
+  min-width: 80px;
+}
+.aws-nav-search-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.aws-nav-right {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+.aws-nav-pill {
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.aws-nav-account {
+  color: #ff9900;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* Service breadcrumb strip */
+.aws-service-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #d5dbdb;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.aws-service-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: #ff9900;
+  color: #16191f;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.aws-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #545b64;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.aws-breadcrumb-link { color: #0972d3; cursor: default; }
+.aws-breadcrumb-sep { color: #879596; }
+.aws-breadcrumb-current {
+  color: #16191f;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* Console body */
+.aws-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: #fafafa;
+  flex: 1;
+}
+
+/* Tabs */
+.aws-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #d5dbdb;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.aws-tabs::-webkit-scrollbar { display: none; }
+.aws-tab {
+  padding: 8px 14px;
+  font-size: 12px;
+  color: #545b64;
+  border-bottom: 2px solid transparent;
+  cursor: default;
+  white-space: nowrap;
+  margin-bottom: -1px;
+}
+.aws-tab.is-active {
+  color: #0972d3;
+  border-bottom-color: #0972d3;
+  font-weight: 700;
+}
+
+/* Generic AWS panel */
+.aws-panel {
+  background: #ffffff;
+  border: 1px solid #d5dbdb;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 1px rgba(0, 28, 36, 0.05);
+}
+.aws-panel-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #eaeded;
+  background: #ffffff;
+  font-size: 13px;
+  color: #16191f;
+  font-weight: 700;
 }
-.escalate-console-svc {
-  color: var(--text-secondary);
-  font-weight: 600;
-}
-.escalate-id-card {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+.aws-panel-title { color: #16191f; font-weight: 700; }
+.aws-panel-body { padding: 14px 16px; }
+
+/* AWS-style button */
+.aws-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--bg-elevated);
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: default;
+  white-space: nowrap;
+}
+.aws-btn-primary {
+  background: #0972d3;
+  color: #ffffff;
+}
+
+/* Identity / Summary card on AWS skin */
+.aws-console-window .escalate-id-card {
+  display: block;
+  border: 1px solid #d5dbdb;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 0;
   transition: border-color 0.4s ease, background 0.4s ease;
 }
-.escalate-id-card[data-state="user"] {
-  border-color: rgba(255, 184, 77, 0.4);
+.aws-console-window .escalate-id-card[data-state="user"] {
+  border-color: #d5dbdb;
 }
-.escalate-id-card[data-state="admin"] {
-  border-color: rgba(255, 71, 87, 0.55);
-  background: linear-gradient(135deg, rgba(255, 71, 87, 0.10), rgba(124, 92, 252, 0.10));
+.aws-console-window .escalate-id-card[data-state="admin"] {
+  border-color: #d91515;
+  background: linear-gradient(180deg, #ffffff 0%, #fdf3f3 100%);
 }
-.escalate-id-portrait {
+.aws-console-window .escalate-id-card[data-state="admin"] .aws-panel-head {
+  border-bottom-color: #f7c6c7;
+}
+.escalate-id-body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 16px;
+  align-items: start;
+  padding: 14px 16px;
+}
+.aws-console-window .escalate-id-portrait {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  background: var(--bg-surface);
-  color: var(--text-secondary);
+  background: #f1f3f3;
+  color: #545b64;
+  border: 1px solid #d5dbdb;
 }
-.escalate-id-card[data-state="admin"] .escalate-id-portrait {
-  color: var(--danger);
-  background: rgba(255, 71, 87, 0.12);
+.aws-console-window .escalate-id-card[data-state="admin"] .escalate-id-portrait {
+  background: rgba(217, 21, 21, 0.10);
+  color: #d91515;
+  border-color: rgba(217, 21, 21, 0.4);
 }
-.escalate-id-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.aws-console-window .escalate-id-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
   min-width: 0;
 }
-.escalate-id-kicker {
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  font-weight: 600;
+.aws-console-window .escalate-id-meta dt,
+.aws-console-window .escalate-id-meta dd {
+  margin: 0;
 }
-.escalate-id-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-.escalate-id-arn {
-  font-family: 'SF Mono', 'Fira Code', monospace;
+.aws-console-window .escalate-id-kicker {
   font-size: 11px;
-  color: var(--text-secondary);
+  letter-spacing: 0;
+  text-transform: none;
+  color: #545b64;
+  font-weight: 700;
+  margin-top: 4px;
+}
+.aws-console-window .escalate-id-meta dt:first-child { margin-top: 0; }
+.aws-console-window .escalate-id-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #16191f;
+}
+.aws-console-window .escalate-id-arn {
+  font-family: 'Monaco', 'Menlo', 'SF Mono', monospace;
+  font-size: 11.5px;
+  color: #16191f;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Identity badge */
 .escalate-id-badge {
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  background: var(--bg-surface);
-  color: var(--text-tertiary);
-  border: 1px solid var(--border);
+  background: #eaeded;
+  color: #545b64;
+  border: 1px solid #d5dbdb;
   transition: all 0.3s ease;
 }
-.escalate-id-card[data-state="user"] .escalate-id-badge {
-  background: rgba(255, 184, 77, 0.12);
-  color: var(--warning);
-  border-color: rgba(255, 184, 77, 0.3);
+.aws-console-window .escalate-id-card[data-state="user"] .escalate-id-badge {
+  background: #fff8c5;
+  color: #6a4f1a;
+  border-color: #f3d878;
 }
-.escalate-id-card[data-state="admin"] .escalate-id-badge {
-  background: rgba(255, 71, 87, 0.18);
-  color: var(--danger);
-  border-color: rgba(255, 71, 87, 0.4);
+.aws-console-window .escalate-id-card[data-state="admin"] .escalate-id-badge {
+  background: #d91515;
+  color: #ffffff;
+  border-color: #d91515;
 }
-.escalate-policies {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--bg-surface);
+
+/* Permissions table panel */
+.aws-console-window .escalate-policies {
+  background: #ffffff;
+  border: 1px solid #d5dbdb;
+  border-radius: 4px;
   overflow: hidden;
 }
-.escalate-policies-header {
+.aws-console-window .escalate-policies-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 14px;
-  background: var(--bg-elevated);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeded;
+  color: #16191f;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
 }
-.escalate-policies-list {
+.aws-console-window .escalate-policies-header > span:first-child { font-weight: 700; }
+.aws-table-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #fafafa;
+  color: #545b64;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #eaeded;
+}
+.aws-console-window .escalate-policies-list {
   display: flex;
   flex-direction: column;
+  background: #ffffff;
 }
-.escalate-policy-empty {
-  padding: 18px 14px;
-  font-size: 12px;
-  color: var(--text-tertiary);
+.aws-console-window .escalate-policy-empty {
+  padding: 22px 16px;
+  font-size: 12.5px;
+  color: #687078;
   text-align: center;
-  font-style: italic;
+  font-style: normal;
+  background: #ffffff;
 }
-.escalate-policy-row {
-  display: flex;
+.aws-console-window .escalate-policy-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  padding: 10px 14px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 12px;
-  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  font-family: 'Amazon Ember', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12.5px;
+  border-bottom: 1px solid #eaeded;
 }
-.escalate-policy-row:last-child {
-  border-bottom: none;
-}
-.escalate-policy-row.is-danger {
-  background: rgba(255, 71, 87, 0.06);
-}
-.escalate-policy-name {
-  color: var(--text-primary);
+.aws-console-window .escalate-policy-row:last-child { border-bottom: none; }
+.aws-console-window .escalate-policy-row.is-danger { background: #fdf3f3; }
+.aws-console-window .escalate-policy-name {
+  color: #0972d3;
   font-weight: 500;
 }
-.escalate-policy-row.is-danger .escalate-policy-name {
-  color: var(--danger);
+.aws-console-window .escalate-policy-row.is-danger .escalate-policy-name {
+  color: #d91515;
+  font-weight: 700;
 }
-.escalate-policy-tag {
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-.escalate-arrow {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 10px;
-  font-size: 10px;
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-.escalate-arrow-low { color: var(--warning); }
-.escalate-arrow-high { color: var(--danger); }
-.escalate-arrow-shaft {
-  position: relative;
-  height: 4px;
-  background: var(--bg-surface);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.escalate-arrow-fill {
-  position: absolute;
-  inset: 0;
-  width: 0%;
-  background: linear-gradient(90deg, var(--warning), var(--danger));
-  transition: width 0.6s var(--ease-out);
+.aws-console-window .escalate-policy-tag {
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #545b64;
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
   .escalate-grid { grid-template-columns: 1fr; }
+  .aws-nav-account { display: none; }
 }
 
 

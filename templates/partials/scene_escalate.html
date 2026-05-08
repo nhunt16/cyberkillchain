@@ -22,46 +22,99 @@
         </div>
       </div>
 
-      <div class="mockup-window escalate-iam-window">
+      <div class="mockup-window aws-console-window escalate-iam-window">
         <div class="mockup-titlebar">
           <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-          <div class="mockup-url"><span class="mockup-lock">&#128274;</span> console.aws.amazon.com/iam</div>
+          <div class="mockup-url"><span class="mockup-lock">&#128274;</span> us-east-1.console.aws.amazon.com/iamv2/home#/users/details/{{ lesson.body.leaked_keys.owner }}</div>
         </div>
-        <div class="mockup-body mockup-body--escalate-console">
-          <div class="escalate-console-header">
-            <span class="escalate-console-svc">IAM · Identity</span>
-            <span class="escalate-console-region">us-east-1 · {{ lesson.body.ec2_instance_id }}</span>
-          </div>
+        <div class="mockup-body mockup-body--aws-console">
 
-          <div class="escalate-id-card" id="escalateIdCard" data-state="idle">
-            <div class="escalate-id-portrait" aria-hidden="true">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 21a8 8 0 0 1 16 0"/>
+          <div class="aws-nav">
+            <div class="aws-nav-left">
+              <span class="aws-logo" aria-label="AWS">
+                <span class="aws-logo-text">aws</span>
+                <svg class="aws-logo-smile" viewBox="0 0 26 8" aria-hidden="true">
+                  <path d="M2 1.5 Q13 8 24 1.5" stroke="#ff9900" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <path d="M19 1.5 L24 1.5 L24 5.5" stroke="#ff9900" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="aws-nav-btn" aria-hidden="true">
+                <span class="aws-nav-grid">
+                  <span></span><span></span><span></span>
+                  <span></span><span></span><span></span>
+                  <span></span><span></span><span></span>
+                </span>
+                Services
+              </span>
+            </div>
+            <div class="aws-nav-search" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l3 3" stroke-linecap="round"/>
               </svg>
+              <span class="aws-nav-search-text">Search</span>
             </div>
-            <div class="escalate-id-meta">
-              <span class="escalate-id-kicker">CURRENT IDENTITY</span>
-              <span class="escalate-id-name" id="escalateIdName">— no identity —</span>
-              <span class="escalate-id-arn" id="escalateIdArn">awaiting credentials…</span>
-            </div>
-            <div class="escalate-id-badge" id="escalateIdBadge">LOCKED</div>
-          </div>
-
-          <div class="escalate-policies" id="escalatePolicies">
-            <div class="escalate-policies-header">
-              <span>Attached policies</span>
-              <span id="escalatePoliciesCount">0</span>
-            </div>
-            <div class="escalate-policies-list" id="escalatePoliciesList">
-              <div class="escalate-policy-empty">Run a step to populate identity context.</div>
+            <div class="aws-nav-right">
+              <span class="aws-nav-pill">N. Virginia &#9662;</span>
+              <span class="aws-nav-account">{{ lesson.body.leaked_keys.owner }} @ acme-prod</span>
             </div>
           </div>
 
-          <div class="escalate-arrow" aria-hidden="true">
-            <span class="escalate-arrow-low">jenkins-deployer</span>
-            <span class="escalate-arrow-shaft"><span class="escalate-arrow-fill" id="escalateArrowFill"></span></span>
-            <span class="escalate-arrow-high">OrgAccountAdmin</span>
+          <div class="aws-service-strip">
+            <span class="aws-service-tag">IAM</span>
+            <span class="aws-breadcrumb">
+              <span class="aws-breadcrumb-link">Identity and Access Management (IAM)</span>
+              <span class="aws-breadcrumb-sep">&rsaquo;</span>
+              <span class="aws-breadcrumb-link" id="escalateBreadcrumbSection">Users</span>
+              <span class="aws-breadcrumb-sep">&rsaquo;</span>
+              <span class="aws-breadcrumb-current" id="escalateBreadcrumbName">&mdash;</span>
+            </span>
+          </div>
+
+          <div class="aws-body">
+
+            <div class="aws-panel escalate-id-card" id="escalateIdCard" data-state="idle">
+              <div class="aws-panel-head">
+                <span class="aws-panel-title">Summary</span>
+                <span class="escalate-id-badge" id="escalateIdBadge">LOCKED</span>
+              </div>
+              <div class="aws-panel-body escalate-id-body">
+                <div class="escalate-id-portrait" aria-hidden="true">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 21a8 8 0 0 1 16 0"/>
+                  </svg>
+                </div>
+                <dl class="escalate-id-meta">
+                  <dt class="escalate-id-kicker">User name</dt>
+                  <dd class="escalate-id-name" id="escalateIdName">&mdash; no identity &mdash;</dd>
+                  <dt class="escalate-id-kicker">ARN</dt>
+                  <dd class="escalate-id-arn" id="escalateIdArn">awaiting credentials&hellip;</dd>
+                </dl>
+              </div>
+            </div>
+
+            <div class="aws-tabs" role="tablist">
+              <span class="aws-tab is-active" role="tab">Permissions</span>
+              <span class="aws-tab" role="tab">Groups</span>
+              <span class="aws-tab" role="tab">Tags</span>
+              <span class="aws-tab" role="tab">Security credentials</span>
+              <span class="aws-tab" role="tab">Access Advisor</span>
+            </div>
+
+            <div class="aws-panel escalate-policies" id="escalatePolicies">
+              <div class="aws-panel-head escalate-policies-header">
+                <span>Permissions policies (<span id="escalatePoliciesCount">0</span>)</span>
+                <span class="aws-btn aws-btn-primary" aria-hidden="true">Add permissions</span>
+              </div>
+              <div class="aws-table-head">
+                <span>Policy name</span>
+                <span>Type</span>
+              </div>
+              <div class="escalate-policies-list" id="escalatePoliciesList">
+                <div class="escalate-policy-empty">No permissions yet &middot; run a step to load this user's policies.</div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

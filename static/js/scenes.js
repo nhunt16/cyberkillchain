@@ -586,7 +586,8 @@
     var idBadge = scene.querySelector('#escalateIdBadge');
     var policiesList = scene.querySelector('#escalatePoliciesList');
     var policiesCount = scene.querySelector('#escalatePoliciesCount');
-    var arrowFill = scene.querySelector('#escalateArrowFill');
+    var bcSection = scene.querySelector('#escalateBreadcrumbSection');
+    var bcName = scene.querySelector('#escalateBreadcrumbName');
 
     var foundFile = scene.dataset.foundFile || '~/.aws/credentials';
     var accessKey = scene.dataset.accessKey || '';
@@ -632,6 +633,18 @@
       if (name)      idName.textContent = name;
       if (arn)       idArn.textContent = arn;
       if (badgeText) idBadge.textContent = badgeText;
+      if (bcSection && bcName) {
+        if (state === 'admin') {
+          bcSection.textContent = 'Roles';
+          bcName.textContent = name || 'OrganizationAccountAdmin';
+        } else if (state === 'user') {
+          bcSection.textContent = 'Users';
+          bcName.textContent = name || keyOwner;
+        } else {
+          bcSection.textContent = 'Users';
+          bcName.textContent = '\u2014';
+        }
+      }
     }
 
     function renderPolicies(list) {
@@ -671,7 +684,6 @@
       btn.innerHTML = '<span class="scene-action-num">1</span> File Found';
       btns.read.disabled = false;
       btns.reset.disabled = false;
-      arrowFill.style.width = '20%';
       setHint(scene, 'Found <strong>' + escapeHtml(foundFile) + '</strong>. Now read the keys to confirm what they unlock.');
     }
 
@@ -684,7 +696,6 @@
         { name: 'AmazonEC2ReadOnlyAccess', tag: 'AWS managed' },
         { name: 'jenkins-deploy-policy',   tag: 'inline' }
       ]);
-      arrowFill.style.width = '55%';
       btn.classList.add('done');
       btn.innerHTML = '<span class="scene-action-num">2</span> Keys Identified';
       btns.assume.disabled = false;
@@ -700,7 +711,6 @@
         { name: 'AdministratorAccess',         tag: 'AWS managed', danger: true },
         { name: 'AssumeRole · all accounts',   tag: 'inline',      danger: true }
       ]);
-      arrowFill.style.width = '100%';
       btn.classList.add('done');
       btn.innerHTML = '<span class="scene-action-num">3</span> Admin Assumed';
       setHint(scene, '<strong>Privilege escalated.</strong> A regular dev key just turned into account-admin.', 'success');
@@ -712,7 +722,6 @@
       setIdState('idle', '— no identity —', 'awaiting credentials…', 'LOCKED');
       policiesList.innerHTML = '<div class="escalate-policy-empty">Run a step to populate identity context.</div>';
       policiesCount.textContent = '0';
-      arrowFill.style.width = '0%';
 
       btns.search.disabled = false;
       btns.search.classList.remove('done');

@@ -62,20 +62,39 @@
      Sydney.
      ------------------------------------------------------------ */
   var cities = [
-    { x: 0.161, y: 0.296 },
-    { x: 0.294, y: 0.274 },
-    { x: 0.226, y: 0.437 },
-    { x: 0.370, y: 0.747 },
-    { x: 0.500, y: 0.195 },
-    { x: 0.509, y: 0.526 },
-    { x: 0.602, y: 0.583 },
-    { x: 0.551, y: 0.822 },
-    { x: 0.604, y: 0.169 },
-    { x: 0.702, y: 0.434 },
-    { x: 0.788, y: 0.564 },
-    { x: 0.823, y: 0.280 },
-    { x: 0.888, y: 0.311 },
-    { x: 0.920, y: 0.822 }
+    { x: 0.161, y: 0.296 },  // San Francisco
+    { x: 0.172, y: 0.324 },  // Los Angeles
+    { x: 0.158, y: 0.213 },  // Vancouver
+    { x: 0.256, y: 0.265 },  // Chicago
+    { x: 0.294, y: 0.274 },  // New York
+    { x: 0.226, y: 0.437 },  // Mexico City
+    { x: 0.294, y: 0.544 },  // Bogotá
+    { x: 0.286, y: 0.662 },  // Lima
+    { x: 0.370, y: 0.747 },  // São Paulo
+    { x: 0.339, y: 0.824 },  // Buenos Aires
+    { x: 0.500, y: 0.195 },  // London
+    { x: 0.489, y: 0.279 },  // Madrid
+    { x: 0.533, y: 0.265 },  // Rome
+    { x: 0.581, y: 0.272 },  // Istanbul
+    { x: 0.604, y: 0.169 },  // Moscow
+    { x: 0.586, y: 0.353 },  // Cairo
+    { x: 0.509, y: 0.526 },  // Lagos
+    { x: 0.602, y: 0.583 },  // Nairobi
+    { x: 0.578, y: 0.765 },  // Johannesburg
+    { x: 0.551, y: 0.822 },  // Cape Town
+    { x: 0.642, y: 0.309 },  // Tehran
+    { x: 0.653, y: 0.390 },  // Dubai
+    { x: 0.702, y: 0.434 },  // Mumbai
+    { x: 0.778, y: 0.471 },  // Bangkok
+    { x: 0.788, y: 0.564 },  // Singapore
+    { x: 0.794, y: 0.618 },  // Jakarta
+    { x: 0.817, y: 0.412 },  // Hong Kong
+    { x: 0.823, y: 0.280 },  // Beijing
+    { x: 0.853, y: 0.301 },  // Seoul
+    { x: 0.888, y: 0.311 },  // Tokyo
+    { x: 0.836, y: 0.471 },  // Manila
+    { x: 0.920, y: 0.822 },  // Sydney
+    { x: 0.983, y: 0.846 }   // Auckland
   ];
 
   function resize() {
@@ -100,7 +119,7 @@
   /* Occasional link arcs between two cities */
   var arcs = [];
   function spawnArc() {
-    if (!running || arcs.length > 2) return;
+    if (!running || arcs.length > 5) return;
     var a = cities[(Math.random() * cities.length) | 0];
     var b = cities[(Math.random() * cities.length) | 0];
     if (a === b) return;
@@ -108,7 +127,7 @@
     if (Math.sqrt(dx * dx + dy * dy) < 0.18) return;
     arcs.push({ from: a, to: b, t: 0, speed: 0.0032 + Math.random() * 0.004 });
   }
-  setInterval(spawnArc, 2400);
+  setInterval(spawnArc, 1200);
 
   /* ------------------------------------------------------------
      Render loop
