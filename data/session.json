@@ -219,6 +219,69 @@
       "time_iso": "2026-05-08T05:05:30.707434Z",
       "lesson": 1,
       "lesson_id": "framework"
+    },
+    {
+      "type": "battle",
+      "time": 1778216908.2851992,
+      "time_iso": "2026-05-08T05:08:28.285706Z",
+      "challenge_num": 1,
+      "challenge_id": "battle"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1778217117.346124,
+      "time_iso": "2026-05-08T05:11:57.346134Z",
+      "lesson": 4,
+      "lesson_id": "compromise"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1778217275.291827,
+      "time_iso": "2026-05-08T05:14:35.291834Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1778217277.1555572,
+      "time_iso": "2026-05-08T05:14:37.155561Z",
+      "lesson": 7,
+      "lesson_id": "casestudy"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1778217312.71414,
+      "time_iso": "2026-05-08T05:15:12.714155Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1778217314.439639,
+      "time_iso": "2026-05-08T05:15:14.439648Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "lesson_enter",
+      "time": 1778217320.130458,
+      "time_iso": "2026-05-08T05:15:20.130499Z",
+      "lesson": 1,
+      "lesson_id": "framework"
+    },
+    {
+      "type": "avatar_select",
+      "time": 1778218247.2809322,
+      "time_iso": "2026-05-08T05:30:47.280957Z",
+      "avatar_id": "inu",
+      "accepted": true
+    },
+    {
+      "type": "avatar_select",
+      "time": 1778218248.362836,
+      "time_iso": "2026-05-08T05:30:48.362842Z",
+      "avatar_id": "neko",
+      "accepted": true
     }
   ],
   "quiz_answers": {
