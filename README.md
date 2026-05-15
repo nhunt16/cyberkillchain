@@ -1,6 +1,6 @@
-# Cyber Kill Chain · Educational Module (Flask)
+# Cyber Kill Chain · Web Application
 
-COMS 4170W · HW 10 · An interactive, multi-page Flask web app that
+COMS 4170W · Final Project · An interactive, multi-page Flask web app that
 teaches students the five phases of the Cyber Kill Chain through
 seven illustrated lessons and a turn-based Final Battle against a
 boss-narrator avatar.
@@ -63,19 +63,12 @@ phase; picking a weak move spikes Inu's detection meter. Reach the
 objective before the IR clock runs out (or the SOC catches you) to
 win the engagement.
 
-The grader (`_grade_challenge` in `app.py`) treats every "strong"
-pick as a correct answer, scales to 100, and adds a +20 victory bonus
-capped at 100. A defeat hard-caps the score at 60 regardless of how
-many strong picks were made — you still lost the campaign.
-
 ## Avatars (Pokédex-style unlocks)
 
 ![Avatars page showing two character cards side-by-side: Neko, the default cat-girl guide, and Cyber Inu, the unlockable cybernetic blue-team boss.](docs/screenshot-avatars.png)
 
 Beating Cyber Inu in the Final Battle unlocks him as a selectable
-narrator from the **Avatars** page. Unlocks live in `data/avatars.json`
-*separately* from `data/session.json`, so they survive a "Start Over"
-the same way a Pokédex entry survives starting a new game.
+narrator from the **Avatars** page.
 
 ## Data model
 
@@ -154,18 +147,6 @@ on a single GCP `e2-micro` Compute Engine VM (Ubuntu 24.04) in
 `data/session.json` and `data/avatars.json` are deliberately *not*
 shipped from the dev machine on each redeploy — they're the
 server's runtime state.
-
-## Spec checklist
-
-- [x] Flask backend + HTML / JS / jQuery / Bootstrap frontend
-- [x] Home screen with a Start button (`POST /start` clears the session and begins a new run)
-- [x] Backend stores user choices on every page (lesson-enter timestamps, scene clicks, quiz submissions, avatar selections)
-- [x] Content driven by `data/content.json`, not hard-coded in the templates
-- [x] Four+ routes: `/`, `/learn/<n>`, `/quiz/<n>`, `/quiz/result`, `/avatars`
-- [x] Each page shows data, includes instructions, records user data, and advances
-- [x] Quiz returns a score based on correct/incorrect picks + victory bonus
-- [x] Single-user assumption (one `session.json` file on disk)
-- [x] Deployed to a public domain over HTTPS
 
 ## Credit
 
