@@ -1,6 +1,7 @@
 # Cyber Kill Chain · Web Application
 
-COMS 4170W · Final Project · An interactive, multi-page Flask web app that
+COMS 4170W · Final Project by Nicolas Hunt (nh2905@columbia.edu)
+An interactive, multi-page Flask web app that
 teaches students the five phases of the Cyber Kill Chain through
 seven illustrated lessons and a turn-based Final Battle against a
 boss-narrator avatar.
@@ -34,7 +35,6 @@ boss-narrator avatar.
 | `/avatars` | GET | Roster screen — pick your active narrator, see locked / unlocked avatars |
 | `/api/avatars/select` | POST | Set the active avatar (must already be unlocked) |
 | `/api/avatars/unlock` | POST | Mark an avatar as unlocked (called by the battle on victory) |
-| `/api/session` | GET | Dev-only JSON dump of the current session (useful for verifying that choices are being recorded) |
 
 ## Lessons
 
@@ -73,7 +73,7 @@ narrator from the **Avatars** page.
 ## Data model
 
 ```
-HW 10/
+cyberkillchain/
 ├── app.py                  # Flask app, routes, grader, avatar persistence
 ├── requirements.txt        # Flask (gunicorn added in prod, not pinned here)
 ├── README.md
@@ -143,10 +143,6 @@ on a single GCP `e2-micro` Compute Engine VM (Ubuntu 24.04) in
   and serving `/static/` directly from disk.
 - **Let's Encrypt** for the TLS cert, issued and auto-renewed via
   `certbot`'s `certbot.timer` systemd unit.
-
-`data/session.json` and `data/avatars.json` are deliberately *not*
-shipped from the dev machine on each redeploy — they're the
-server's runtime state.
 
 ## Credit
 
